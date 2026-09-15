@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 880px; background: #ffffff; font-family: 'Helvetica Neue', Arial, sans-serif; }
+  .canvas { width: 880px; padding: 24px 20px; background: #ffffff; position: relative; }
+  .layer { display: flex; justify-content: center; gap: 12px; margin-bottom: 0; }
+  .layer-label { font-size: 13px; font-weight: 700; letter-spacing: 2px; color: #6f7578; text-transform: uppercase; margin: 0 0 8px 6px; }
+  .node {
+    background: #eef1f3; border: 1.5px solid #b8c8cf; border-radius: 6px;
+    padding: 10px 12px; text-align: center; flex: 1 1 0; min-width: 0;
+  }
+  .node .t { font-size: 21px; font-weight: 700; color: #1a1b1c; line-height: 1.25; }
+  .node .d { font-size: 15px; color: #6f7578; line-height: 1.3; margin-top: 3px; }
+  .node.core { background: #334650; border-color: #334650; }
+  .node.core .t { color: #ffffff; }
+  .node.core .d { color: #b8c8cf; }
+  .node.redborder { border: 2.5px solid #b43a4e; background: #faf1f2; }
+  .arrow-row { display: flex; justify-content: center; gap: 12px; padding: 2px 0; }
+  .arrow-cell { flex: 1 1 0; display: flex; justify-content: center; }
+  .arrow { width: 0; height: 0; border-left: 7px solid transparent; border-right: 7px solid transparent; border-top: 10px solid #52798c; }
+  .stem { width: 2px; height: 12px; background: #52798c; margin: 0 auto; }
+  .vgroup { display: flex; flex-direction: column; align-items: center; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="layer-label">Channels</div>
+  <div class="layer">
+    <div class="node"><div class="t">Phone</div><div class="d">SIP / WebRTC</div></div>
+    <div class="node"><div class="t">Web Chat</div><div class="d">Widget API</div></div>
+    <div class="node"><div class="t">SMS</div><div class="d">Messaging API</div></div>
+    <div class="node"><div class="t">WhatsApp</div><div class="d">Business API</div></div>
+    <div class="node"><div class="t">Email</div><div class="d">Inbound hook</div></div>
+  </div>
+  <div class="arrow-row"><div class="arrow-cell"><div class="vgroup"><div class="stem"></div><div class="arrow"></div></div></div><div class="arrow-cell"><div class="vgroup"><div class="stem"></div><div class="arrow"></div></div></div><div class="arrow-cell"><div class="vgroup"><div class="stem"></div><div class="arrow"></div></div></div><div class="arrow-cell"><div class="vgroup"><div class="stem"></div><div class="arrow"></div></div></div><div class="arrow-cell"><div class="vgroup"><div class="stem"></div><div class="arrow"></div></div></div></div>
+
+  <div class="layer">
+    <div class="node" style="flex: 2.2 1 0;"><div class="t">Media Gateway</div><div class="d">VAD, turn detection, barge-in</div></div>
+    <div class="node" style="flex: 2.2 1 0;"><div class="t">API Gateway</div><div class="d">Auth, rate limit, webhooks</div></div>
+  </div>
+  <div class="arrow-row"><div class="arrow-cell" style="flex: 2.2 1 0;"><div class="vgroup"><div class="stem"></div><div class="arrow"></div></div></div><div class="arrow-cell" style="flex: 2.2 1 0;"><div class="vgroup"><div class="stem"></div><div class="arrow"></div></div></div></div>
+
+  <div class="layer">
+    <div class="node redborder" style="flex: 5 1 0;"><div class="t">AI Orchestrator</div><div class="d">Routing, permissions, escalation, tool policy, streaming LLM context</div></div>
+  </div>
+  <div class="arrow-row"><div class="arrow-cell" style="flex: 5 1 0;"><div class="vgroup"><div class="stem"></div><div class="arrow"></div></div></div></div>
+
+  <div class="layer">
+    <div class="node core" style="flex: 5 1 0;"><div class="t">Worker Router + Context and Memory</div><div class="d">PostgreSQL, Redis streams, organization-scoped data access</div></div>
+  </div>
+  <div class="arrow-row">
+    <div class="arrow-cell" style="flex: 1 1 0;"><div class="vgroup"><div class="stem"></div><div class="arrow"></div></div></div>
+    <div class="arrow-cell" style="flex: 1 1 0;"><div class="vgroup"><div class="stem"></div><div class="arrow"></div></div></div>
+    <div class="arrow-cell" style="flex: 1 1 0;"><div class="vgroup"><div class="stem"></div><div class="arrow"></div></div></div>
+    <div class="arrow-cell" style="flex: 1 1 0;"><div class="vgroup"><div class="stem"></div><div class="arrow"></div></div></div>
+    <div class="arrow-cell" style="flex: 1 1 0;"><div class="vgroup"><div class="stem"></div><div class="arrow"></div></div></div>
+    <div class="arrow-cell" style="flex: 1 1 0;"><div class="vgroup"><div class="stem"></div><div class="arrow"></div></div></div>
+    <div class="arrow-cell" style="flex: 1 1 0;"><div class="vgroup"><div class="stem"></div><div class="arrow"></div></div></div>
+  </div>
+
+  <div class="layer">
+    <div class="node"><div class="t">Voice</div><div class="d">STT / TTS</div></div>
+    <div class="node"><div class="t">Text</div><div class="d">LLM replies</div></div>
+    <div class="node"><div class="t">Tool</div><div class="d">Actions</div></div>
+    <div class="node"><div class="t">Knowledge</div><div class="d">Retrieval</div></div>
+    <div class="node"><div class="t">Channel</div><div class="d">Delivery</div></div>
+    <div class="node"><div class="t">Automation</div><div class="d">Flows</div></div>
+    <div class="node"><div class="t">Analytics</div><div class="d">Metrics</div></div>
+  </div>
+  <div class="arrow-row">
+    <div class="arrow-cell" style="flex: 3.5 1 0;"><div class="vgroup"><div class="stem"></div><div class="arrow"></div></div></div>
+    <div class="arrow-cell" style="flex: 3.5 1 0;"><div class="vgroup"><div class="stem"></div><div class="arrow"></div></div></div>
+  </div>
+
+  <div class="layer">
+    <div class="node" style="flex: 3.5 1 0;"><div class="t">AI Providers</div><div class="d">STT, LLM, TTS, embeddings</div></div>
+    <div class="node" style="flex: 3.5 1 0;"><div class="t">Telephony and Business Systems</div><div class="d">SIP trunk, calendar, CRM, storage</div></div>
+  </div>
+</div>
+</body>
+</html>

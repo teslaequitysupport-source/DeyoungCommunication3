@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "The screenshot displays a mobile website with a visible phone mockup showing a voice recording interface. The \"Open dashboard\" button features a subtle, premium gradient appearance. There are no obvious visual bugs or cut-off elements; the layout appears clean and well-structured.\n\nVERDICT: PASS",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1789417293,
+  "id": "202609150421318c834b76b5784266",
+  "model": "glm-5v-turbo",
+  "object": "chat.completion",
+  "request_id": "202609150421318c834b76b5784266",
+  "usage": {
+    "completion_tokens": 58,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 448,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "total_tokens": 506
+  }
+}

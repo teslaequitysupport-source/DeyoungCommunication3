@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "1) **Phone mockup visible?** Yes. A 3D-styled phone UI is clearly displayed on the right side of the hero section.\n2) **Industry photo cards with 3D tilt?** No. The provided screenshot only shows the hero section; the row of 4 industry photo cards is not present in the viewport.\n3) **Any broken/blank images?** No broken or blank images are visible in the current view.\n\n**VERDICT: FAIL** (Missing the required industry photo card section).",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1789416894,
+  "id": "202609150414290d545eb158f74a50",
+  "model": "glm-5v-turbo",
+  "object": "chat.completion",
+  "request_id": "202609150414290d545eb158f74a50",
+  "usage": {
+    "completion_tokens": 109,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 5736,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "total_tokens": 5845
+  }
+}

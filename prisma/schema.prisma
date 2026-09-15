@@ -1,0 +1,377 @@
+// DEYOUNG COMMUNICATION - Prisma schema
+// Organization-scoped entities per Project Dossier Chapter 7.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String    @id @default(cuid())
+  email           String    @unique
+  name            String?
+  passwordHash    String
+  role            String    @default("user") // user | admin
+  status          String    @default("active") // active | pending | rejected | blocked
+  plan            String    @default("starter") // starter (free) | business | agency
+  statusReason    String    @default("") // shown to the user honestly (rejection/block reason)
+  internalNotes   String    @default("") // ADMIN ONLY, never serialized to user endpoints
+  approvedAt      DateTime?
+  lastLoginAt     DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  memberships     Membership[]
+  auditLogs       AuditLog[]
+  sessions        SessionToken[]
+  callSessions    CallSession[]
+  uploadedMedia   MediaAsset[]
+}
+
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  type      String   @default("business") // individual | business | agency
+  parentId  String?
+  settings  String   @default("{}") // JSON: retention defaults, disclosure config
+  status    String   @default("active")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  memberships    Membership[]
+  aiEmployees    AiEmployee[]
+  conversations  Conversation[]
+  callSessions   CallSession[]
+  customers      Customer[]
+  knowledge      KnowledgeSource[]
+  usageEvents    UsageEvent[]
+  integrationConns IntegrationConn[]
+  voiceClones    VoiceClone[]
+}
+
+// ---- Voice cloning (operator-owned voices) ----
+// Honesty model: audio samples are measured IN THE BROWSER (pitch, pace,
+// energy) and never uploaded. Only the derived numeric profile is stored.
+// Engine today: Timbre Match (browser DSP). Neural cloning of exact timbre
+// requires a heavy model and is labeled as a pending engine, never faked.
+
+model VoiceClone {
+  id             String    @id @default(cuid())
+  organizationId String
+  name           String
+  status         String    @default("ready") // ready | failed
+  engine         String    @default("timbre_match") // timbre_match (browser DSP, live) | neural (pending provider)
+  sampleCount    Int       @default(0)
+  totalMs        Int       @default(0) // total sample duration measured
+  profileJson    String    @default("{}") // VoiceDNA: medianPitchHz, rateMultiplier, pitchMultiplier, energy, matchedVoiceUri, register
+  consentName    String    @default("") // the person who consented to being cloned
+  consentAt      DateTime?
+  notes          String    @default("") // operator's own notes
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+}
+
+model Membership {
+  id             String   @id @default(cuid())
+  userId         String
+  organizationId String
+  role           String   @default("viewer") // owner | admin | operator | viewer
+  createdAt      DateTime @default(now())
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, organizationId])
+}
+
+model AiEmployee {
+  id             String   @id @default(cuid())
+  organizationId String
+  name           String
+  role           String   @default("ai_receptionist") // role template key
+  purpose        String   @default("")
+  personality    String   @default("professional")
+  tone           String   @default("warm-professional")
+  instructions   String   @default("")
+  escalationRule String   @default("request_human_on_low_confidence")
+  channels       String   @default("web_chat") // JSON array
+  language       String   @default("en")
+  voiceId        String?
+  // Operator-controlled voice for this employee: { cloneId, name, voiceUri, pitch, rate }
+  // Points at a VoiceClone the org owns. Empty = engine default voice.
+  voiceProfile   String   @default("{}")
+  // Operator script rules (absolute obedience): [{ id, match, matchType, response, priority, enabled }]
+  // A matching rule answers verbatim BEFORE the LLM: the employee must obey.
+  scriptRules    String   @default("[]")
+  status         String   @default("draft") // draft | deployed | paused
+  configVersion  Int      @default(1)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization  Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  conversations Conversation[]
+  callSessions  CallSession[]
+
+  @@index([organizationId])
+}
+
+model Customer {
+  id             String   @id @default(cuid())
+  organizationId String
+  name           String
+  email          String?
+  phone          String?
+  company        String?
+  tags           String   @default("[]") // JSON array
+  notes          String   @default("")
+  consentStatus  String   @default("unknown") // unknown | granted | declined
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization  Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  conversations Conversation[]
+
+  @@index([organizationId])
+}
+
+model Conversation {
+  id             String   @id @default(cuid())
+  organizationId String
+  employeeId     String?
+  customerId     String?
+  channel        String   @default("web_chat") // web_chat | phone | sms | whatsapp | email
+  callId         String?  // linked voice call when channel = browser_voice
+  status         String   @default("open") // open | closed
+  direction      String   @default("inbound")
+  lastMessageAt  DateTime @default(now())
+  createdAt      DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  employee     AiEmployee?  @relation(fields: [employeeId], references: [id], onDelete: SetNull)
+  customer     Customer?    @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  messages     Message[]
+
+  @@index([organizationId])
+}
+
+model Message {
+  id             String   @id @default(cuid())
+  conversationId String
+  role           String // customer | ai | system | human
+  content        String
+  speakerName    String?
+  createdAt      DateTime @default(now())
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId])
+}
+
+model KnowledgeSource {
+  id             String   @id @default(cuid())
+  organizationId String
+  type           String // txt | manual | faq | url | pdf | docx
+  title          String
+  content        String   @default("") // extracted text (txt/manual/faq)
+  status         String   @default("pending") // pending | indexed | processing | needs_configuration
+  statusDetail   String   @default("")
+  version        Int      @default(1)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  chunks       KnowledgeChunk[]
+
+  @@index([organizationId])
+}
+
+model KnowledgeChunk {
+  id        String   @id @default(cuid())
+  sourceId  String
+  ordinal   Int
+  content   String
+  createdAt DateTime @default(now())
+
+  source KnowledgeSource @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+
+  @@index([sourceId])
+}
+
+model IntegrationConn {
+  id             String   @id @default(cuid())
+  organizationId String
+  type           String // twilio | livekit | deepgram | elevenlabs | openai | whatsapp | sms | email
+  status         String   @default("not_connected") // connected | needs_attention | not_connected | coming_soon
+  statusDetail   String   @default("")
+  configJson     String   @default("{}")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, type])
+  @@index([organizationId])
+}
+
+model UsageEvent {
+  id             String   @id @default(cuid())
+  organizationId String
+  kind           String // message_ai | conversation_created | employee_created | employee_deployed | auth
+  units          Int      @default(1)
+  detail         String   @default("")
+  createdAt      DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  orgId     String?
+  actor     String // user | system
+  action    String
+  target    String   @default("")
+  reason    String   @default("")
+  ip        String   @default("")
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([orgId])
+}
+
+model SessionToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ---- Site-wide CMS (admin-controlled, no redeploys) ----
+
+model SiteSettings {
+  id            String   @id @default("site") // singleton
+  siteName      String   @default("DEYOUNG COMMUNICATION")
+  tagline       String   @default("AI employees that answer, understand, and act")
+  supportEmail  String   @default("support@deyoungcommunication.com")
+  // Announcement banner
+  bannerEnabled Boolean  @default(true)
+  bannerText    String   @default("Real-time voice with emotion is live on paid plans. Text chat is free forever.")
+  bannerLabel   String   @default("Try a call")
+  bannerHref    String   @default("#/signup")
+  // Feature flags: hide sections from the public site entirely
+  flagShowPricing      Boolean @default(true)
+  flagShowStats        Boolean @default(true)
+  flagShowTestimonials Boolean @default(true)
+  flagShowVoiceDemo    Boolean @default(true)
+  flagRequireApproval  Boolean @default(true)
+  updatedAt     DateTime @updatedAt
+}
+
+model ContentBlock {
+  id        String   @id @default(cuid())
+  key       String   @unique // e.g. home.hero.title
+  group     String   @default("home") // admin editor grouping
+  label     String   @default("") // human label in admin
+  type      String   @default("text") // text | textarea | image | boolean
+  value     String   @default("")
+  visible   Boolean  @default(true) // hidden from public when false
+  sortOrder Int      @default(0)
+  updatedAt DateTime @updatedAt
+}
+
+model MediaAsset {
+  id           String   @id @default(cuid())
+  filename     String
+  url          String // /uploads/<file>
+  mime         String
+  size         Int      @default(0)
+  alt          String   @default("")
+  uploadedById String?
+  createdAt    DateTime @default(now())
+
+  uploadedBy User? @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
+}
+
+// ---- Live voice calls (browser engine; production = telephony) ----
+
+model CallSession {
+  id             String   @id @default(cuid())
+  organizationId String
+  employeeId     String?
+  userId         String?
+  channel        String   @default("browser_voice")
+  status         String   @default("live") // live | completed | failed
+  direction      String   @default("inbound")
+  startedAt      DateTime @default(now())
+  endedAt        DateTime?
+  durationSec    Int      @default(0)
+  turnsCount     Int      @default(0)
+  interruptions  Int      @default(0) // real barge-in count
+  cuesSummary    String   @default("[]") // JSON: counts of each emotion cue
+  transcript     String   @default("") // denormalized for admin quick view
+  // Operator directives for THIS particular call (what to say / how to answer).
+  // The employee must obey them for the whole call.
+  callDirectives String   @default("")
+  // Mid-call operator coaching: [{ at, text, mode, appliedOrdinal }]
+  coachLog       String   @default("[]")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  employee     AiEmployee?  @relation(fields: [employeeId], references: [id], onDelete: SetNull)
+  user         User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  turns        CallTurn[]
+
+  @@index([organizationId])
+  @@index([status])
+}
+
+model CallTurn {
+  id           String   @id @default(cuid())
+  callId       String
+  ordinal      Int
+  speaker      String // human | ai
+  content      String
+  cues         String   @default("[]") // JSON array of emotion cues used
+  latencyMs     Int      @default(0) // measured LLM round-trip
+  interrupted  Boolean  @default(false) // human barge-in cut this turn off
+  // Where this reply came from: llm | operator_script (verbatim rule) | operator_injection (operator said it now)
+  source       String   @default("llm")
+  createdAt    DateTime @default(now())
+
+  call CallSession @relation(fields: [callId], references: [id], onDelete: Cascade)
+
+  @@index([callId])
+}
+
+model WaitlistEntry {
+  id        String   @id @default(cuid())
+  email     String
+  platform  String   @default("ios") // ios | android
+  source    String   @default("site")
+  createdAt DateTime @default(now())
+
+  @@unique([email, platform])
+}
+
+model ContactInquiry {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  company   String   @default("")
+  message   String
+  topic     String   @default("general")
+  createdAt DateTime @default(now())
+}

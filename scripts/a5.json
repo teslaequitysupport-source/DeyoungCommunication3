@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "**VERDICT: PASS**\n\n**Reasoning:**\n\n1.  **Photo Band Rendering:** The full-width cinematic band is present. It features the abstract red light waveform (flowing, glowing lines) set against a deep black/dark gradient background as specified. The image extends edge-to-edge with the content properly layered on top.\n\n2.  **Text Readability:** **High contrast achieved.** The headline \"Every call your business misses tonight is gone by morning.\" is rendered in large, bold white typography. It sits primarily over the dark void on the left side of the composition, while the red waveform graphic is positioned to the right, ensuring the text remains crisp and legible without needing heavy overlay masks.\n\n3.  **CTA Button Premium Quality:** The \"Start building free\" button meets premium standards:\n    *   **Color:** Vibrant red-to-dark-red gradient (not flat).\n    *   **Styling:** Rounded pill shape (high border-radius) with a subtle inner shadow/bevel effect giving it a tactile, 3D \"glassy\" appearance.\n    *   **Details:** Includes a directional arrow icon (→) and clear white text.\n    *   **Eyebrow:** The gold/yellow uppercase text (\"THE SIGNAL IS READY\") is positioned correctly above the headline.\n\nThe design successfully balances the \"dark mode\" aesthetic with high-impact visual elements and clear information hierarchy.",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1789416823,
+  "id": "202609150413348e0c2cd57765495a",
+  "model": "glm-5v-turbo",
+  "object": "chat.completion",
+  "request_id": "202609150413348e0c2cd57765495a",
+  "usage": {
+    "completion_tokens": 288,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 973,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "total_tokens": 1261
+  }
+}
