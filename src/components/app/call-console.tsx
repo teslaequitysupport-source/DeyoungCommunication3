@@ -404,10 +404,10 @@ export function CallConsole({
   if (phase === "idle" || phase === "requesting") {
     return (
       <div className="mx-auto max-w-2xl">
-        <div className="rounded-[4px] border border-[#262626] bg-[#0C0C0C] p-8">
+        <div className="rounded-[4px] border border-[#1C3050] bg-[#0A1220] p-8">
           <div className="flex items-center gap-3">
-            <span className="flex h-11 w-11 items-center justify-center rounded-full border border-[#262626] bg-[#111111]">
-              <Phone className="h-5 w-5 text-[#E10600]" strokeWidth={1.75} />
+            <span className="flex h-11 w-11 items-center justify-center rounded-full border border-[#1C3050] bg-[#0A1424]">
+              <Phone className="h-5 w-5 text-[#4A90E2]" strokeWidth={1.75} />
             </span>
             <div>
               <h2 className="font-display-strong text-xl text-white">Start a live test call</h2>
@@ -418,7 +418,7 @@ export function CallConsole({
           </div>
 
           {deployed.length === 0 ? (
-            <div className="mt-7 rounded-[3px] border border-dashed border-[#262626] bg-[#0D0D0D] p-6 text-center">
+            <div className="mt-7 rounded-[3px] border border-dashed border-[#1C3050] bg-[#0A1322] p-6 text-center">
               <AlertTriangle className="mx-auto h-5 w-5 text-[#A1A1A1]" strokeWidth={1.75} />
               <p className="mt-3 font-display text-[15px] font-bold text-white">No deployed employees yet</p>
               <p className="mt-1.5 text-[13px] leading-relaxed text-[#A1A1A1]">
@@ -437,12 +437,12 @@ export function CallConsole({
                       className={cn(
                         "flex w-full items-center justify-between rounded-[3px] border px-4 py-3 text-left transition-colors ease-mechanical",
                         employeeId === e.id
-                          ? "border-[#E10600]/60 bg-[#E10600]/[0.07]"
-                          : "border-[#262626] bg-[#111111] hover:border-[#333]",
+                          ? "border-[#4A90E2]/60 bg-[#4A90E2]/[0.07]"
+                          : "border-[#1C3050] bg-[#0A1424] hover:border-[#333]",
                       )}
                     >
                       <span className="flex items-center gap-3">
-                        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1a1a1a] text-[11px] font-bold text-white">
+                        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#0c1526] text-[11px] font-bold text-white">
                           {e.name.slice(0, 2).toUpperCase()}
                         </span>
                         <span>
@@ -452,7 +452,7 @@ export function CallConsole({
                           </span>
                         </span>
                       </span>
-                      {employeeId === e.id && <BadgeCheck className="h-4 w-4 text-[#E10600]" />}
+                      {employeeId === e.id && <BadgeCheck className="h-4 w-4 text-[#4A90E2]" />}
                     </button>
                   ))}
                 </div>
@@ -477,7 +477,7 @@ export function CallConsole({
                   placeholder={
                     "Tell it what to say or how to answer on this exact call. It must obey.\ne.g. Offer the 20% discount to everyone today. Never mention the price until they ask."
                   }
-                  className="mt-2 rounded-[2px] border-[#262626] bg-[#111111] text-[13px] leading-relaxed text-white placeholder:text-[#6f6f6a] focus-visible:ring-[#E10600]"
+                  className="mt-2 rounded-[2px] border-[#1C3050] bg-[#0A1424] text-[13px] leading-relaxed text-white placeholder:text-[#6f6f6a] focus-visible:ring-[#4A90E2]"
                 />
                 <p className="mt-1.5 text-[11px] leading-relaxed text-[#6f6f6a]">
                   These apply to this call only, on top of the employee&apos;s standing instructions
@@ -485,15 +485,15 @@ export function CallConsole({
                 </p>
               </div>
 
-              <div className="mt-6 rounded-[3px] border border-[#262626] bg-[#111111] px-4 py-3 font-mono-dy text-[10.5px] leading-relaxed tracking-[0.06em] text-[#6f6f6a]">
+              <div className="mt-6 rounded-[3px] border border-[#1C3050] bg-[#0A1424] px-4 py-3 font-mono-dy text-[10.5px] leading-relaxed tracking-[0.06em] text-[#6f6f6a]">
                 ENGINE: BROWSER VOICE (REAL-TIME, NO PROVIDER ACCOUNT NEEDED). PRODUCTION PHONE
                 CALLS USE THE TELEPHONY STACK AND REQUIRE A PROVIDER ACCOUNT · LABELED HONESTLY,
                 NEVER FAKED.
-                {recError && <span className="mt-1 block text-[#ff6a5e]">{recError.toUpperCase()}</span>}
+                {recError && <span className="mt-1 block text-[#6fcbff]">{recError.toUpperCase()}</span>}
               </div>
 
               {/* Where it runs · the honest pipeline map, visible BEFORE you call */}
-              <div className="mt-3 rounded-[3px] border border-dashed border-[#262626] bg-[#0D0D0D] px-4 py-3">
+              <div className="mt-3 rounded-[3px] border border-dashed border-[#1C3050] bg-[#0A1322] px-4 py-3">
                 <button
                   onClick={() => setShowHow((v) => !v)}
                   className="flex w-full items-center justify-between font-mono-dy text-[10px] tracking-[0.16em] text-[#6f6f6a] transition-colors hover:text-[#A1A1A1]"
@@ -536,7 +536,7 @@ export function CallConsole({
               <Button
                 onClick={startCall}
                 disabled={phase === "requesting" || !employee}
-                className="mt-6 h-12 w-full rounded-[2px] bg-[#E10600] text-[14px] font-semibold text-white transition-all ease-mechanical hover:bg-[#B80500] hover:shadow-[0_12px_36px_-8px_rgba(225,6,0,0.5)]"
+                className="mt-6 h-12 w-full rounded-[2px] bg-[#4A90E2] text-[14px] font-semibold text-white transition-all ease-mechanical hover:bg-[#2E7CDE] hover:shadow-[0_12px_36px_-8px_rgba(10,91,196,0.5)]"
               >
                 {phase === "requesting" ? (
                   <>
@@ -558,21 +558,21 @@ export function CallConsole({
   if (phase === "ended" && summary) {
     return (
       <div className="mx-auto max-w-2xl">
-        <div className="rounded-[4px] border border-[#262626] bg-[#0C0C0C] p-8 text-center">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-[#262626] bg-[#111111]">
+        <div className="rounded-[4px] border border-[#1C3050] bg-[#0A1220] p-8 text-center">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-[#1C3050] bg-[#0A1424]">
             <PhoneOff className="h-5 w-5 text-[#A1A1A1]" strokeWidth={1.75} />
           </div>
           <h2 className="font-display-strong mt-5 text-xl text-white">Call ended</h2>
           <p className="mt-1.5 text-[13px] text-[#A1A1A1]">
             {fmtDur(summary.durationSec)} · transcript and metrics saved to your workspace.
           </p>
-          <div className="mt-7 grid grid-cols-3 gap-px overflow-hidden rounded-[3px] border border-[#262626] bg-[#262626]">
+          <div className="mt-7 grid grid-cols-3 gap-px overflow-hidden rounded-[3px] border border-[#1C3050] bg-[#1C3050]">
             {[
               { l: "TURNS", v: summary.turns },
               { l: "BARGE-INS", v: summary.interruptions },
               { l: "EMOTION CUES", v: cueTotal },
             ].map((s) => (
-              <div key={s.l} className="bg-[#111111] p-4">
+              <div key={s.l} className="bg-[#0A1424] p-4">
                 <p className="font-display-strong text-2xl text-white">{s.v}</p>
                 <p className="eyebrow-dy mt-1.5 text-[#A1A1A1]">{s.l}</p>
               </div>
@@ -589,7 +589,7 @@ export function CallConsole({
           )}
           <Button
             onClick={() => setPhase("idle")}
-            className="mt-7 rounded-[2px] bg-white text-[13px] font-semibold text-[#090909] hover:bg-neutral-200"
+            className="mt-7 rounded-[2px] bg-white text-[13px] font-semibold text-[#070E1A] hover:bg-neutral-200"
           >
             Start another call
           </Button>
@@ -602,9 +602,9 @@ export function CallConsole({
   return (
     <div className="mx-auto max-w-3xl">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-t-[4px] border border-[#262626] bg-[#0C0C0C] px-5 py-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-t-[4px] border border-[#1C3050] bg-[#0A1220] px-5 py-4">
         <div className="flex items-center gap-3">
-          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#1a1a1a] text-[12px] font-bold text-white">
+          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0c1526] text-[12px] font-bold text-white">
             {employee?.name.slice(0, 2).toUpperCase()}
           </span>
           <div>
@@ -628,7 +628,7 @@ export function CallConsole({
       </div>
 
       {/* Where this call actually runs: the honest pipeline map */}
-      <div className="border-x border-[#262626] bg-[#0C0C0C] px-5 py-3">
+      <div className="border-x border-[#1C3050] bg-[#0A1220] px-5 py-3">
         <button
           onClick={() => setShowHow((v) => !v)}
           className="flex w-full items-center justify-between font-mono-dy text-[10px] tracking-[0.16em] text-[#6f6f6a] transition-colors hover:text-[#A1A1A1]"
@@ -671,7 +671,7 @@ export function CallConsole({
       {/* Transcript */}
       <div
         ref={scrollRef}
-        className="dy-scroll max-h-[46vh] min-h-[280px] space-y-3 overflow-y-auto border-x border-[#262626] bg-[#090909] px-4 py-5"
+        className="dy-scroll max-h-[46vh] min-h-[280px] space-y-3 overflow-y-auto border-x border-[#1C3050] bg-[#070E1A] px-4 py-5"
         role="log"
         aria-label="Live call transcript"
       >
@@ -683,13 +683,13 @@ export function CallConsole({
         {turns.map((t) =>
           t.source === "operator_pending" ? (
             <div key={t.id} className="flex justify-end">
-              <div className="max-w-[86%] rounded-[3px] rounded-br-none border border-dashed border-[#E9B44C]/50 bg-[#E9B44C]/[0.04] px-4 py-3">
+              <div className="max-w-[86%] rounded-[3px] rounded-br-none border border-dashed border-[#A9E2FF]/50 bg-[#A9E2FF]/[0.04] px-4 py-3">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="font-mono-dy text-[9.5px] tracking-[0.16em] text-[#E9B44C]">
+                  <span className="font-mono-dy text-[9.5px] tracking-[0.16em] text-[#A9E2FF]">
                     YOUR ORDER · PENDING
                   </span>
                 </div>
-                <p className="mt-1.5 text-[13.5px] leading-snug text-[#e6d9b8] italic">{t.content}</p>
+                <p className="mt-1.5 text-[13.5px] leading-snug text-[#cfe3f5] italic">{t.content}</p>
                 <p className="mt-1 font-mono-dy text-[9px] tracking-[0.12em] text-[#6f6f6a]">
                   IT MUST OBEY THIS ON ITS NEXT REPLY
                 </p>
@@ -697,7 +697,7 @@ export function CallConsole({
             </div>
           ) : t.speaker === "human" ? (
             <div key={t.id} className="flex justify-start">
-              <div className="max-w-[82%] rounded-[3px] rounded-bl-none border border-[#262626] bg-[#111111] px-4 py-3">
+              <div className="max-w-[82%] rounded-[3px] rounded-bl-none border border-[#1C3050] bg-[#0A1424] px-4 py-3">
                 <p className="font-mono-dy text-[9.5px] tracking-[0.16em] text-[#6f6f6a]">YOU</p>
                 <p className="mt-1 text-[13.5px] leading-snug text-neutral-200">{t.content}</p>
               </div>
@@ -708,17 +708,17 @@ export function CallConsole({
                 className={cn(
                   "max-w-[86%] rounded-[3px] rounded-br-none border px-4 py-3",
                   t.source === "operator_injection"
-                    ? "border-[#E9B44C]/60 bg-[#E9B44C]/[0.06]"
+                    ? "border-[#A9E2FF]/60 bg-[#A9E2FF]/[0.06]"
                     : t.interrupted
-                      ? "border-[#E10600]/60 bg-[#E10600]/[0.06]"
-                      : "border-[#E10600]/25 bg-[#E10600]/[0.05]",
+                      ? "border-[#4A90E2]/60 bg-[#4A90E2]/[0.06]"
+                      : "border-[#4A90E2]/25 bg-[#4A90E2]/[0.05]",
                 )}
               >
                 <div className="flex flex-wrap items-center gap-2">
                   <span
                     className={cn(
                       "font-mono-dy text-[9.5px] tracking-[0.16em]",
-                      t.source === "operator_injection" ? "text-[#E9B44C]" : "text-[#ff6a5e]",
+                      t.source === "operator_injection" ? "text-[#A9E2FF]" : "text-[#6fcbff]",
                     )}
                   >
                     {employee?.name.toUpperCase()}
@@ -743,7 +743,7 @@ export function CallConsole({
         )}
         {interim && (
           <div className="flex justify-start">
-            <div className="max-w-[82%] rounded-[3px] rounded-bl-none border border-dashed border-[#262626] bg-transparent px-4 py-3">
+            <div className="max-w-[82%] rounded-[3px] rounded-bl-none border border-dashed border-[#1C3050] bg-transparent px-4 py-3">
               <p className="font-mono-dy text-[9.5px] tracking-[0.16em] text-[#6f6f6a]">YOU: SPEAKING</p>
               <p className="mt-1 text-[13.5px] leading-snug text-neutral-500">{interim}</p>
           </div>
@@ -751,8 +751,8 @@ export function CallConsole({
         )}
         {thinking && (
           <div className="flex justify-end">
-            <div className="flex items-center gap-2 rounded-[3px] border border-[#E10600]/20 bg-[#0D0D0D] px-4 py-3">
-              <Loader2 className="h-3.5 w-3.5 animate-spin text-[#E10600]" />
+            <div className="flex items-center gap-2 rounded-[3px] border border-[#4A90E2]/20 bg-[#0A1322] px-4 py-3">
+              <Loader2 className="h-3.5 w-3.5 animate-spin text-[#4A90E2]" />
               <span className="font-mono-dy text-[10px] tracking-[0.14em] text-[#A1A1A1]">THINKING…</span>
             </div>
           </div>
@@ -760,10 +760,10 @@ export function CallConsole({
       </div>
 
       {/* Operator coach: control the conversation mid-call */}
-      <div className="border-x border-[#262626] bg-[#0C0C0C] px-4 py-3">
+      <div className="border-x border-[#1C3050] bg-[#0A1220] px-4 py-3">
         <button
           onClick={() => setCoachOpen((v) => !v)}
-          className="flex w-full items-center justify-between font-mono-dy text-[10px] tracking-[0.16em] text-[#E9B44C] transition-colors hover:text-[#f5cd6e]"
+          className="flex w-full items-center justify-between font-mono-dy text-[10px] tracking-[0.16em] text-[#A9E2FF] transition-colors hover:text-[#bfe4ff]"
           aria-expanded={coachOpen}
         >
           <span className="flex items-center gap-2">
@@ -786,14 +786,14 @@ export function CallConsole({
                 }}
                 maxLength={2000}
                 placeholder="Type what it must say now, or an order for its next reply…"
-                className="rounded-[2px] border-[#3a2f14] bg-[#151109] text-[13px] text-white placeholder:text-[#6f6f6a] focus-visible:ring-[#E9B44C]"
+                className="rounded-[2px] border-[#16294a] bg-[#0E1B2E] text-[13px] text-white placeholder:text-[#6f6f6a] focus-visible:ring-[#A9E2FF]"
               />
               <Button
                 type="button"
                 onClick={() => void sendCoach("exact")}
                 disabled={coachBusy || !coachDraft.trim()}
                 title="The employee says your words immediately, word for word (Ctrl+Enter)"
-                className="h-10 flex-none rounded-[2px] bg-[#E9B44C] px-4 text-[12.5px] font-bold text-[#151109] transition-all ease-mechanical hover:bg-[#f5cd6e] hover:shadow-[0_10px_30px_-8px_rgba(233,180,76,0.55)]"
+                className="h-10 flex-none rounded-[2px] bg-[#A9E2FF] px-4 text-[12.5px] font-bold text-[#0E1B2E] transition-all ease-mechanical hover:bg-[#bfe4ff] hover:shadow-[0_10px_30px_-8px_rgba(233,180,76,0.55)]"
               >
                 {coachBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Megaphone className="h-4 w-4" />}
                 Say now
@@ -803,7 +803,7 @@ export function CallConsole({
                 onClick={() => void sendCoach("instruct")}
                 disabled={coachBusy || !coachDraft.trim()}
                 title="A directive the employee must obey on its next reply"
-                className="h-10 flex-none rounded-[2px] border border-[#3a2f14] bg-[#151109] px-4 text-[12.5px] font-semibold text-[#E9B44C] transition-colors ease-mechanical hover:bg-[#1c160c]"
+                className="h-10 flex-none rounded-[2px] border border-[#16294a] bg-[#0E1B2E] px-4 text-[12.5px] font-semibold text-[#A9E2FF] transition-colors ease-mechanical hover:bg-[#16294a]"
               >
                 {coachBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Wand2 className="h-4 w-4" />}
                 Instruct
@@ -819,7 +819,7 @@ export function CallConsole({
       </div>
 
       {/* Waveform strip */}
-      <div className="border-x border-[#262626] bg-[#0C0C0C] px-4 py-3">
+      <div className="border-x border-[#1C3050] bg-[#0A1220] px-4 py-3">
         <div className="flex items-center justify-between">
           <span className="font-mono-dy text-[9.5px] tracking-[0.16em] text-[#6f6f6a]">
             {speaking ? "SPEECH · SYNTH ACTIVE" : micDenied ? "MIC PERMISSION DENIED · TEXT MODE INTACT" : "MIC · REAL AMPLITUDE"}
@@ -832,20 +832,20 @@ export function CallConsole({
                 ))}
               </span>
             ) : (
-              <Volume2 className={cn("h-3.5 w-3.5", listening ? "text-[#E10600]" : "text-[#6f6f6a]")} />
+              <Volume2 className={cn("h-3.5 w-3.5", listening ? "text-[#4A90E2]" : "text-[#6f6f6a]")} />
             )}
           </span>
         </div>
         <Waveform
           amplitudes={speaking ? [] : amplitudes}
           height={44}
-          color="#E10600"
+          color="#4A90E2"
           label={speaking ? "Synthesized speech active" : "Your live microphone amplitude"}
         />
       </div>
 
       {/* Controls */}
-      <div className="rounded-b-[4px] border border-t-0 border-[#262626] bg-[#0C0C0C] px-4 py-4">
+      <div className="rounded-b-[4px] border border-t-0 border-[#1C3050] bg-[#0A1220] px-4 py-4">
         {textMode ? (
           <form
             onSubmit={(e) => {
@@ -863,16 +863,16 @@ export function CallConsole({
               onChange={(e) => setTextDraft(e.target.value)}
               placeholder="Type what you would say out loud…"
               maxLength={4000}
-              className="rounded-[2px] border-[#262626] bg-[#111111] text-[13.5px] text-white placeholder:text-[#6f6f6a] focus-visible:ring-[#E10600]"
+              className="rounded-[2px] border-[#1C3050] bg-[#0A1424] text-[13.5px] text-white placeholder:text-[#6f6f6a] focus-visible:ring-[#4A90E2]"
             />
             <Button type="submit" disabled={!textDraft.trim() || thinking}
-              className="rounded-[2px] bg-[#E10600] text-[13px] font-semibold text-white hover:bg-[#B80500]">
+              className="rounded-[2px] bg-[#4A90E2] text-[13px] font-semibold text-white hover:bg-[#2E7CDE]">
               Say
             </Button>
             <button
               type="button"
               onClick={endCall}
-              className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#E10600] text-white shadow-[0_8px_28px_-6px_rgba(225,6,0,0.6)] transition-all ease-mechanical hover:bg-[#B80500]"
+              className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#4A90E2] text-white shadow-[0_8px_28px_-6px_rgba(10,91,196,0.6)] transition-all ease-mechanical hover:bg-[#2E7CDE]"
               aria-label="End call"
               title="End call"
             >
@@ -888,8 +888,8 @@ export function CallConsole({
                 className={cn(
                   "flex h-11 w-11 items-center justify-center rounded-full border transition-colors ease-mechanical",
                   micOn
-                    ? "border-[#E10600]/50 bg-[#E10600]/[0.08] text-white"
-                    : "border-[#262626] bg-[#111111] text-[#A1A1A1] hover:text-white",
+                    ? "border-[#4A90E2]/50 bg-[#4A90E2]/[0.08] text-white"
+                    : "border-[#1C3050] bg-[#0A1424] text-[#A1A1A1] hover:text-white",
                 )}
                 aria-label={micOn ? "Mute microphone" : "Unmute microphone"}
                 title={micOn ? "Mute" : "Unmute"}
@@ -898,7 +898,7 @@ export function CallConsole({
               </button>
               <button
                 onClick={() => setTextMode(true)}
-                className="flex h-11 w-11 items-center justify-center rounded-full border border-[#262626] bg-[#111111] text-[#A1A1A1] transition-colors hover:text-white"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-[#1C3050] bg-[#0A1424] text-[#A1A1A1] transition-colors hover:text-white"
                 aria-label="Switch to text mode"
                 title="Switch to text mode"
               >
@@ -910,7 +910,7 @@ export function CallConsole({
             </div>
             <button
               onClick={endCall}
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-[#E10600] text-white shadow-[0_8px_28px_-6px_rgba(225,6,0,0.6)] transition-all ease-mechanical hover:bg-[#B80500]"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-[#4A90E2] text-white shadow-[0_8px_28px_-6px_rgba(10,91,196,0.6)] transition-all ease-mechanical hover:bg-[#2E7CDE]"
               aria-label="End call"
               title="End call"
             >
@@ -919,7 +919,7 @@ export function CallConsole({
           </div>
         )}
         {recError && (
-          <p className="mt-2 font-mono-dy text-[10px] leading-relaxed tracking-[0.08em] text-[#ff6a5e]">
+          <p className="mt-2 font-mono-dy text-[10px] leading-relaxed tracking-[0.08em] text-[#6fcbff]">
             {recError.toUpperCase()}
           </p>
         )}

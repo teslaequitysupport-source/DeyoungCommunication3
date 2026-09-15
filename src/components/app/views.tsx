@@ -74,7 +74,7 @@ export function CustomersView() {
       />
       {customers === null ? (
         <div className="flex justify-center py-24">
-          <Loader2 className="h-6 w-6 text-[#E10600] animate-spin" />
+          <Loader2 className="h-6 w-6 text-[#4A90E2] animate-spin" />
         </div>
       ) : customers.length === 0 ? (
         <EmptyState
@@ -85,7 +85,7 @@ export function CustomersView() {
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {customers.map((c) => (
-            <div key={c.id} className="rounded-[2px] border border-[#262626] bg-[#111111] p-5">
+            <div key={c.id} className="rounded-[2px] border border-[#1C3050] bg-[#0A1424] p-5">
               <div className="flex items-start justify-between">
                 <div>
                   <p className="font-bold text-white">{c.name}</p>
@@ -195,14 +195,14 @@ export function KnowledgeView() {
         title="Knowledge"
         intro="What your AI employees are allowed to know. Sources show type, status, version, and chunk counts. Nothing is marked indexed until it actually is."
         actions={
-          <Button className="bg-[#E10600] hover:bg-[#B80500] text-white rounded-[2px]" onClick={() => setOpen(true)}>
+          <Button className="bg-[#4A90E2] hover:bg-[#2E7CDE] text-white rounded-[2px]" onClick={() => setOpen(true)}>
             <Plus className="mr-2 h-4 w-4" /> Add source
           </Button>
         }
       />
       {sources === null ? (
         <div className="flex justify-center py-24">
-          <Loader2 className="h-6 w-6 text-[#E10600] animate-spin" />
+          <Loader2 className="h-6 w-6 text-[#4A90E2] animate-spin" />
         </div>
       ) : sources.length === 0 ? (
         <EmptyState
@@ -210,16 +210,16 @@ export function KnowledgeView() {
           title="No knowledge sources"
           body="Add your first source: a manual entry, an FAQ, or pasted text indexes immediately for retrieval. PDF and DOCX parsing arrives with the knowledge worker and is labeled accordingly."
           action={
-            <Button className="bg-[#E10600] hover:bg-[#B80500] text-white rounded-[2px]" onClick={() => setOpen(true)}>
+            <Button className="bg-[#4A90E2] hover:bg-[#2E7CDE] text-white rounded-[2px]" onClick={() => setOpen(true)}>
               Add your first source
             </Button>
           }
         />
       ) : (
-        <div className="rounded-[2px] border border-[#262626] overflow-hidden">
+        <div className="rounded-[2px] border border-[#1C3050] overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-[#111111] border-b border-[#262626]">
+              <tr className="bg-[#0A1424] border-b border-[#1C3050]">
                 <th className="text-left px-4 py-3 text-[11px] uppercase tracking-wider text-[#A1A1A1] font-semibold">Source</th>
                 <th className="text-left px-4 py-3 text-[11px] uppercase tracking-wider text-[#A1A1A1] font-semibold">Type</th>
                 <th className="text-left px-4 py-3 text-[11px] uppercase tracking-wider text-[#A1A1A1] font-semibold">Status</th>
@@ -228,7 +228,7 @@ export function KnowledgeView() {
                 <th className="px-4 py-3" aria-label="Actions" />
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#262626] bg-[#0D0D0D]">
+            <tbody className="divide-y divide-[#1C3050] bg-[#0A1322]">
               {sources.map((s) => (
                 <tr key={s.id}>
                   <td className="px-4 py-3 text-white">
@@ -242,7 +242,7 @@ export function KnowledgeView() {
                   <td className="px-4 py-3 text-right">
                     <button
                       onClick={() => remove(s.id)}
-                      className="p-1.5 text-[#A1A1A1] hover:text-[#E10600]"
+                      className="p-1.5 text-[#A1A1A1] hover:text-[#4A90E2]"
                       aria-label={`Delete ${s.title}`}
                     >
                       <Trash2 className="h-3.5 w-3.5" />
@@ -256,7 +256,7 @@ export function KnowledgeView() {
       )}
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="bg-[#0D0D0D] border-[#262626] text-[#F5F5F3]">
+        <DialogContent className="bg-[#0A1322] border-[#1C3050] text-[#F5F5F3]">
           <DialogHeader>
             <DialogTitle className="text-white">Add knowledge source</DialogTitle>
             <DialogDescription className="text-[#A1A1A1]">
@@ -268,10 +268,10 @@ export function KnowledgeView() {
             <div className="space-y-2">
               <Label className="text-[#A1A1A1]">Source type</Label>
               <Select value={type} onValueChange={setType}>
-                <SelectTrigger className="bg-[#111111] border-[#262626] text-white rounded-[2px]">
+                <SelectTrigger className="bg-[#0A1424] border-[#1C3050] text-white rounded-[2px]">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-[#111111] border-[#262626] text-white">
+                <SelectContent className="bg-[#0A1424] border-[#1C3050] text-white">
                   <SelectItem value="manual">Manual entry (indexes now)</SelectItem>
                   <SelectItem value="faq">FAQ (indexes now)</SelectItem>
                   <SelectItem value="txt">Text (indexes now)</SelectItem>
@@ -288,7 +288,7 @@ export function KnowledgeView() {
                 placeholder="Service pricing 2026"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="bg-[#111111] border-[#262626] text-white placeholder:text-[#6b6b6b] rounded-[2px]"
+                className="bg-[#0A1424] border-[#1C3050] text-white placeholder:text-[#6b6b6b] rounded-[2px]"
               />
             </div>
             {["manual", "faq", "txt"].includes(type) && (
@@ -300,12 +300,12 @@ export function KnowledgeView() {
                   placeholder={"Paste policies, FAQs, or service details.\n\nShort standalone statements with concrete numbers work best."}
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
-                  className="bg-[#111111] border-[#262626] text-white placeholder:text-[#6b6b6b] rounded-[2px]"
+                  className="bg-[#0A1424] border-[#1C3050] text-white placeholder:text-[#6b6b6b] rounded-[2px]"
                 />
               </div>
             )}
             {["url", "pdf", "docx"].includes(type) && (
-              <p className="text-xs text-[#d08700] leading-relaxed border border-[#d08700]/30 bg-[#1a1408] rounded-[2px] p-3">
+              <p className="text-xs text-[#d08700] leading-relaxed border border-[#d08700]/30 bg-[#101e33] rounded-[2px] p-3">
                 This type is stored with status configuration required. Document parsing and
                 website crawling ship with the knowledge worker in Phase 1. Paste the same content
                 as a manual source to index it today.
@@ -313,10 +313,10 @@ export function KnowledgeView() {
             )}
           </div>
           <DialogFooter className="mt-4">
-            <Button variant="outline" onClick={() => setOpen(false)} className="border-[#262626] text-[#A1A1A1] rounded-[2px]">
+            <Button variant="outline" onClick={() => setOpen(false)} className="border-[#1C3050] text-[#A1A1A1] rounded-[2px]">
               Cancel
             </Button>
-            <Button onClick={add} disabled={pending} className="bg-[#E10600] hover:bg-[#B80500] text-white rounded-[2px]">
+            <Button onClick={add} disabled={pending} className="bg-[#4A90E2] hover:bg-[#2E7CDE] text-white rounded-[2px]">
               {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Add source
             </Button>
@@ -437,21 +437,21 @@ export function VoiceStudioView() {
         <CloneVoicesList clones={clones} onChanged={loadClones} />
 
         <div className="grid gap-4 lg:grid-cols-2">
-          <div className="rounded-[2px] border border-[#262626] bg-[#111111] p-6">
+          <div className="rounded-[2px] border border-[#1C3050] bg-[#0A1424] p-6">
             <p className="text-xs uppercase tracking-[0.2em] text-[#A1A1A1]">Practice console</p>
             <div className="mt-6">
               <Waveform
                 amplitudes={amplitudes}
                 height={88}
-                color="#E10600"
-                baselineColor="#262626"
+                color="#4A90E2"
+                baselineColor="#1C3050"
                 label={micOn ? "Your live microphone waveform" : "Idle waveform, flat baseline"}
               />
             </div>
             <div className="mt-6 flex items-center gap-3">
               <Button
                 onClick={toggleMic}
-                className={micOn ? "bg-[#161616] border border-[#262626] text-white hover:bg-[#222] rounded-[2px]" : "bg-[#E10600] hover:bg-[#B80500] text-white rounded-[2px]"}
+                className={micOn ? "bg-[#0B1628] border border-[#1C3050] text-white hover:bg-[#222] rounded-[2px]" : "bg-[#4A90E2] hover:bg-[#2E7CDE] text-white rounded-[2px]"}
               >
                 {micOn ? <MicOff className="mr-2 h-4 w-4" /> : <Mic className="mr-2 h-4 w-4" />}
                 {micOn ? "Stop microphone" : "Start microphone"}
@@ -467,14 +467,14 @@ export function VoiceStudioView() {
             </p>
           </div>
 
-          <div className="rounded-[2px] border border-dashed border-[#262626] bg-[#0D0D0D] p-6">
+          <div className="rounded-[2px] border border-dashed border-[#1C3050] bg-[#0A1322] p-6">
             <div className="flex items-center gap-2">
               <ShieldCheck className="h-4 w-4 text-[#A1A1A1]" />
               <p className="text-sm font-semibold text-white">How the cloning engine works, honestly</p>
             </div>
             <div className="mt-4 space-y-3 text-xs leading-relaxed text-[#A1A1A1]">
               <p>
-                <span className="font-mono-dy text-[10px] tracking-[0.12em] text-[#E9B44C]">TIMBRE MATCH · LIVE</span>
+                <span className="font-mono-dy text-[10px] tracking-[0.12em] text-[#A9E2FF]">TIMBRE MATCH · LIVE</span>
                 <br />
                 Your recordings are measured in this browser: median pitch by autocorrelation, pace by
                 syllable rate, energy by loudness. The numbers, never the audio, drive your
@@ -539,7 +539,7 @@ export function LiveCallsView() {
         <VoicePlanGate />
       ) : employees === null ? (
         <div className="flex h-40 items-center justify-center">
-          <Loader2 className="h-5 w-5 animate-spin text-[#E10600]" />
+          <Loader2 className="h-5 w-5 animate-spin text-[#4A90E2]" />
         </div>
       ) : (
         <CallConsole employees={employees} onCallEnded={() => setCallsVersion((v) => v + 1)} />
@@ -558,15 +558,15 @@ export function LiveCallsView() {
         </div>
         {pastCalls === null ? (
           <div className="mt-3 flex h-20 items-center justify-center">
-            <Loader2 className="h-4 w-4 animate-spin text-[#E10600]" />
+            <Loader2 className="h-4 w-4 animate-spin text-[#4A90E2]" />
           </div>
         ) : pastCalls.length === 0 ? (
-          <p className="mt-3 rounded-[4px] border border-dashed border-[#262626] bg-[#0D0D0D] px-5 py-6 text-center text-[13px] text-[#A1A1A1]">
+          <p className="mt-3 rounded-[4px] border border-dashed border-[#1C3050] bg-[#0A1322] px-5 py-6 text-center text-[13px] text-[#A1A1A1]">
             No calls yet. The list fills with real sessions: durations, turns, barge-ins, and cue
             counts come from the turns that actually happened.
           </p>
         ) : (
-          <div className="mt-3 overflow-hidden rounded-[4px] border border-[#262626]">
+          <div className="mt-3 overflow-hidden rounded-[4px] border border-[#1C3050]">
             {pastCalls.map((c, i) => {
               const cueCount = Object.values(c.cuesSummary ?? {}).reduce((a, b) => a + b, 0);
               return (
@@ -574,8 +574,8 @@ export function LiveCallsView() {
                   key={c.id}
                   onClick={() => navigate(ROUTES.appInbox)}
                   className={cn(
-                    "grid w-full grid-cols-1 gap-2 bg-[#111111] px-5 py-4 text-left transition-colors ease-mechanical hover:bg-[#161616]",
-                    i > 0 && "border-t border-[#262626]",
+                    "grid w-full grid-cols-1 gap-2 bg-[#0A1424] px-5 py-4 text-left transition-colors ease-mechanical hover:bg-[#0B1628]",
+                    i > 0 && "border-t border-[#1C3050]",
                   )}
                 >
                   <div className="flex flex-wrap items-center gap-3">
@@ -616,12 +616,12 @@ export function AutomationsView() {
         title="The automation engine ships in Phase 2"
         body="Automations run on the real event stream, so they ship with the engine, not before it. Triggers like incoming call, lead inquiry, and missed call become configurable the moment the engine is live. Until then, this page says exactly that."
       />
-      <div className="mt-4 rounded-[2px] border border-[#262626] bg-[#111111] p-6">
+      <div className="mt-4 rounded-[2px] border border-[#1C3050] bg-[#0A1424] p-6">
         <p className="text-xs uppercase tracking-[0.2em] text-[#A1A1A1]">Planned flow structure</p>
         <div className="mt-4 flex flex-wrap gap-2 items-center text-xs font-semibold uppercase tracking-wide">
           {["Trigger", "Condition", "AI action", "Tool action", "Route", "Log"].map((s, i) => (
             <span key={s} className="flex items-center gap-2">
-              <span className="px-3 py-2 border border-[#262626] rounded-[2px] text-white/80">{s}</span>
+              <span className="px-3 py-2 border border-[#1C3050] rounded-[2px] text-white/80">{s}</span>
               {i < 5 && <span className="text-[#6b6b6b]">→</span>}
             </span>
           ))}
@@ -677,12 +677,12 @@ export function IntegrationsView() {
       />
       {items === null ? (
         <div className="flex justify-center py-24">
-          <Loader2 className="h-6 w-6 text-[#E10600] animate-spin" />
+          <Loader2 className="h-6 w-6 text-[#4A90E2] animate-spin" />
         </div>
       ) : (
         <div className="grid sm:grid-cols-2 gap-4">
           {items.map((i) => (
-            <div key={i.type} className="rounded-[2px] border border-[#262626] bg-[#111111] p-5">
+            <div key={i.type} className="rounded-[2px] border border-[#1C3050] bg-[#0A1424] p-5">
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <p className="font-bold text-white">{i.label}</p>
@@ -695,7 +695,7 @@ export function IntegrationsView() {
                 <Button
                   size="sm"
                   variant="outline"
-                  className="mt-4 border-[#262626] text-white hover:bg-[#161616] rounded-[2px] h-8"
+                  className="mt-4 border-[#1C3050] text-white hover:bg-[#0B1628] rounded-[2px] h-8"
                   onClick={() => requestSetup(i)}
                 >
                   <Plug className="mr-1.5 h-3.5 w-3.5" /> Request setup
@@ -725,7 +725,7 @@ export function AnalyticsView() {
   if (loading) {
     return (
       <div className="flex justify-center py-24">
-        <Loader2 className="h-6 w-6 text-[#E10600] animate-spin" />
+        <Loader2 className="h-6 w-6 text-[#4A90E2] animate-spin" />
       </div>
     );
   }
@@ -756,13 +756,13 @@ export function AnalyticsView() {
               detail="Most recent AI reply"
             />
           </div>
-          <div className="mt-4 rounded-[2px] border border-[#262626] bg-[#111111] p-6">
+          <div className="mt-4 rounded-[2px] border border-[#1C3050] bg-[#0A1424] p-6">
             <p className="text-sm font-semibold text-white">Events per day, last 14 days</p>
             <div className="mt-6 flex items-end gap-1.5 h-24">
               {data.eventsByDay.map((d) => (
                 <div key={d.day} className="flex-1 flex flex-col items-center gap-1.5" title={`${d.day}: ${d.count}`}>
                   <div
-                    className="w-full bg-[#E10600] rounded-t-[2px] min-h-[2px]"
+                    className="w-full bg-[#4A90E2] rounded-t-[2px] min-h-[2px]"
                     style={{ height: `${Math.max(2, (d.count / Math.max(1, Math.max(...data.eventsByDay.map((x) => x.count)))) * 96)}px` }}
                   />
                   <span className="text-[9px] text-[#6b6b6b]">{d.day.slice(8)}</span>
@@ -786,18 +786,18 @@ export function SettingsView() {
         title="Settings"
         intro="Organization, members, security, retention, and billing. Defaults favor privacy and explicit review." />
       <div className="space-y-4 max-w-2xl">
-        <div className="rounded-[2px] border border-[#262626] bg-[#111111] p-6">
+        <div className="rounded-[2px] border border-[#1C3050] bg-[#0A1424] p-6">
           <p className="text-xs uppercase tracking-[0.2em] text-[#A1A1A1]">Organization</p>
           <div className="mt-4 space-y-2 text-sm">
-            <div className="flex justify-between border-b border-[#1a1a1a] pb-2">
+            <div className="flex justify-between border-b border-[#0c1526] pb-2">
               <span className="text-[#A1A1A1]">Name</span>
               <span className="text-white font-semibold">{user?.organizationName}</span>
             </div>
-            <div className="flex justify-between border-b border-[#1a1a1a] pb-2">
+            <div className="flex justify-between border-b border-[#0c1526] pb-2">
               <span className="text-[#A1A1A1]">Type</span>
               <span className="text-white capitalize">{user?.organizationType}</span>
             </div>
-            <div className="flex justify-between border-b border-[#1a1a1a] pb-2">
+            <div className="flex justify-between border-b border-[#0c1526] pb-2">
               <span className="text-[#A1A1A1]">Your role</span>
               <span className="text-white capitalize">{user?.role}</span>
             </div>
@@ -808,7 +808,7 @@ export function SettingsView() {
           </div>
         </div>
 
-        <div className="rounded-[2px] border border-[#262626] bg-[#111111] p-6">
+        <div className="rounded-[2px] border border-[#1C3050] bg-[#0A1424] p-6">
           <p className="text-xs uppercase tracking-[0.2em] text-[#A1A1A1]">Members and roles</p>
           <p className="mt-3 text-sm text-[#A1A1A1] leading-relaxed">
             Roles: owner manages billing and the organization, admin manages members and deploys
@@ -817,7 +817,7 @@ export function SettingsView() {
           </p>
         </div>
 
-        <div className="rounded-[2px] border border-[#262626] bg-[#111111] p-6">
+        <div className="rounded-[2px] border border-[#1C3050] bg-[#0A1424] p-6">
           <p className="text-xs uppercase tracking-[0.2em] text-[#A1A1A1]">Data retention</p>
           <p className="mt-3 text-sm text-[#A1A1A1] leading-relaxed">
             Conversations and transcripts: retained while the organization is active. Recordings:
@@ -827,7 +827,7 @@ export function SettingsView() {
           </p>
         </div>
 
-        <div className="rounded-[2px] border border-[#262626] bg-[#111111] p-6">
+        <div className="rounded-[2px] border border-[#1C3050] bg-[#0A1424] p-6">
           <p className="text-xs uppercase tracking-[0.2em] text-[#A1A1A1]">Billing</p>
           <p className="mt-3 text-sm text-[#A1A1A1] leading-relaxed">
             This organization is on the free tier. Usage is metered transparently in the usage

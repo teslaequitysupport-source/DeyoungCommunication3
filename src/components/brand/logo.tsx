@@ -31,7 +31,7 @@ export function Monogram({
         width="15"
         height="3.4"
         rx="1.2"
-        fill={redBar ? "#E10600" : "currentColor"}
+        fill={redBar ? "#00C8FF" : "currentColor"}
       />
       <rect x="12" y="20.6" width="10" height="3.4" rx="1.2" fill="currentColor" />
     </svg>
@@ -48,12 +48,12 @@ export function Wordmark({
   compact?: boolean;
 }) {
   const mainColor =
-    variant === "light" || variant === "mono-white" ? "#FFFFFF" : "#090909";
+    variant === "light" || variant === "mono-white" ? "#FFFFFF" : "#070E1A";
   const subColor =
     variant === "mono-white"
       ? "#FFFFFF"
       : variant === "mono-black"
-        ? "#090909"
+        ? "#070E1A"
         : variant === "light"
           ? "#A1A1A1"
           : "#A1A1A1";
@@ -64,7 +64,7 @@ export function Wordmark({
         style={{ color: mainColor }}
         aria-label="DEYOUNG COMM"
       >
-        DEYOUNG<span style={{ color: "#E10600" }}>.</span>
+        DEYOUNG<span style={{ color: "#00C8FF" }}>.</span>
       </span>
     );
   }
@@ -97,7 +97,7 @@ export function LogoLockup({
 }) {
   return (
     <span className={cn("inline-flex items-center gap-3", className)}>
-      <Monogram size={size} className={variant === "light" ? "text-white" : "text-[#090909]"} />
+      <Monogram size={size} className={variant === "light" ? "text-white" : "text-[#070E1A]"} />
       <Wordmark variant={variant} />
     </span>
   );
@@ -119,7 +119,7 @@ export function SiteLockup({
   size?: number;
   className?: string;
 }) {
-  const mainColor = variant === "light" ? "#FFFFFF" : "#090909";
+  const mainColor = variant === "light" ? "#FFFFFF" : "#070E1A";
   const subColor = variant === "light" ? "#A1A1A1" : "#A1A1A1";
   const trimmed = siteName.trim() || "DEYOUNG COMMUNICATION";
   const words = trimmed.split(/\s+/);
@@ -128,7 +128,7 @@ export function SiteLockup({
 
   return (
     <span className={cn("inline-flex items-center gap-2.5", className)}>
-      <Monogram size={size} className={variant === "light" ? "text-white" : "text-[#090909]"} />
+      <Monogram size={size} className={variant === "light" ? "text-white" : "text-[#070E1A]"} />
       {rest ? (
         <span className="inline-flex flex-col select-none">
           <span

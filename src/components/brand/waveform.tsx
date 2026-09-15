@@ -12,8 +12,8 @@ import { cn } from "@/lib/utils";
  */
 export function Waveform({
   amplitudes,
-  color = "#E10600",
-  baselineColor = "#262626",
+  color = "#4A90E2",
+  baselineColor = "#1C3050",
   height = 56,
   barWidth = 3,
   gap = 2,

@@ -29,7 +29,7 @@ export function SiteBanner() {
             onClick={() => navigate(settings.bannerHref.replace(/^#/, ""))}
             className="group inline-flex items-center gap-1 font-mono-dy text-[11px] font-semibold tracking-[0.08em] text-white transition-colors hover:text-white"
           >
-            <span className="border-b border-[#ff6a5e]/60 pb-px">{settings.bannerLabel}</span>
+            <span className="border-b border-[#6fcbff]/60 pb-px">{settings.bannerLabel}</span>
             <ChevronRight className="h-3 w-3 transition-transform ease-mechanical group-hover:translate-x-0.5" />
           </button>
         )}

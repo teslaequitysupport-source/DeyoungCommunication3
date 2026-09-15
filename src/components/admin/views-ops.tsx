@@ -126,19 +126,19 @@ export function AdminUsersView() {
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Search by email or name…"
-          className="rounded-[2px] border-[#262626] bg-[#111111] pl-9 text-[13px] text-white placeholder:text-[#6f6f6a] focus-visible:ring-[#E10600]"
+          className="rounded-[2px] border-[#1C3050] bg-[#0A1424] pl-9 text-[13px] text-white placeholder:text-[#6f6f6a] focus-visible:ring-[#4A90E2]"
         />
       </div>
 
-      <div className="overflow-hidden rounded-[4px] border border-[#262626]">
-        <div className="hidden grid-cols-[1.6fr_0.7fr_0.85fr_0.8fr_0.9fr_2.1fr] gap-4 border-b border-[#262626] bg-[#0C0C0C] px-5 py-3 md:grid">
+      <div className="overflow-hidden rounded-[4px] border border-[#1C3050]">
+        <div className="hidden grid-cols-[1.6fr_0.7fr_0.85fr_0.8fr_0.9fr_2.1fr] gap-4 border-b border-[#1C3050] bg-[#0A1220] px-5 py-3 md:grid">
           {["ACCOUNT", "ROLE", "PLAN", "STATUS", "LAST SEEN", "LIFECYCLE"].map((h) => (
             <span key={h} className="font-mono-dy text-[9.5px] tracking-[0.18em] text-[#6f6f6a]">{h}</span>
           ))}
         </div>
         {isLoading && !data ? (
           <div className="flex h-32 items-center justify-center">
-            <Loader2 className="h-5 w-5 animate-spin text-[#E10600]" />
+            <Loader2 className="h-5 w-5 animate-spin text-[#4A90E2]" />
           </div>
         ) : users.length === 0 ? (
           <p className="px-5 py-12 text-center font-mono-dy text-[10.5px] tracking-[0.12em] text-[#6f6f6a]">
@@ -149,15 +149,15 @@ export function AdminUsersView() {
             <div
               key={u.id}
               className={cn(
-                "grid grid-cols-1 gap-3 bg-[#111111] px-5 py-4 transition-colors hover:bg-[#161616] md:grid-cols-[1.6fr_0.7fr_0.85fr_0.8fr_0.9fr_2.1fr] md:items-center md:gap-4",
-                i > 0 && "border-t border-[#262626]",
+                "grid grid-cols-1 gap-3 bg-[#0A1424] px-5 py-4 transition-colors hover:bg-[#0B1628] md:grid-cols-[1.6fr_0.7fr_0.85fr_0.8fr_0.9fr_2.1fr] md:items-center md:gap-4",
+                i > 0 && "border-t border-[#1C3050]",
               )}
             >
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
                   <p className="truncate text-[13px] font-semibold text-white">{u.email}</p>
                   {u.role === "admin" && (
-                    <span className="rounded-[2px] border border-[#E10600]/40 bg-[#E10600]/[0.08] px-1.5 py-0.5 font-mono-dy text-[9px] tracking-[0.1em] text-[#ff6a5e]">
+                    <span className="rounded-[2px] border border-[#4A90E2]/40 bg-[#4A90E2]/[0.08] px-1.5 py-0.5 font-mono-dy text-[9px] tracking-[0.1em] text-[#6FCBFF]">
                       ADMIN
                     </span>
                   )}
@@ -166,7 +166,7 @@ export function AdminUsersView() {
                   {u.name ?? "0"} · {u.orgName ?? "no workspace"}
                 </p>
                 {u.statusReason && (
-                  <p className="mt-1 font-mono-dy text-[10px] text-[#ff6a5e]">REASON: {u.statusReason}</p>
+                  <p className="mt-1 font-mono-dy text-[10px] text-[#d08700]">REASON: {u.statusReason}</p>
                 )}
               </div>
               <span className="font-mono-dy text-[11px] text-neutral-400">{u.role.toUpperCase()}</span>
@@ -189,8 +189,8 @@ export function AdminUsersView() {
                         current
                           ? o.p === "starter"
                             ? "border-[#6f6f6a]/40 bg-white/[0.03] text-[#A1A1A1]"
-                            : "border-[#E10600]/50 bg-[#E10600]/[0.1] text-[#ff6a5e]"
-                          : "border-[#262626] text-[#6f6f6a] hover:border-[#3a3a3a] hover:text-[#A1A1A1]",
+                            : "border-[#4A90E2]/50 bg-[#4A90E2]/[0.1] text-[#6FCBFF]"
+                          : "border-[#1C3050] text-[#6f6f6a] hover:border-[#3a3a3a] hover:text-[#A1A1A1]",
                       )}
                     >
                       {o.tag}
@@ -213,8 +213,8 @@ export function AdminUsersView() {
                       a.action === "approve" || a.action === "unblock"
                         ? "border-[#3e9e63]/40 bg-[#3e9e63]/[0.08] text-[#6ecf95] hover:bg-[#3e9e63]/[0.15]"
                         : a.action === "makeAdmin"
-                          ? "border-[#E10600]/40 bg-[#E10600]/[0.08] text-[#ff6a5e] hover:bg-[#E10600]/[0.15]"
-                          : "border-[#262626] text-[#A1A1A1] hover:border-[#E10600]/40 hover:text-white",
+                          ? "border-[#4A90E2]/40 bg-[#4A90E2]/[0.08] text-[#6FCBFF] hover:bg-[#4A90E2]/[0.15]"
+                          : "border-[#1C3050] text-[#A1A1A1] hover:border-[#4A90E2]/40 hover:text-white",
                     )}
                   >
                     {pending === u.id + a.action ? (
@@ -230,7 +230,7 @@ export function AdminUsersView() {
                     setNotesFor(u);
                     setNotesDraft(u.internalNotes);
                   }}
-                  className="inline-flex items-center gap-1.5 rounded-[2px] border border-dashed border-[#262626] px-2.5 py-1.5 font-mono-dy text-[10px] tracking-[0.06em] text-[#6f6f6a] transition-colors hover:border-[#333] hover:text-[#A1A1A1]"
+                  className="inline-flex items-center gap-1.5 rounded-[2px] border border-dashed border-[#1C3050] px-2.5 py-1.5 font-mono-dy text-[10px] tracking-[0.06em] text-[#6f6f6a] transition-colors hover:border-[#333] hover:text-[#A1A1A1]"
                   title="Internal note (admin-only)"
                 >
                   <StickyNote className="h-3 w-3" />
@@ -244,7 +244,7 @@ export function AdminUsersView() {
 
       {/* Reason dialog */}
       <Dialog open={reasonFor !== null} onOpenChange={(o) => !o && setReasonFor(null)}>
-        <DialogContent className="dy-dark border-[#262626] bg-[#0C0C0C] text-[#F5F5F3] sm:max-w-md">
+        <DialogContent className="dy-dark border-[#1C3050] bg-[#0A1220] text-[#F5F5F3] sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="font-display text-white">
               {reasonFor?.action === "reject" ? "Reject signup" : "Block account"}: {reasonFor?.user.email}
@@ -260,15 +260,15 @@ export function AdminUsersView() {
             rows={3}
             maxLength={500}
             placeholder="e.g. Could not verify the business details: reply to our email to proceed."
-            className="rounded-[2px] border-[#262626] bg-[#111111] text-[13px] text-white placeholder:text-[#6f6f6a] focus-visible:ring-[#E10600]"
+            className="rounded-[2px] border-[#1C3050] bg-[#0A1424] text-[13px] text-white placeholder:text-[#6f6f6a] focus-visible:ring-[#4A90E2]"
           />
           <DialogFooter>
-            <Button variant="outline" onClick={() => setReasonFor(null)} className="rounded-[2px] border-[#262626] bg-transparent text-[#F5F5F3] hover:bg-[#111111]">
+            <Button variant="outline" onClick={() => setReasonFor(null)} className="rounded-[2px] border-[#1C3050] bg-transparent text-[#F5F5F3] hover:bg-[#0A1424]">
               Cancel
             </Button>
             <Button
               onClick={() => reasonFor && act(reasonFor.user, reasonFor.action, reason.trim() || (reasonFor.action === "reject" ? "Signup not approved." : "Blocked by administrator."))}
-              className="rounded-[2px] bg-[#E10600] text-[13px] font-semibold text-white hover:bg-[#B80500]"
+              className="rounded-[2px] bg-[#2E7CDE] text-[13px] font-semibold text-white hover:bg-[#4A90E2]"
             >
               Confirm
             </Button>
@@ -278,7 +278,7 @@ export function AdminUsersView() {
 
       {/* Internal notes dialog */}
       <Dialog open={notesFor !== null} onOpenChange={(o) => !o && setNotesFor(null)}>
-        <DialogContent className="dy-dark border-[#262626] bg-[#0C0C0C] text-[#F5F5F3] sm:max-w-md">
+        <DialogContent className="dy-dark border-[#1C3050] bg-[#0A1220] text-[#F5F5F3] sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="font-display text-white">Internal note: {notesFor?.email}</DialogTitle>
             <DialogDescription className="text-[13px] text-[#A1A1A1]">
@@ -292,13 +292,13 @@ export function AdminUsersView() {
             rows={4}
             maxLength={2000}
             placeholder="Context for fellow admins…"
-            className="rounded-[2px] border-[#262626] bg-[#111111] text-[13px] text-white placeholder:text-[#6f6f6a] focus-visible:ring-[#E10600]"
+            className="rounded-[2px] border-[#1C3050] bg-[#0A1424] text-[13px] text-white placeholder:text-[#6f6f6a] focus-visible:ring-[#4A90E2]"
           />
           <DialogFooter>
-            <Button variant="outline" onClick={() => setNotesFor(null)} className="rounded-[2px] border-[#262626] bg-transparent text-[#F5F5F3] hover:bg-[#111111]">
+            <Button variant="outline" onClick={() => setNotesFor(null)} className="rounded-[2px] border-[#1C3050] bg-transparent text-[#F5F5F3] hover:bg-[#0A1424]">
               Cancel
             </Button>
-            <Button onClick={saveNotes} className="rounded-[2px] bg-[#E10600] text-[13px] font-semibold text-white hover:bg-[#B80500]">
+            <Button onClick={saveNotes} className="rounded-[2px] bg-[#2E7CDE] text-[13px] font-semibold text-white hover:bg-[#4A90E2]">
               Save note
             </Button>
           </DialogFooter>
@@ -345,14 +345,14 @@ export function AdminCallsView() {
       />
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-5">
-        <div className={cn("overflow-hidden rounded-[4px] border border-[#262626]", openId ? "xl:col-span-2" : "xl:col-span-3")}>
-          <div className="hairline-b flex items-center justify-between border-b border-[#262626] bg-[#0C0C0C] px-5 py-3.5">
+        <div className={cn("overflow-hidden rounded-[4px] border border-[#1C3050]", openId ? "xl:col-span-2" : "xl:col-span-3")}>
+          <div className="hairline-b flex items-center justify-between border-b border-[#1C3050] bg-[#0A1220] px-5 py-3.5">
             <span className="font-mono-dy text-[10px] tracking-[0.16em] text-[#6f6f6a]">SESSIONS</span>
             <span className="font-mono-dy text-[10px] tabular-nums text-[#6f6f6a]">{calls.length} TOTAL</span>
           </div>
           {isLoading ? (
             <div className="flex h-24 items-center justify-center">
-              <Loader2 className="h-4 w-4 animate-spin text-[#E10600]" />
+              <Loader2 className="h-4 w-4 animate-spin text-[#4A90E2]" />
             </div>
           ) : calls.length === 0 ? (
             <p className="px-5 py-10 text-center font-mono-dy text-[10.5px] leading-relaxed tracking-[0.1em] text-[#6f6f6a]">
@@ -365,9 +365,9 @@ export function AdminCallsView() {
                   key={c.id}
                   onClick={() => setOpenId(openId === c.id ? null : c.id)}
                   className={cn(
-                    "flex w-full flex-col gap-1.5 bg-[#111111] px-5 py-3.5 text-left transition-colors hover:bg-[#161616]",
-                    i > 0 && "border-t border-[#161616]",
-                    openId === c.id && "bg-[#161616]",
+                    "flex w-full flex-col gap-1.5 bg-[#0A1424] px-5 py-3.5 text-left transition-colors hover:bg-[#0B1628]",
+                    i > 0 && "border-t border-[#0B1628]",
+                    openId === c.id && "bg-[#0B1628]",
                   )}
                 >
                   <div className="flex flex-wrap items-center gap-2.5">
@@ -387,8 +387,8 @@ export function AdminCallsView() {
         </div>
 
         {openId && (
-          <div className="overflow-hidden rounded-[4px] border border-[#262626] bg-[#0C0C0C] xl:col-span-3">
-            <div className="hairline-b flex items-center justify-between border-b border-[#262626] px-5 py-3.5">
+          <div className="overflow-hidden rounded-[4px] border border-[#1C3050] bg-[#0A1220] xl:col-span-3">
+            <div className="hairline-b flex items-center justify-between border-b border-[#1C3050] px-5 py-3.5">
               <div className="flex items-center gap-2.5">
                 <button onClick={() => setOpenId(null)} className="text-[#A1A1A1] transition-colors hover:text-white" aria-label="Close transcript">
                   <ChevronLeft className="h-4 w-4" />
@@ -409,7 +409,7 @@ export function AdminCallsView() {
             <div className="dy-scroll max-h-[560px] space-y-3 overflow-y-auto px-4 py-4">
               {!detail ? (
                 <div className="flex h-24 items-center justify-center">
-                  <Loader2 className="h-4 w-4 animate-spin text-[#E10600]" />
+                  <Loader2 className="h-4 w-4 animate-spin text-[#4A90E2]" />
                 </div>
               ) : detail.turns.length === 0 ? (
                 <p className="py-8 text-center font-mono-dy text-[10.5px] tracking-[0.12em] text-[#6f6f6a]">
@@ -422,17 +422,17 @@ export function AdminCallsView() {
                       className={cn(
                         "max-w-[84%] rounded-[3px] border px-4 py-3",
                         t.speaker === "human"
-                          ? "border-[#262626] bg-[#111111]"
+                          ? "border-[#1C3050] bg-[#0A1424]"
                           : t.interrupted
-                            ? "border-[#E10600]/60 bg-[#E10600]/[0.06]"
-                            : "border-[#E10600]/25 bg-[#E10600]/[0.05]",
+                            ? "border-[#d08700]/60 bg-[#d08700]/[0.06]"
+                            : "border-[#4A90E2]/25 bg-[#4A90E2]/[0.05]",
                       )}
                     >
                       <div className="flex flex-wrap items-center gap-2">
                         <span
                           className={cn(
                             "font-mono-dy text-[9.5px] tracking-[0.16em]",
-                            t.source === "operator_script" || t.source === "operator_injection" ? "text-[#E9B44C]" : "text-[#6f6f6a]",
+                            t.source === "operator_script" || t.source === "operator_injection" ? "text-[#A9E2FF]" : "text-[#6f6f6a]",
                           )}
                         >
                           {t.speaker === "human" ? "CALLER" : (detail.employeeName ?? "AI").toUpperCase()}
@@ -444,7 +444,7 @@ export function AdminCallsView() {
                           <span key={c} className="cue-chip">{c}</span>
                         ))}
                         {t.interrupted && (
-                          <span className="font-mono-dy text-[9px] font-semibold tracking-[0.14em] text-[#E10600]">
+                          <span className="font-mono-dy text-[9px] font-semibold tracking-[0.14em] text-[#d08700]">
                             INTERRUPTED
                           </span>
                         )}
@@ -456,7 +456,7 @@ export function AdminCallsView() {
               )}
             </div>
             {detail && Object.keys(detail.cuesSummary ?? {}).length > 0 && (
-              <div className="hairline-t border-t border-[#262626] px-5 py-3">
+              <div className="hairline-t border-t border-[#1C3050] px-5 py-3">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="font-mono-dy text-[9.5px] tracking-[0.16em] text-[#6f6f6a]">EMOTION CUES: COUNTED</span>
                   {Object.entries(detail.cuesSummary).map(([cue, n]) => (
@@ -514,13 +514,13 @@ export function AdminAuditView() {
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
           placeholder="Filter by action, target, or actor…"
-          className="rounded-[2px] border-[#262626] bg-[#111111] pl-9 text-[13px] text-white placeholder:text-[#6f6f6a] focus-visible:ring-[#E10600]"
+          className="rounded-[2px] border-[#1C3050] bg-[#0A1424] pl-9 text-[13px] text-white placeholder:text-[#6f6f6a] focus-visible:ring-[#4A90E2]"
         />
       </div>
-      <div className="overflow-hidden rounded-[4px] border border-[#262626]">
+      <div className="overflow-hidden rounded-[4px] border border-[#1C3050]">
         {isLoading ? (
           <div className="flex h-24 items-center justify-center">
-            <Loader2 className="h-4 w-4 animate-spin text-[#E10600]" />
+            <Loader2 className="h-4 w-4 animate-spin text-[#4A90E2]" />
           </div>
         ) : logs.length === 0 ? (
           <p className="px-5 py-10 text-center font-mono-dy text-[10.5px] tracking-[0.12em] text-[#6f6f6a]">
@@ -531,8 +531,8 @@ export function AdminAuditView() {
             <div
               key={l.id}
               className={cn(
-                "grid grid-cols-1 gap-1.5 bg-[#111111] px-5 py-3.5 md:grid-cols-[2fr_1.2fr_2fr_1fr] md:items-center md:gap-4",
-                i > 0 && "border-t border-[#161616]",
+                "grid grid-cols-1 gap-1.5 bg-[#0A1424] px-5 py-3.5 md:grid-cols-[2fr_1.2fr_2fr_1fr] md:items-center md:gap-4",
+                i > 0 && "border-t border-[#0B1628]",
               )}
             >
               <span className="font-mono-dy text-[11px] tracking-[0.04em] text-neutral-200">{l.action}</span>

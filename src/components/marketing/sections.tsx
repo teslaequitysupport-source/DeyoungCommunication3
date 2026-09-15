@@ -450,7 +450,7 @@ export function ChannelsHonest() {
               className={cn(
                 "dy-status",
                 c.state === "connected" && "dy-status-connected text-[#2e7d4f]",
-                c.state === "attention" && "dy-status-attention text-[#a06a00]",
+                c.state === "attention" && "dy-status-attention text-[#d08700]",
                 c.state === "neutral" && "dy-status-neutral text-neutral-500",
               )}
             >
@@ -648,9 +648,9 @@ export function PricingTable({ enterpriseNote = true }: { enterpriseNote?: boole
               className={cn(
                 "relative flex h-full flex-col rounded-[4px] border p-7 transition-all duration-300 ease-mechanical hover:-translate-y-0.5",
                 t.highlight
-                  ? "border-brand/40 bg-ink-3 shadow-[0_24px_60px_-20px_rgba(225,6,0,0.25)]"
+                  ? "border-brand/40 bg-ink-3 shadow-[0_24px_60px_-20px_rgba(10,91,196,0.35)]"
                   : t.name === "Agency"
-                    ? "border-white/10 bg-[#111111] text-white hover:border-brand/40 hover:shadow-[0_20px_56px_-20px_rgba(9,9,9,0.5)]"
+                    ? "border-white/10 bg-[#0A1424] text-white hover:border-brand/40 hover:shadow-[0_20px_56px_-20px_rgba(9,9,9,0.5)]"
                     : "border-white/10 bg-ink-3 hover:border-neutral-300 hover:shadow-[0_16px_40px_-20px_rgba(0,0,0,0.55)]",
               )}
             >
@@ -676,7 +676,7 @@ export function PricingTable({ enterpriseNote = true }: { enterpriseNote?: boole
                 {t.features.map((f) => (
                   <li key={f} className={cn("flex items-start gap-2.5 text-[13.5px] leading-[1.6]", t.name === "Agency" ? "text-neutral-300" : "text-neutral-300")}>
                     <svg width="12" height="12" viewBox="0 0 12 12" className="mt-[5px] flex-none" aria-hidden="true">
-                      <circle cx="6" cy="6" r="4" fill="#E10600" />
+                      <circle cx="6" cy="6" r="4" fill="#4A90E2" />
                       <circle cx="6" cy="6" r="1.6" fill="#ffffff" />
                     </svg>
                     {f}
@@ -908,7 +908,7 @@ export function IntegrationsPreview() {
               className={cn(
                 "dy-status mt-2.5",
                 ig.state === "connected" && "dy-status-connected text-[#2e7d4f]",
-                ig.state === "attention" && "dy-status-attention text-[#a06a00]",
+                ig.state === "attention" && "dy-status-attention text-[#d08700]",
                 ig.state === "neutral" && "dy-status-neutral text-neutral-500",
               )}
             >

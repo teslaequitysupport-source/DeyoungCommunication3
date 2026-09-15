@@ -107,20 +107,20 @@ export function AdminContentView() {
       />
       {isLoading && !data ? (
         <div className="flex h-40 items-center justify-center">
-          <Loader2 className="h-5 w-5 animate-spin text-[#E10600]" />
+          <Loader2 className="h-5 w-5 animate-spin text-[#4A90E2]" />
         </div>
       ) : (
         <div className="space-y-8">
           {groups.map((g) => (
             <div key={g}>
               <div className="mb-3 flex items-center gap-3">
-                <span className="font-mono-dy text-[10px] font-semibold tracking-[0.2em] text-[#E10600]">
+                <span className="font-mono-dy text-[10px] font-semibold tracking-[0.2em] text-[#4A90E2]">
                   {String(groups.indexOf(g) + 1).padStart(2, "0")}
                 </span>
                 <h2 className="font-display text-[16px] font-bold text-white">
                   {GROUP_LABELS[g] ?? g}
                 </h2>
-                <span className="h-px flex-1 bg-[#262626]" aria-hidden="true" />
+                <span className="h-px flex-1 bg-[#1C3050]" aria-hidden="true" />
               </div>
               <div className="space-y-3">
                 {blocks
@@ -133,8 +133,8 @@ export function AdminContentView() {
                       <div
                         key={b.id}
                         className={cn(
-                          "rounded-[4px] border bg-[#111111] p-5 transition-colors",
-                          b.visible ? "border-[#262626]" : "border-dashed border-[#2e2e2e] opacity-60",
+                          "rounded-[4px] border bg-[#0A1424] p-5 transition-colors",
+                          b.visible ? "border-[#1C3050]" : "border-dashed border-[#2e2e2e] opacity-60",
                         )}
                       >
                         <div className="flex flex-wrap items-center justify-between gap-3">
@@ -167,14 +167,14 @@ export function AdminContentView() {
                               onChange={(e) => setDrafts((d) => ({ ...d, [b.key]: e.target.value }))}
                               rows={3}
                               maxLength={4000}
-                              className="rounded-[2px] border-[#262626] bg-[#0C0C0C] text-[13px] leading-relaxed text-white focus-visible:ring-[#E10600]"
+                              className="rounded-[2px] border-[#1C3050] bg-[#0A1220] text-[13px] leading-relaxed text-white focus-visible:ring-[#4A90E2]"
                             />
                           ) : (
                             <Input
                               value={draft ?? b.value}
                               onChange={(e) => setDrafts((d) => ({ ...d, [b.key]: e.target.value }))}
                               maxLength={4000}
-                              className="rounded-[2px] border-[#262626] bg-[#0C0C0C] text-[13px] text-white focus-visible:ring-[#E10600]"
+                              className="rounded-[2px] border-[#1C3050] bg-[#0A1220] text-[13px] text-white focus-visible:ring-[#4A90E2]"
                             />
                           )}
                         </div>
@@ -184,7 +184,7 @@ export function AdminContentView() {
                               size="sm"
                               onClick={() => save(b, draft)}
                               disabled={saving === b.key}
-                              className="rounded-[2px] bg-[#E10600] px-4 text-[12px] font-semibold text-white hover:bg-[#B80500]"
+                              className="rounded-[2px] bg-[#4A90E2] px-4 text-[12px] font-semibold text-white hover:bg-[#2E7CDE]"
                             >
                               {saving === b.key ? <Loader2 className="mr-1.5 h-3 w-3 animate-spin" /> : <Save className="mr-1.5 h-3 w-3" />}
                               Save & publish
@@ -301,7 +301,7 @@ export function AdminMediaView() {
         }}
         className={cn(
           "rounded-[4px] border-2 border-dashed p-10 text-center transition-colors ease-mechanical",
-          dragOver ? "border-[#E10600]/60 bg-[#E10600]/[0.04]" : "border-[#2e2e2e] bg-[#0C0C0C]",
+          dragOver ? "border-[#4A90E2]/60 bg-[#4A90E2]/[0.04]" : "border-[#2e2e2e] bg-[#0A1220]",
         )}
       >
         <input
@@ -312,12 +312,12 @@ export function AdminMediaView() {
           className="hidden"
           onChange={(e) => e.target.files && upload(e.target.files)}
         />
-        <Upload className={cn("mx-auto h-6 w-6", dragOver ? "text-[#E10600]" : "text-[#6f6f6a]")} strokeWidth={1.75} />
+        <Upload className={cn("mx-auto h-6 w-6", dragOver ? "text-[#4A90E2]" : "text-[#6f6f6a]")} strokeWidth={1.75} />
         <p className="font-display mt-4 text-[15px] font-bold text-white">
           Drop photos here, or
           <button
             onClick={() => inputRef.current?.click()}
-            className="ml-1.5 text-[#E10600] underline decoration-[#E10600]/40 underline-offset-4 transition-colors hover:text-[#ff6a5e]"
+            className="ml-1.5 text-[#4A90E2] underline decoration-[#4A90E2]/40 underline-offset-4 transition-colors hover:text-[#6fcbff]"
           >
             choose from your device
           </button>
@@ -327,7 +327,7 @@ export function AdminMediaView() {
         </p>
         {uploading && (
           <p className="mt-4 flex items-center justify-center gap-2 font-mono-dy text-[11px] text-[#A1A1A1]">
-            <Loader2 className="h-3.5 w-3.5 animate-spin text-[#E10600]" /> UPLOADING…
+            <Loader2 className="h-3.5 w-3.5 animate-spin text-[#4A90E2]" /> UPLOADING…
           </p>
         )}
       </div>
@@ -336,17 +336,17 @@ export function AdminMediaView() {
       <h2 className="font-display mt-8 mb-3 text-[16px] font-bold text-white">Library: {assets.length} asset{assets.length === 1 ? "" : "s"}</h2>
       {isLoading ? (
         <div className="flex h-24 items-center justify-center">
-          <Loader2 className="h-4 w-4 animate-spin text-[#E10600]" />
+          <Loader2 className="h-4 w-4 animate-spin text-[#4A90E2]" />
         </div>
       ) : assets.length === 0 ? (
-        <p className="rounded-[4px] border border-dashed border-[#262626] bg-[#0D0D0D] px-5 py-10 text-center font-mono-dy text-[10.5px] leading-relaxed tracking-[0.1em] text-[#6f6f6a]">
+        <p className="rounded-[4px] border border-dashed border-[#1C3050] bg-[#0A1322] px-5 py-10 text-center font-mono-dy text-[10.5px] leading-relaxed tracking-[0.1em] text-[#6f6f6a]">
           NO MEDIA YET · THE LIBRARY SHOWS EXACTLY WHAT HAS BEEN UPLOADED, NOTHING STOCKED
         </p>
       ) : (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {assets.map((a) => (
-            <div key={a.id} className="group overflow-hidden rounded-[4px] border border-[#262626] bg-[#111111]">
-              <div className="relative aspect-[4/3] overflow-hidden bg-[#0C0C0C]">
+            <div key={a.id} className="group overflow-hidden rounded-[4px] border border-[#1C3050] bg-[#0A1424]">
+              <div className="relative aspect-[4/3] overflow-hidden bg-[#0A1220]">
                 { }
                 <img src={a.url} alt={a.alt} className="h-full w-full object-cover transition-transform duration-300 ease-mechanical group-hover:scale-[1.03]" />
               </div>
@@ -358,13 +358,13 @@ export function AdminMediaView() {
                 <div className="mt-2.5 flex gap-1.5">
                   <button
                     onClick={() => copyUrl(a.url)}
-                    className="flex flex-1 items-center justify-center gap-1 rounded-[2px] border border-[#262626] py-1.5 font-mono-dy text-[9.5px] tracking-[0.08em] text-[#A1A1A1] transition-colors hover:border-[#333] hover:text-white"
+                    className="flex flex-1 items-center justify-center gap-1 rounded-[2px] border border-[#1C3050] py-1.5 font-mono-dy text-[9.5px] tracking-[0.08em] text-[#A1A1A1] transition-colors hover:border-[#333] hover:text-white"
                   >
                     <Copy className="h-3 w-3" /> URL
                   </button>
                   <button
                     onClick={() => remove(a)}
-                    className="flex items-center justify-center rounded-[2px] border border-[#262626] px-2.5 py-1.5 text-[#A1A1A1] transition-colors hover:border-[#E10600]/50 hover:text-[#ff6a5e]"
+                    className="flex items-center justify-center rounded-[2px] border border-[#1C3050] px-2.5 py-1.5 text-[#A1A1A1] transition-colors hover:border-[#4A90E2]/50 hover:text-[#6fcbff]"
                     aria-label={`Delete ${a.filename}`}
                   >
                     <Trash2 className="h-3 w-3" />
@@ -431,7 +431,7 @@ export function AdminSettingsView() {
   if (isLoading && !data) {
     return (
       <div className="flex h-40 items-center justify-center">
-        <Loader2 className="h-5 w-5 animate-spin text-[#E10600]" />
+        <Loader2 className="h-5 w-5 animate-spin text-[#4A90E2]" />
       </div>
     );
   }
@@ -445,9 +445,9 @@ export function AdminSettingsView() {
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         {/* Identity */}
-        <div className="rounded-[4px] border border-[#262626] bg-[#111111] p-6">
+        <div className="rounded-[4px] border border-[#1C3050] bg-[#0A1424] p-6">
           <div className="flex items-center gap-2.5">
-            <Type className="h-4 w-4 text-[#E10600]" strokeWidth={1.75} />
+            <Type className="h-4 w-4 text-[#4A90E2]" strokeWidth={1.75} />
             <h2 className="font-display text-[15px] font-bold text-white">Identity</h2>
           </div>
           <p className="mt-1.5 text-[12.5px] leading-relaxed text-[#6f6f6a]">
@@ -460,7 +460,7 @@ export function AdminSettingsView() {
                 value={s.siteName ?? ""}
                 onChange={(e) => set("siteName", e.target.value)}
                 maxLength={80}
-                className="rounded-[2px] border-[#262626] bg-[#0C0C0C] text-[14px] font-semibold text-white focus-visible:ring-[#E10600]"
+                className="rounded-[2px] border-[#1C3050] bg-[#0A1220] text-[14px] font-semibold text-white focus-visible:ring-[#4A90E2]"
               />
             </div>
             <div className="space-y-2">
@@ -469,7 +469,7 @@ export function AdminSettingsView() {
                 value={s.tagline ?? ""}
                 onChange={(e) => set("tagline", e.target.value)}
                 maxLength={200}
-                className="rounded-[2px] border-[#262626] bg-[#0C0C0C] text-[13.5px] text-white focus-visible:ring-[#E10600]"
+                className="rounded-[2px] border-[#1C3050] bg-[#0A1220] text-[13.5px] text-white focus-visible:ring-[#4A90E2]"
               />
             </div>
             <div className="space-y-2">
@@ -478,17 +478,17 @@ export function AdminSettingsView() {
                 type="email"
                 value={s.supportEmail ?? ""}
                 onChange={(e) => set("supportEmail", e.target.value)}
-                className="rounded-[2px] border-[#262626] bg-[#0C0C0C] text-[13.5px] text-white focus-visible:ring-[#E10600]"
+                className="rounded-[2px] border-[#1C3050] bg-[#0A1220] text-[13.5px] text-white focus-visible:ring-[#4A90E2]"
               />
             </div>
           </div>
         </div>
 
         {/* Banner */}
-        <div className="rounded-[4px] border border-[#262626] bg-[#111111] p-6">
+        <div className="rounded-[4px] border border-[#1C3050] bg-[#0A1424] p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <Megaphone className="h-4 w-4 text-[#E10600]" strokeWidth={1.75} />
+              <Megaphone className="h-4 w-4 text-[#4A90E2]" strokeWidth={1.75} />
               <h2 className="font-display text-[15px] font-bold text-white">Announcement banner</h2>
             </div>
             <Switch
@@ -509,7 +509,7 @@ export function AdminSettingsView() {
                 onChange={(e) => set("bannerText", e.target.value)}
                 maxLength={300}
                 disabled={!s.bannerEnabled}
-                className="rounded-[2px] border-[#262626] bg-[#0C0C0C] text-[13.5px] text-white focus-visible:ring-[#E10600] disabled:opacity-50"
+                className="rounded-[2px] border-[#1C3050] bg-[#0A1220] text-[13.5px] text-white focus-visible:ring-[#4A90E2] disabled:opacity-50"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -520,7 +520,7 @@ export function AdminSettingsView() {
                   onChange={(e) => set("bannerLabel", e.target.value)}
                   maxLength={60}
                   disabled={!s.bannerEnabled}
-                  className="rounded-[2px] border-[#262626] bg-[#0C0C0C] text-[13.5px] text-white focus-visible:ring-[#E10600] disabled:opacity-50"
+                  className="rounded-[2px] border-[#1C3050] bg-[#0A1220] text-[13.5px] text-white focus-visible:ring-[#4A90E2] disabled:opacity-50"
                 />
               </div>
               <div className="space-y-2">
@@ -531,15 +531,15 @@ export function AdminSettingsView() {
                   maxLength={300}
                   disabled={!s.bannerEnabled}
                   placeholder="#/signup"
-                  className="rounded-[2px] border-[#262626] bg-[#0C0C0C] text-[13.5px] text-white focus-visible:ring-[#E10600] disabled:opacity-50"
+                  className="rounded-[2px] border-[#1C3050] bg-[#0A1220] text-[13.5px] text-white focus-visible:ring-[#4A90E2] disabled:opacity-50"
                 />
               </div>
             </div>
             {s.bannerEnabled && (s.bannerText ?? "").trim() && (
-              <div className="rounded-[3px] border border-[#262626] bg-[#0C0C0C] px-4 py-2.5">
+              <div className="rounded-[3px] border border-[#1C3050] bg-[#0A1220] px-4 py-2.5">
                 <p className="font-mono-dy text-[10.5px] text-neutral-300">
-                  <span className="mr-2 inline-block h-1.5 w-1.5 rounded-full bg-[#E10600]" />
-                  {s.bannerText} <span className="text-[#ff6a5e]">{s.bannerLabel} →</span>
+                  <span className="mr-2 inline-block h-1.5 w-1.5 rounded-full bg-[#4A90E2]" />
+                  {s.bannerText} <span className="text-[#6fcbff]">{s.bannerLabel} →</span>
                 </p>
               </div>
             )}
@@ -547,9 +547,9 @@ export function AdminSettingsView() {
         </div>
 
         {/* Flags */}
-        <div className="rounded-[4px] border border-[#262626] bg-[#111111] p-6 xl:col-span-2">
+        <div className="rounded-[4px] border border-[#1C3050] bg-[#0A1424] p-6 xl:col-span-2">
           <div className="flex items-center gap-2.5">
-            <Eye className="h-4 w-4 text-[#E10600]" strokeWidth={1.75} />
+            <Eye className="h-4 w-4 text-[#4A90E2]" strokeWidth={1.75} />
             <h2 className="font-display text-[15px] font-bold text-white">Public visibility</h2>
           </div>
           <p className="mt-1.5 text-[12.5px] leading-relaxed text-[#6f6f6a]">
@@ -560,7 +560,7 @@ export function AdminSettingsView() {
             {FLAGS.map((f) => (
               <div
                 key={f.key}
-                className="flex items-center justify-between gap-4 rounded-[3px] border border-[#1c1c1c] bg-[#0C0C0C] px-4 py-3.5"
+                className="flex items-center justify-between gap-4 rounded-[3px] border border-[#1c1c1c] bg-[#0A1220] px-4 py-3.5"
               >
                 <div>
                   <p className="text-[13.5px] font-semibold text-white">{f.label}</p>
@@ -578,8 +578,8 @@ export function AdminSettingsView() {
       </div>
 
       {dirty && (
-        <div className="sticky bottom-4 mt-6 flex items-center justify-between rounded-[4px] border border-[#E10600]/40 bg-[#160b0a] px-5 py-4 shadow-[0_16px_48px_-12px_rgba(225,6,0,0.35)]">
-          <span className="font-mono-dy text-[11px] tracking-[0.1em] text-[#ff6a5e]">
+        <div className="sticky bottom-4 mt-6 flex items-center justify-between rounded-[4px] border border-[#4A90E2]/40 bg-[#0A1424] px-5 py-4 shadow-[0_16px_48px_-12px_rgba(10,91,196,0.45)]">
+          <span className="font-mono-dy text-[11px] tracking-[0.1em] text-[#6fcbff]">
             {Object.keys(draft).length} UNSAVED SETTING{Object.keys(draft).length === 1 ? "" : "S"}: NOT YET LIVE
           </span>
           <div className="flex gap-2">
@@ -589,7 +589,7 @@ export function AdminSettingsView() {
             <Button
               onClick={save}
               disabled={saving}
-              className="rounded-[2px] bg-[#E10600] px-5 text-[12.5px] font-semibold text-white hover:bg-[#B80500]"
+              className="rounded-[2px] bg-[#4A90E2] px-5 text-[12.5px] font-semibold text-white hover:bg-[#2E7CDE]"
             >
               {saving ? <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> : <Check className="mr-1.5 h-3.5 w-3.5" />}
               Save & publish

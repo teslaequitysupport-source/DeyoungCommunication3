@@ -569,7 +569,7 @@ export function ContactPage() {
                 className="rounded-[2px] border-white/15 focus-visible:ring-brand" placeholder="What are you trying to build or solve?" />
             </div>
             <Button type="submit" disabled={pending}
-              className="h-12 rounded-[2px] bg-brand px-7 text-[14px] font-semibold text-white transition-all ease-mechanical hover:bg-brand-dark hover:shadow-[0_12px_36px_-8px_rgba(225,6,0,0.5)]">
+              className="h-12 rounded-[2px] bg-brand px-7 text-[14px] font-semibold text-white transition-all ease-mechanical hover:bg-brand-dark hover:shadow-[0_12px_36px_-8px_rgba(10,91,196,0.5)]">
               {pending ? "Sending…" : "Send message"}
               <ArrowRight className="ml-1.5 h-4 w-4" />
             </Button>
@@ -732,7 +732,7 @@ export function LoginPage() {
             className="h-11 rounded-[2px] border-white/15 focus-visible:ring-brand" placeholder="Your password" />
         </div>
         <Button type="submit" disabled={pending}
-          className="h-12 w-full rounded-[2px] bg-brand text-[14px] font-semibold text-white transition-all ease-mechanical hover:bg-brand-dark hover:shadow-[0_12px_36px_-8px_rgba(225,6,0,0.5)]">
+          className="h-12 w-full rounded-[2px] bg-brand text-[14px] font-semibold text-white transition-all ease-mechanical hover:bg-brand-dark hover:shadow-[0_12px_36px_-8px_rgba(10,91,196,0.5)]">
           {pending ? "Signing in…" : "Sign in"}
         </Button>
       </form>
@@ -836,7 +836,7 @@ export function SignupPage() {
           </div>
         </div>
         <Button type="submit" disabled={pending}
-          className="h-12 w-full rounded-[2px] bg-brand text-[14px] font-semibold text-white transition-all ease-mechanical hover:bg-brand-dark hover:shadow-[0_12px_36px_-8px_rgba(225,6,0,0.5)]">
+          className="h-12 w-full rounded-[2px] bg-brand text-[14px] font-semibold text-white transition-all ease-mechanical hover:bg-brand-dark hover:shadow-[0_12px_36px_-8px_rgba(10,91,196,0.5)]">
           {pending ? "Creating…" : "Create workspace"}
           <ArrowRight className="ml-1.5 h-4 w-4" />
         </Button>

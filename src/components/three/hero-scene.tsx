@@ -17,7 +17,7 @@ function SignalRing({ count = 160 }: { count?: number }) {
   const group = useRef<THREE.Group>(null!);
   const color = useMemo(() => new THREE.Color(), []);
   const cDark = useMemo(() => new THREE.Color("#232323"), []);
-  const cRed = useMemo(() => new THREE.Color("#e10600"), []);
+  const cRed = useMemo(() => new THREE.Color("#4a90e2"), []);
 
   const items = useMemo(() => {
     const arr: { angle: number; x: number; z: number }[] = [];
@@ -91,12 +91,12 @@ function SignalRing({ count = 160 }: { count?: number }) {
       {/* Center core: one red beacon that breathes */}
       <mesh position={[0, 0.55, 0]}>
         <sphereGeometry args={[0.34, 32, 32]} />
-        <meshBasicMaterial color="#e10600" toneMapped={false} />
+        <meshBasicMaterial color="#4a90e2" toneMapped={false} />
       </mesh>
       {/* Ring floor guide */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
         <ringGeometry args={[3.28, 3.42, 128]} />
-        <meshBasicMaterial color="#1a1a1a" side={THREE.DoubleSide} toneMapped={false} />
+        <meshBasicMaterial color="#0c1526" side={THREE.DoubleSide} toneMapped={false} />
       </mesh>
     </group>
   );
@@ -111,7 +111,7 @@ export default function HeroScene({ className }: { className?: string }) {
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
         style={{ background: "transparent" }}
       >
-        <fog attach="fog" args={["#090909", 7.5, 15]} />
+        <fog attach="fog" args={["#070E1A", 7.5, 15]} />
         <SignalRing count={160} />
       </Canvas>
     </div>

@@ -56,9 +56,9 @@ const EVENT_META: Record<string, { icon: typeof UserPlus; tint: string; label: s
   "user:created": { icon: UserPlus, tint: "text-white", label: "New signup" },
   "user:status": { icon: ShieldCheck, tint: "text-white", label: "Account status" },
   "user:role": { icon: ShieldAlert, tint: "text-white", label: "Role change" },
-  "call:started": { icon: Phone, tint: "text-[#ff6a5e]", label: "Call started" },
+  "call:started": { icon: Phone, tint: "text-[#6fcbff]", label: "Call started" },
   "call:turn": { icon: RefreshCw, tint: "text-neutral-400", label: "Call turn" },
-  "call:coached": { icon: Megaphone, tint: "text-[#E9B44C]", label: "Operator coached" },
+  "call:coached": { icon: Megaphone, tint: "text-[#A9E2FF]", label: "Operator coached" },
   "call:ended": { icon: PhoneOff, tint: "text-neutral-400", label: "Call ended" },
   "contact:new": { icon: Mail, tint: "text-white", label: "Contact inquiry" },
   "content:updated": { icon: FileText, tint: "text-white", label: "Content" },
@@ -69,8 +69,8 @@ const EVENT_META: Record<string, { icon: typeof UserPlus; tint: string; label: s
 function EventFeed() {
   const { events } = useAdminRealtime();
   return (
-    <div className="flex h-full flex-col rounded-[4px] border border-[#262626] bg-[#0C0C0C]">
-      <div className="hairline-b flex items-center justify-between border-b border-[#262626] px-5 py-4">
+    <div className="flex h-full flex-col rounded-[4px] border border-[#1C3050] bg-[#0A1220]">
+      <div className="hairline-b flex items-center justify-between border-b border-[#1C3050] px-5 py-4">
         <h3 className="font-display text-[14px] font-bold text-white">Live event feed</h3>
         <span className="font-mono-dy text-[10px] tracking-[0.14em] text-[#6f6f6a]">
           SOCKET.IO · REALTIME
@@ -110,7 +110,7 @@ function EventRow({ e }: { e: AdminEvent }) {
   else if (e.event === "settings:updated") detail = "site settings changed";
 
   return (
-    <div className="flex items-start gap-3 rounded-[3px] px-2 py-2.5 transition-colors hover:bg-[#111111]">
+    <div className="flex items-start gap-3 rounded-[3px] px-2 py-2.5 transition-colors hover:bg-[#0A1424]">
       <meta.icon className={cn("mt-0.5 h-3.5 w-3.5 flex-none", meta.tint)} strokeWidth={1.8} />
       <div className="min-w-0 flex-1">
         <div className="flex items-baseline justify-between gap-2">
@@ -164,7 +164,7 @@ function AdminOverview() {
       />
       {isLoading && !data ? (
         <div className="flex h-40 items-center justify-center">
-          <Loader2 className="h-5 w-5 animate-spin text-[#E10600]" />
+          <Loader2 className="h-5 w-5 animate-spin text-[#4A90E2]" />
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
@@ -173,7 +173,7 @@ function AdminOverview() {
               {cards.map((s) => (
                 <div
                   key={s.l}
-                  className="rounded-[4px] border border-[#262626] bg-[#111111] p-4 transition-all duration-300 ease-mechanical hover:-translate-y-0.5 hover:border-[#333]"
+                  className="rounded-[4px] border border-[#1C3050] bg-[#0A1424] p-4 transition-all duration-300 ease-mechanical hover:-translate-y-0.5 hover:border-[#333]"
                 >
                   <p className="font-mono-dy text-[9.5px] tracking-[0.18em] text-[#A1A1A1]">{s.l}</p>
                   <p className="mt-2.5 font-display-strong text-[26px] leading-none tabular-nums text-white">
@@ -189,8 +189,8 @@ function AdminOverview() {
               ))}
             </div>
 
-            <div className="mt-6 rounded-[4px] border border-[#262626] bg-[#0C0C0C]">
-              <div className="hairline-b flex items-center justify-between border-b border-[#262626] px-5 py-4">
+            <div className="mt-6 rounded-[4px] border border-[#1C3050] bg-[#0A1220]">
+              <div className="hairline-b flex items-center justify-between border-b border-[#1C3050] px-5 py-4">
                 <h3 className="font-display text-[14px] font-bold text-white">Recent admin actions</h3>
                 <span className="font-mono-dy text-[10px] tracking-[0.14em] text-[#6f6f6a]">AUDIT TRAIL</span>
               </div>
@@ -198,7 +198,7 @@ function AdminOverview() {
                 {(data?.recentAudit ?? []).map((a) => (
                   <div
                     key={a.id}
-                    className="flex items-center justify-between gap-4 border-b border-[#161616] px-5 py-3 last:border-b-0"
+                    className="flex items-center justify-between gap-4 border-b border-[#0B1628] px-5 py-3 last:border-b-0"
                   >
                     <div className="min-w-0">
                       <p className="font-mono-dy text-[11px] tracking-[0.06em] text-neutral-300">{a.action}</p>
@@ -260,12 +260,12 @@ function ConsoleInner() {
   const section = path[1] ?? "";
 
   return (
-    <div className="dy-dark min-h-screen bg-[#090909] text-[#F5F5F3]">
-      <aside className="fixed inset-y-0 left-0 z-40 hidden w-60 flex-col border-r border-[#262626] bg-[#090909] lg:flex">
-        <div className="flex h-16 items-center gap-2.5 border-b border-[#262626] px-5">
+    <div className="dy-dark min-h-screen bg-[#070E1A] text-[#F5F5F3]">
+      <aside className="fixed inset-y-0 left-0 z-40 hidden w-60 flex-col border-r border-[#1C3050] bg-[#070E1A] lg:flex">
+        <div className="flex h-16 items-center gap-2.5 border-b border-[#1C3050] px-5">
           <Monogram size={24} className="text-white" />
           <span className="font-display text-[15px] leading-none text-white">
-            CONTROL<span className="text-[#E10600]">/</span>CENTER
+            CONTROL<span className="text-[#4A90E2]">/</span>CENTER
           </span>
         </div>
         <nav className="flex-1 space-y-0.5 overflow-y-auto py-3 dy-scroll" aria-label="Admin sections">
@@ -277,25 +277,25 @@ function ConsoleInner() {
                 onClick={() => navigate(item.to ? `${ROUTES.admin}/${item.to}` : ROUTES.admin)}
                 className={cn(
                   "relative flex w-full items-center gap-3 rounded-[2px] px-3 py-2 text-[13.5px] transition-colors ease-mechanical",
-                  active ? "bg-[#111111] text-white" : "text-[#A1A1A1] hover:bg-[#0D0D0D] hover:text-white",
+                  active ? "bg-[#0A1424] text-white" : "text-[#A1A1A1] hover:bg-[#0A1322] hover:text-white",
                 )}
                 aria-current={active ? "page" : undefined}
               >
-                {active && <span className="absolute inset-y-1.5 left-0 w-0.5 bg-[#E10600]" aria-hidden="true" />}
-                <item.icon className={cn("h-4 w-4", active && "text-[#E10600]")} strokeWidth={1.75} />
+                {active && <span className="absolute inset-y-1.5 left-0 w-0.5 bg-[#4A90E2]" aria-hidden="true" />}
+                <item.icon className={cn("h-4 w-4", active && "text-[#4A90E2]")} strokeWidth={1.75} />
                 {item.label}
               </button>
             );
           })}
         </nav>
-        <div className="border-t border-[#262626] p-4">
+        <div className="border-t border-[#1C3050] p-4">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full border border-[#262626] bg-[#111111] text-[11px] font-bold text-white">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full border border-[#1C3050] bg-[#0A1424] text-[11px] font-bold text-white">
               {(user?.name ?? "AD").slice(0, 2).toUpperCase()}
             </div>
             <div className="min-w-0 flex-1">
               <p className="truncate text-[11.5px] font-semibold text-white">{user?.email}</p>
-              <p className="font-mono-dy text-[9.5px] tracking-[0.12em] text-[#E10600]">SITE ADMIN</p>
+              <p className="font-mono-dy text-[9.5px] tracking-[0.12em] text-[#4A90E2]">SITE ADMIN</p>
             </div>
             <button
               onClick={async () => {
@@ -313,7 +313,7 @@ function ConsoleInner() {
       </aside>
 
       {/* Mobile topbar */}
-      <header className="sticky top-0 z-40 border-b border-[#262626] bg-[#090909] lg:hidden">
+      <header className="sticky top-0 z-40 border-b border-[#1C3050] bg-[#070E1A] lg:hidden">
         <div className="flex h-14 items-center justify-between px-4">
           <div className="flex items-center gap-2">
             <Monogram size={20} className="text-white" />
@@ -323,7 +323,7 @@ function ConsoleInner() {
             <ArrowLeft className="h-4 w-4" />
           </button>
         </div>
-        <nav className="flex overflow-x-auto dy-scroll border-t border-[#262626]" aria-label="Admin sections">
+        <nav className="flex overflow-x-auto dy-scroll border-t border-[#1C3050]" aria-label="Admin sections">
           {NAV.map((item) => {
             const active = item.exact ? section === "" : section === item.to;
             return (
@@ -332,7 +332,7 @@ function ConsoleInner() {
                 onClick={() => navigate(item.to ? `${ROUTES.admin}/${item.to}` : ROUTES.admin)}
                 className={cn(
                   "whitespace-nowrap border-b-2 px-4 py-2.5 text-[11.5px] font-medium transition-colors",
-                  active ? "border-[#E10600] text-white" : "border-transparent text-[#A1A1A1]",
+                  active ? "border-[#4A90E2] text-white" : "border-transparent text-[#A1A1A1]",
                 )}
               >
                 {item.label}
@@ -342,10 +342,10 @@ function ConsoleInner() {
         </nav>
       </header>
 
-      <div className="border-b border-[#262626] bg-[#0C0C0C] px-4 py-3 lg:pl-64">
+      <div className="border-b border-[#1C3050] bg-[#0A1220] px-4 py-3 lg:pl-64">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <ShieldCheck className="h-4 w-4 text-[#E10600]" strokeWidth={1.75} />
+            <ShieldCheck className="h-4 w-4 text-[#4A90E2]" strokeWidth={1.75} />
             <span className="font-mono-dy text-[10.5px] tracking-[0.14em] text-neutral-400">
               DEYOUNG CONTROL CENTER · ADMIN EYES ONLY
             </span>
@@ -386,16 +386,16 @@ export function AdminConsole() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#090909] text-white flex items-center justify-center">
-        <Loader2 className="h-6 w-6 animate-spin text-[#E10600]" />
+      <div className="min-h-screen bg-[#070E1A] text-white flex items-center justify-center">
+        <Loader2 className="h-6 w-6 animate-spin text-[#4A90E2]" />
       </div>
     );
   }
 
   if (!user) {
     return (
-      <div className="dy-dark min-h-screen bg-[#090909] text-[#F5F5F3] flex flex-col items-center justify-center gap-4 px-4 dy-grid-bg">
-        <ShieldAlert className="h-8 w-8 text-[#E10600]" strokeWidth={1.75} />
+      <div className="dy-dark min-h-screen bg-[#070E1A] text-[#F5F5F3] flex flex-col items-center justify-center gap-4 px-4 dy-grid-bg">
+        <ShieldAlert className="h-8 w-8 text-[#4A90E2]" strokeWidth={1.75} />
         <h1 className="font-display-strong text-2xl text-white">Admin sign-in required</h1>
         <p className="max-w-sm text-center text-sm text-[#A1A1A1]">
           The control center is for administrators. Every admin API request is verified
@@ -403,7 +403,7 @@ export function AdminConsole() {
         </p>
         <Button
           onClick={() => navigate(ROUTES.login)}
-          className="rounded-[2px] bg-[#E10600] text-[13.5px] font-semibold text-white hover:bg-[#B80500]"
+          className="rounded-[2px] bg-[#4A90E2] text-[13.5px] font-semibold text-white hover:bg-[#2E7CDE]"
         >
           Sign in as admin
         </Button>
@@ -413,8 +413,8 @@ export function AdminConsole() {
 
   if (user.accountRole !== "admin") {
     return (
-      <div className="dy-dark min-h-screen bg-[#090909] text-[#F5F5F3] flex flex-col items-center justify-center gap-4 px-4">
-        <ShieldAlert className="h-8 w-8 text-[#E10600]" strokeWidth={1.75} />
+      <div className="dy-dark min-h-screen bg-[#070E1A] text-[#F5F5F3] flex flex-col items-center justify-center gap-4 px-4">
+        <ShieldAlert className="h-8 w-8 text-[#4A90E2]" strokeWidth={1.75} />
         <h1 className="font-display-strong text-2xl text-white">403: Admin access required</h1>
         <p className="max-w-md text-center text-sm leading-relaxed text-[#A1A1A1]">
           Your account ({user.email}) is a workspace account. Admin rights are granted by another
@@ -423,7 +423,7 @@ export function AdminConsole() {
         <Button
           variant="outline"
           onClick={() => navigate(ROUTES.app)}
-          className="rounded-[2px] border-[#262626] text-white hover:bg-[#111111]"
+          className="rounded-[2px] border-[#1C3050] text-white hover:bg-[#0A1424]"
         >
           Back to your workspace
         </Button>

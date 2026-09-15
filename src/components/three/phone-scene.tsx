@@ -93,7 +93,7 @@ function MissionControl({ stats }: { stats: PhoneStats }) {
           </div>
           <div className="ml-auto max-w-[85%] rounded-[3px] rounded-br-none border border-brand/25 bg-brand/[0.07] px-4 py-3">
             <div className="flex flex-wrap items-center gap-1.5">
-              <span className="font-mono-dy text-[10px] tracking-[0.14em] text-[#ff6a5e]">ADA · 412MS</span>
+              <span className="font-mono-dy text-[10px] tracking-[0.14em] text-[#6fcbff]">ADA · 412MS</span>
               <span className="cue-chip">breathes</span>
             </div>
             <p className="mt-1.5 text-[13px] leading-snug text-neutral-200">
@@ -136,7 +136,7 @@ function MissionControl({ stats }: { stats: PhoneStats }) {
               <Volume2 className="h-3.5 w-3.5" />
             </span>
           </div>
-          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand text-white shadow-[0_8px_24px_-6px_rgba(225,6,0,0.6)]">
+          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand text-white shadow-[0_8px_24px_-6px_rgba(10,91,196,0.6)]">
             <PhoneOff className="h-3.5 w-3.5" />
           </span>
         </div>
@@ -162,7 +162,7 @@ function DomPhone({ stats }: { stats: PhoneStats }) {
     >
       {/* faint signal bloom behind the chassis */}
       <div
-        className="absolute -inset-12 bg-[radial-gradient(ellipse_at_center,rgba(225,6,0,0.10),transparent_65%)] blur-2xl"
+        className="absolute -inset-12 bg-[radial-gradient(ellipse_at_center,rgba(10,91,196,0.16),transparent_65%)] blur-2xl"
         aria-hidden="true"
       />
       <motion.div
@@ -170,7 +170,7 @@ function DomPhone({ stats }: { stats: PhoneStats }) {
         animate={reduced ? undefined : { y: [0, -9, 0] }}
         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
       >
-        <div className="relative rounded-[42px] border border-white/15 bg-[#101010] p-2.5 shadow-[0_60px_120px_-40px_rgba(0,0,0,0.95)]">
+        <div className="relative rounded-[42px] border border-white/15 bg-[#081020] p-2.5 shadow-[0_60px_120px_-40px_rgba(0,0,0,0.95)]">
           <div className="absolute left-1/2 top-[14px] z-10 h-5 w-[104px] -translate-x-1/2 rounded-full bg-black" aria-hidden="true" />
           <MissionControl stats={stats} />
         </div>

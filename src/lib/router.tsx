@@ -11,6 +11,11 @@ function parseHash(hash: string): DyRoute {
   return parts;
 }
 
+function parsePathname(pathname: string): DyRoute {
+  if (!pathname || pathname === "/") return [];
+  return pathname.split("/").filter(Boolean);
+}
+
 type RouterCtx = {
   path: DyRoute;
   navigate: (to: string) => void;
@@ -25,21 +30,52 @@ const Ctx = createContext<RouterCtx>({
 
 export function DyRouterProvider({ children }: { children: React.ReactNode }) {
   // Initial state is [] so SSR and the first client render match exactly.
-  // The real hash route applies after hydration (effect), avoiding mismatches.
+  // The real route applies after hydration (effect), avoiding mismatches.
   const [path, setPath] = useState<DyRoute>([]);
 
   useEffect(() => {
-    const onHash = () => setPath(parseHash(window.location.hash));
-    onHash();
+    const readRoute = () => {
+      // Prefer an explicit hash route (legacy #/ links keep working);
+      // otherwise fall back to the clean URL pathname (direct loads,
+      // shared links, crawlers).
+      if (window.location.hash && window.location.hash !== "#") {
+        setPath(parseHash(window.location.hash));
+      } else {
+        setPath(parsePathname(window.location.pathname));
+      }
+    };
+    readRoute();
+
+    const onHash = () => {
+      setPath(parseHash(window.location.hash));
+      // Keep the visible URL clean: /#/pricing -> /pricing
+      if (window.location.hash && window.location.hash !== "#") {
+        const clean = window.location.hash.replace(/^#/, "");
+        if (clean.startsWith("/")) {
+          window.history.replaceState(null, "", clean);
+        }
+      }
+    };
+    const onPop = () => readRoute();
+
     window.addEventListener("hashchange", onHash);
-    return () => window.removeEventListener("hashchange", onHash);
+    window.addEventListener("popstate", onPop);
+    return () => {
+      window.removeEventListener("hashchange", onHash);
+      window.removeEventListener("popstate", onPop);
+    };
   }, []);
 
   const navigate = useCallback((to: string) => {
-    const target = to.startsWith("#") ? to : `#${to.startsWith("/") ? to : `/${to}`}`;
-    if (window.location.hash === target) return;
-    window.location.hash = target;
-    // hashchange fires only when hash actually changes
+    const clean = to.startsWith("#")
+      ? to.slice(1)
+      : to;
+    const target = clean.startsWith("/") ? clean : `/${clean}`;
+    if (window.location.pathname === target) return;
+    // Push a clean URL; popstate listener updates the route state.
+    window.history.pushState(null, "", target);
+    setPath(parsePathname(target));
+    window.scrollTo({ top: 0 });
   }, []);
 
   const is = useCallback(

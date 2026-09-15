@@ -103,7 +103,7 @@ export function EmployeesView() {
         intro="Configure staff, not chatbots. Every employee carries a role, instructions, escalation rules, and channel scopes. Drafts never touch live conversations."
         actions={
           <Button
-            className="bg-[#E10600] hover:bg-[#B80500] text-white rounded-[2px]"
+            className="bg-[#4A90E2] hover:bg-[#2E7CDE] text-white rounded-[2px]"
             onClick={() => {
               setEditing(null);
               setBuilderOpen(true);
@@ -116,7 +116,7 @@ export function EmployeesView() {
 
       {employees === null ? (
         <div className="flex justify-center py-24">
-          <Loader2 className="h-6 w-6 text-[#E10600] animate-spin" />
+          <Loader2 className="h-6 w-6 text-[#4A90E2] animate-spin" />
         </div>
       ) : employees.length === 0 ? (
         <EmptyState
@@ -125,7 +125,7 @@ export function EmployeesView() {
           body="Create your first AI employee from a role template. You will configure its instructions, personality, and escalation rules, then deploy it to start conversations."
           action={
             <Button
-              className="bg-[#E10600] hover:bg-[#B80500] text-white rounded-[2px]"
+              className="bg-[#4A90E2] hover:bg-[#2E7CDE] text-white rounded-[2px]"
               onClick={() => setBuilderOpen(true)}
             >
               Create your first AI employee
@@ -137,7 +137,7 @@ export function EmployeesView() {
           {employees.map((e) => {
             const template = ROLE_TEMPLATES.find((t) => t.key === e.role);
             return (
-              <div key={e.id} className="rounded-[2px] border border-[#262626] bg-[#111111] p-5">
+              <div key={e.id} className="rounded-[2px] border border-[#1C3050] bg-[#0A1424] p-5">
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="font-bold text-white text-lg">{e.name}</p>
@@ -156,7 +156,7 @@ export function EmployeesView() {
                     return (
                       <span
                         key={c}
-                        className="text-[10px] uppercase tracking-wider px-2 py-1 border border-[#262626] rounded-[2px] text-[#A1A1A1]"
+                        className="text-[10px] uppercase tracking-wider px-2 py-1 border border-[#1C3050] rounded-[2px] text-[#A1A1A1]"
                       >
                         {ch?.label ?? c}
                       </span>
@@ -181,7 +181,7 @@ export function EmployeesView() {
                   <Button
                     size="sm"
                     variant="outline"
-                    className="border-[#262626] text-white hover:bg-[#161616] rounded-[2px] h-8"
+                    className="border-[#1C3050] text-white hover:bg-[#0B1628] rounded-[2px] h-8"
                     onClick={() => {
                       setEditing(e);
                       setBuilderOpen(true);
@@ -194,8 +194,8 @@ export function EmployeesView() {
                     className={cn(
                       "rounded-[2px] h-8",
                       e.status === "deployed"
-                        ? "bg-[#161616] hover:bg-[#222] text-white border border-[#262626]"
-                        : "bg-[#E10600] hover:bg-[#B80500] text-white",
+                        ? "bg-[#0B1628] hover:bg-[#222] text-white border border-[#1C3050]"
+                        : "bg-[#4A90E2] hover:bg-[#2E7CDE] text-white",
                     )}
                     onClick={() => deploy(e)}
                   >
@@ -206,7 +206,7 @@ export function EmployeesView() {
                     <Button
                       size="sm"
                       variant="outline"
-                      className="border-[#262626] text-white hover:bg-[#161616] rounded-[2px] h-8"
+                      className="border-[#1C3050] text-white hover:bg-[#0B1628] rounded-[2px] h-8"
                       onClick={() => navigate(ROUTES.appInbox)}
                     >
                       <MessageSquare className="mr-1.5 h-3.5 w-3.5" /> Test conversation
@@ -216,7 +216,7 @@ export function EmployeesView() {
                     <Button
                       size="sm"
                       variant="ghost"
-                      className="text-[#A1A1A1] hover:text-[#E10600] hover:bg-transparent h-8 ml-auto"
+                      className="text-[#A1A1A1] hover:text-[#4A90E2] hover:bg-transparent h-8 ml-auto"
                       onClick={() => remove(e)}
                       aria-label={`Delete ${e.name}`}
                     >
@@ -402,7 +402,7 @@ function EmployeeBuilder({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="bg-[#0D0D0D] border-[#262626] text-[#F5F5F3] max-w-2xl max-h-[85vh] overflow-y-auto dy-scroll">
+      <DialogContent className="bg-[#0A1322] border-[#1C3050] text-[#F5F5F3] max-w-2xl max-h-[85vh] overflow-y-auto dy-scroll">
         <DialogHeader>
           <DialogTitle className="text-white font-display text-xl">
             {editing ? `Configure ${editing.name}` : "Hire a new AI employee"}
@@ -423,7 +423,7 @@ function EmployeeBuilder({
                 placeholder="Ada"
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="bg-[#111111] border-[#262626] text-white placeholder:text-[#6b6b6b] rounded-[2px]"
+                className="bg-[#0A1424] border-[#1C3050] text-white placeholder:text-[#6b6b6b] rounded-[2px]"
               />
             </div>
             <div className="space-y-2">
@@ -442,10 +442,10 @@ function EmployeeBuilder({
                   })
                 }
               >
-                <SelectTrigger className="bg-[#111111] border-[#262626] text-white rounded-[2px]">
+                <SelectTrigger className="bg-[#0A1424] border-[#1C3050] text-white rounded-[2px]">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-[#111111] border-[#262626] text-white max-h-64">
+                <SelectContent className="bg-[#0A1424] border-[#1C3050] text-white max-h-64">
                   {ROLE_TEMPLATES.map((t) => (
                     <SelectItem key={t.key} value={t.key}>
                       {t.label}
@@ -465,7 +465,7 @@ function EmployeeBuilder({
               placeholder="What this employee is hired to do."
               value={form.purpose}
               onChange={(e) => setForm({ ...form, purpose: e.target.value })}
-              className="bg-[#111111] border-[#262626] text-white placeholder:text-[#6b6b6b] rounded-[2px]"
+              className="bg-[#0A1424] border-[#1C3050] text-white placeholder:text-[#6b6b6b] rounded-[2px]"
             />
           </div>
 
@@ -473,10 +473,10 @@ function EmployeeBuilder({
             <div className="space-y-2">
               <Label className="text-[#A1A1A1]">Personality</Label>
               <Select value={form.personality} onValueChange={(v) => setForm({ ...form, personality: v })}>
-                <SelectTrigger className="bg-[#111111] border-[#262626] text-white rounded-[2px]">
+                <SelectTrigger className="bg-[#0A1424] border-[#1C3050] text-white rounded-[2px]">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-[#111111] border-[#262626] text-white">
+                <SelectContent className="bg-[#0A1424] border-[#1C3050] text-white">
                   {["professional", "warm", "direct", "calm", "energetic"].map((p) => (
                     <SelectItem key={p} value={p}>{p}</SelectItem>
                   ))}
@@ -486,10 +486,10 @@ function EmployeeBuilder({
             <div className="space-y-2">
               <Label className="text-[#A1A1A1]">Tone</Label>
               <Select value={form.tone} onValueChange={(v) => setForm({ ...form, tone: v })}>
-                <SelectTrigger className="bg-[#111111] border-[#262626] text-white rounded-[2px]">
+                <SelectTrigger className="bg-[#0A1424] border-[#1C3050] text-white rounded-[2px]">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-[#111111] border-[#262626] text-white">
+                <SelectContent className="bg-[#0A1424] border-[#1C3050] text-white">
                   {["warm-professional", "plain-spoken", "formal", "friendly-casual"].map((t) => (
                     <SelectItem key={t} value={t}>{t}</SelectItem>
                   ))}
@@ -506,7 +506,7 @@ function EmployeeBuilder({
               placeholder="How to greet, what to never say, how to handle pricing questions, when to escalate."
               value={form.instructions}
               onChange={(e) => setForm({ ...form, instructions: e.target.value })}
-              className="bg-[#111111] border-[#262626] text-white placeholder:text-[#6b6b6b] rounded-[2px]"
+              className="bg-[#0A1424] border-[#1C3050] text-white placeholder:text-[#6b6b6b] rounded-[2px]"
             />
             <p className="text-[11px] text-[#6b6b6b]">
               These are orders, not suggestions. The employee obeys them exactly, above its default
@@ -515,10 +515,10 @@ function EmployeeBuilder({
           </div>
 
           {/* Operator script rules: verbatim obedience */}
-          <div className="space-y-2 rounded-[3px] border border-[#3a2f14] bg-[#151109] p-4">
+          <div className="space-y-2 rounded-[3px] border border-[#16294a] bg-[#0E1B2E] p-4">
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
-                <ScrollText className="h-4 w-4 text-[#E9B44C]" />
+                <ScrollText className="h-4 w-4 text-[#A9E2FF]" />
                 <p className="text-sm font-semibold text-white">Script rules</p>
                 <span className="chip-gold">VERBATIM OBEDIENCE</span>
               </div>
@@ -526,19 +526,19 @@ function EmployeeBuilder({
                 type="button"
                 size="sm"
                 onClick={() => setRules((rs) => [...rs, emptyRule()])}
-                className="h-8 rounded-[2px] bg-[#E9B44C] px-3 text-[12px] font-bold text-[#151109] hover:bg-[#f5cd6e]"
+                className="h-8 rounded-[2px] bg-[#A9E2FF] px-3 text-[12px] font-bold text-[#0E1B2E] hover:bg-[#bfe4ff]"
               >
                 <Plus className="mr-1 h-3.5 w-3.5" /> Add rule
               </Button>
             </div>
-            <p className="text-[11px] leading-relaxed text-[#a89b74]">
+            <p className="text-[11px] leading-relaxed text-[#8fb8d8]">
               When the caller&apos;s words match the WHEN side, the employee replies with the SAY side,
               word for word, before any AI thinking. Rules are checked top to bottom.
             </p>
             {rules.length > 0 && (
               <div className="space-y-2">
                 {rules.map((r, i) => (
-                  <div key={r.id} className="rounded-[2px] border border-[#2a2312] bg-[#0D0B06] p-3">
+                  <div key={r.id} className="rounded-[2px] border border-[#1b3350] bg-[#0A1424] p-3">
                     <div className="flex items-center gap-2">
                       <span className="font-mono-dy text-[9.5px] tracking-[0.14em] text-[#6f6f6a]">
                         RULE {String(i + 1).padStart(2, "0")}
@@ -551,8 +551,8 @@ function EmployeeBuilder({
                         className={cn(
                           "rounded-[2px] border px-2 py-0.5 font-mono-dy text-[9.5px] tracking-[0.12em] transition-colors",
                           r.enabled
-                            ? "border-[#E9B44C]/50 bg-[#E9B44C]/10 text-[#E9B44C]"
-                            : "border-[#262626] text-[#6f6f6a]",
+                            ? "border-[#A9E2FF]/50 bg-[#A9E2FF]/10 text-[#A9E2FF]"
+                            : "border-[#1C3050] text-[#6f6f6a]",
                         )}
                         aria-pressed={r.enabled}
                       >
@@ -570,7 +570,7 @@ function EmployeeBuilder({
                             ),
                           )
                         }
-                        className="font-mono-dy text-[9px] tracking-[0.1em] text-[#E9B44C] underline-offset-2 hover:underline"
+                        className="font-mono-dy text-[9px] tracking-[0.1em] text-[#A9E2FF] underline-offset-2 hover:underline"
                       >
                         SWITCH
                       </button>
@@ -578,14 +578,14 @@ function EmployeeBuilder({
                         type="button"
                         onClick={() => setRules((rs) => rs.filter((x) => x.id !== r.id))}
                         aria-label="Delete rule"
-                        className="text-[#6f6f6a] transition-colors hover:text-[#E10600]"
+                        className="text-[#6f6f6a] transition-colors hover:text-[#4A90E2]"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
                       </button>
                     </div>
                     <div className="mt-2 grid gap-2 sm:grid-cols-2">
                       <div className="space-y-1">
-                        <p className="font-mono-dy text-[9px] tracking-[0.16em] text-[#a89b74]">
+                        <p className="font-mono-dy text-[9px] tracking-[0.16em] text-[#8fb8d8]">
                           WHEN THE CALLER {r.matchType === "exact" ? "SAYS EXACTLY" : "MENTIONS"}
                         </p>
                         <Input
@@ -595,11 +595,11 @@ function EmployeeBuilder({
                           }
                           maxLength={300}
                           placeholder="your price"
-                          className="h-9 rounded-[2px] border-[#2a2312] bg-[#111111] text-[13px] text-white placeholder:text-[#6b6b6b]"
+                          className="h-9 rounded-[2px] border-[#1b3350] bg-[#0A1424] text-[13px] text-white placeholder:text-[#6b6b6b]"
                         />
                       </div>
                       <div className="space-y-1">
-                        <p className="font-mono-dy text-[9px] tracking-[0.16em] text-[#a89b74]">IT SAYS, VERBATIM</p>
+                        <p className="font-mono-dy text-[9px] tracking-[0.16em] text-[#8fb8d8]">IT SAYS, VERBATIM</p>
                         <Input
                           value={r.response}
                           onChange={(e) =>
@@ -607,7 +607,7 @@ function EmployeeBuilder({
                           }
                           maxLength={2000}
                           placeholder="Our standard session is 80 dollars, no deposit."
-                          className="h-9 rounded-[2px] border-[#2a2312] bg-[#111111] text-[13px] text-white placeholder:text-[#6b6b6b]"
+                          className="h-9 rounded-[2px] border-[#1b3350] bg-[#0A1424] text-[13px] text-white placeholder:text-[#6b6b6b]"
                         />
                       </div>
                     </div>
@@ -618,7 +618,7 @@ function EmployeeBuilder({
           </div>
 
           {/* Voice: assign a cloned voice */}
-          <div className="space-y-2 rounded-[3px] border border-[#262626] bg-[#111111] p-4">
+          <div className="space-y-2 rounded-[3px] border border-[#1C3050] bg-[#0A1424] p-4">
             <div className="flex items-center gap-2">
               <AudioLines className="h-4 w-4 text-[#A1A1A1]" />
               <p className="text-sm font-semibold text-white">Voice</p>
@@ -641,12 +641,12 @@ function EmployeeBuilder({
                     className={cn(
                       "flex w-full items-center justify-between rounded-[2px] border px-4 py-2.5 text-left transition-colors ease-mechanical",
                       !voiceProfile
-                        ? "border-[#E10600]/60 bg-[#E10600]/[0.07]"
-                        : "border-[#262626] bg-[#0D0D0D] hover:border-[#333]",
+                        ? "border-[#4A90E2]/60 bg-[#4A90E2]/[0.07]"
+                        : "border-[#1C3050] bg-[#0A1322] hover:border-[#333]",
                     )}
                   >
                     <span className="text-[13px] font-medium text-white">Engine default voice</span>
-                    {!voiceProfile && <BadgeCheck className="h-4 w-4 text-[#E10600]" />}
+                    {!voiceProfile && <BadgeCheck className="h-4 w-4 text-[#4A90E2]" />}
                   </button>
                   {clones.map((c) => (
                     <button
@@ -656,8 +656,8 @@ function EmployeeBuilder({
                       className={cn(
                         "flex w-full items-center justify-between rounded-[2px] border px-4 py-2.5 text-left transition-colors ease-mechanical",
                         voiceProfile?.cloneId === c.id
-                          ? "border-[#E9B44C]/60 bg-[#E9B44C]/[0.07]"
-                          : "border-[#262626] bg-[#0D0D0D] hover:border-[#333]",
+                          ? "border-[#A9E2FF]/60 bg-[#A9E2FF]/[0.07]"
+                          : "border-[#1C3050] bg-[#0A1322] hover:border-[#333]",
                       )}
                     >
                       <span>
@@ -675,11 +675,11 @@ function EmployeeBuilder({
                               e.stopPropagation();
                               previewVoice();
                             }}
-                            className="flex items-center gap-1 font-mono-dy text-[9.5px] tracking-[0.1em] text-[#E9B44C] hover:text-[#f5cd6e]"
+                            className="flex items-center gap-1 font-mono-dy text-[9.5px] tracking-[0.1em] text-[#A9E2FF] hover:text-[#bfe4ff]"
                           >
                             <PlayCircle className="h-3.5 w-3.5" /> PREVIEW
                           </button>
-                          <BadgeCheck className="h-4 w-4 text-[#E9B44C]" />
+                          <BadgeCheck className="h-4 w-4 text-[#A9E2FF]" />
                         </span>
                       )}
                     </button>
@@ -698,10 +698,10 @@ function EmployeeBuilder({
           <div className="space-y-2">
             <Label className="text-[#A1A1A1]">Escalation rule</Label>
             <Select value={form.escalationRule} onValueChange={(v) => setForm({ ...form, escalationRule: v })}>
-              <SelectTrigger className="bg-[#111111] border-[#262626] text-white rounded-[2px]">
+              <SelectTrigger className="bg-[#0A1424] border-[#1C3050] text-white rounded-[2px]">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-[#111111] border-[#262626] text-white">
+              <SelectContent className="bg-[#0A1424] border-[#1C3050] text-white">
                 <SelectItem value="request_human_on_low_confidence">Request a human when unsure</SelectItem>
                 <SelectItem value="escalate_on_negative_sentiment">Escalate on negative sentiment</SelectItem>
                 <SelectItem value="escalate_on_keywords">Escalate on specific topics (set in instructions)</SelectItem>
@@ -730,8 +730,8 @@ function EmployeeBuilder({
                     className={cn(
                       "px-3 py-1.5 text-xs font-medium border rounded-[2px] transition-colors ease-mechanical",
                       selected
-                        ? "border-[#E10600] bg-[#E10600]/10 text-white"
-                        : "border-[#262626] text-[#A1A1A1] hover:text-white",
+                        ? "border-[#4A90E2] bg-[#4A90E2]/10 text-white"
+                        : "border-[#1C3050] text-[#A1A1A1] hover:text-white",
                     )}
                     aria-pressed={selected}
                   >
@@ -752,14 +752,14 @@ function EmployeeBuilder({
           <Button
             variant="outline"
             onClick={onClose}
-            className="border-[#262626] text-[#A1A1A1] hover:text-white rounded-[2px]"
+            className="border-[#1C3050] text-[#A1A1A1] hover:text-white rounded-[2px]"
           >
             Cancel
           </Button>
           <Button
             onClick={save}
             disabled={pending}
-            className="bg-[#E10600] hover:bg-[#B80500] text-white rounded-[2px]"
+            className="bg-[#4A90E2] hover:bg-[#2E7CDE] text-white rounded-[2px]"
           >
             {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {editing ? "Save new version" : "Create employee"}

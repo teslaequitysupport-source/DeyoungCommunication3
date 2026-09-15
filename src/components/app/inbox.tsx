@@ -62,7 +62,7 @@ export function InboxView() {
         intro="Every conversation across your channels, with full transcripts and handoff controls. Channel badges reflect real connection states."
         actions={
           <Button
-            className="bg-[#E10600] hover:bg-[#B80500] text-white rounded-[2px]"
+            className="bg-[#4A90E2] hover:bg-[#2E7CDE] text-white rounded-[2px]"
             onClick={() => setStartOpen(true)}
             disabled={deployed.length === 0}
             title={deployed.length === 0 ? "Deploy an AI employee first" : undefined}
@@ -74,7 +74,7 @@ export function InboxView() {
 
       {conversations === null ? (
         <div className="flex justify-center py-24">
-          <Loader2 className="h-6 w-6 text-[#E10600] animate-spin" />
+          <Loader2 className="h-6 w-6 text-[#4A90E2] animate-spin" />
         </div>
       ) : conversations.length === 0 ? (
         <EmptyState
@@ -88,14 +88,14 @@ export function InboxView() {
           action={
             deployed.length > 0 ? (
               <Button
-                className="bg-[#E10600] hover:bg-[#B80500] text-white rounded-[2px]"
+                className="bg-[#4A90E2] hover:bg-[#2E7CDE] text-white rounded-[2px]"
                 onClick={() => setStartOpen(true)}
               >
                 Start a conversation
               </Button>
             ) : (
               <Button
-                className="bg-[#E10600] hover:bg-[#B80500] text-white rounded-[2px]"
+                className="bg-[#4A90E2] hover:bg-[#2E7CDE] text-white rounded-[2px]"
                 onClick={() => navigate(ROUTES.appEmployees)}
               >
                 Go to AI Employees
@@ -105,19 +105,19 @@ export function InboxView() {
         />
       ) : (
         <div className="grid lg:grid-cols-[320px_1fr] gap-4">
-          <div className="rounded-[2px] border border-[#262626] bg-[#111111] overflow-hidden">
-            <div className="px-4 py-3 border-b border-[#262626] flex items-center justify-between">
+          <div className="rounded-[2px] border border-[#1C3050] bg-[#0A1424] overflow-hidden">
+            <div className="px-4 py-3 border-b border-[#1C3050] flex items-center justify-between">
               <p className="text-xs uppercase tracking-[0.18em] text-[#A1A1A1]">Conversations</p>
               <span className="text-xs text-[#6b6b6b]">{conversations.length}</span>
             </div>
-            <div className="max-h-[520px] overflow-y-auto dy-scroll divide-y divide-[#262626]">
+            <div className="max-h-[520px] overflow-y-auto dy-scroll divide-y divide-[#1C3050]">
               {conversations.map((c) => (
                 <button
                   key={c.id}
                   onClick={() => setSelected(c.id)}
                   className={cn(
                     "w-full text-left px-4 py-3.5 transition-colors ease-mechanical",
-                    selected === c.id ? "bg-[#161616]" : "hover:bg-[#0D0D0D]",
+                    selected === c.id ? "bg-[#0B1628]" : "hover:bg-[#0A1322]",
                   )}
                 >
                   <div className="flex items-center justify-between gap-2">
@@ -147,7 +147,7 @@ export function InboxView() {
               }}
             />
           ) : (
-            <div className="rounded-[2px] border border-dashed border-[#262626] bg-[#0D0D0D] flex flex-col items-center justify-center py-20 px-6 text-center">
+            <div className="rounded-[2px] border border-dashed border-[#1C3050] bg-[#0A1322] flex flex-col items-center justify-center py-20 px-6 text-center">
               <Inbox className="h-6 w-6 text-[#A1A1A1]" />
               <p className="mt-4 text-sm font-semibold text-white">Select a conversation</p>
               <p className="mt-1 text-xs text-[#A1A1A1] max-w-xs">
@@ -214,7 +214,7 @@ function StartConversationDialog({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="bg-[#0D0D0D] border-[#262626] text-[#F5F5F3]">
+      <DialogContent className="bg-[#0A1322] border-[#1C3050] text-[#F5F5F3]">
         <DialogHeader>
           <DialogTitle className="text-white">Start a test conversation</DialogTitle>
           <DialogDescription className="text-[#A1A1A1]">
@@ -226,10 +226,10 @@ function StartConversationDialog({
           <div className="space-y-2">
             <Label className="text-[#A1A1A1]">AI employee</Label>
             <Select value={employeeId} onValueChange={setEmployeeId}>
-              <SelectTrigger className="bg-[#111111] border-[#262626] text-white rounded-[2px]">
+              <SelectTrigger className="bg-[#0A1424] border-[#1C3050] text-white rounded-[2px]">
                 <SelectValue placeholder="Choose a deployed employee" />
               </SelectTrigger>
-              <SelectContent className="bg-[#111111] border-[#262626] text-white">
+              <SelectContent className="bg-[#0A1424] border-[#1C3050] text-white">
                 {employees.map((e) => (
                   <SelectItem key={e.id} value={e.id}>
                     {e.name}
@@ -244,15 +244,15 @@ function StartConversationDialog({
               id="cust-name"
               value={customerName}
               onChange={(e) => setCustomerName(e.target.value)}
-              className="bg-[#111111] border-[#262626] text-white rounded-[2px]"
+              className="bg-[#0A1424] border-[#1C3050] text-white rounded-[2px]"
             />
           </div>
         </div>
         <DialogFooter className="mt-4">
-          <Button variant="outline" onClick={onClose} className="border-[#262626] text-[#A1A1A1] rounded-[2px]">
+          <Button variant="outline" onClick={onClose} className="border-[#1C3050] text-[#A1A1A1] rounded-[2px]">
             Cancel
           </Button>
-          <Button onClick={start} disabled={pending || !employeeId} className="bg-[#E10600] hover:bg-[#B80500] text-white rounded-[2px]">
+          <Button onClick={start} disabled={pending || !employeeId} className="bg-[#4A90E2] hover:bg-[#2E7CDE] text-white rounded-[2px]">
             {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Start conversation
           </Button>
@@ -352,10 +352,10 @@ function ConversationRoom({
   const employee = messages?.find((m) => m.role === "ai")?.speakerName;
 
   return (
-    <div className="rounded-[2px] border border-[#262626] bg-[#111111] flex flex-col overflow-hidden">
+    <div className="rounded-[2px] border border-[#1C3050] bg-[#0A1424] flex flex-col overflow-hidden">
       {/* Room header */}
-      <div className="px-4 py-3 border-b border-[#262626] flex items-center gap-3">
-        <div className="h-8 w-8 rounded-full bg-[#161616] border border-[#262626] flex items-center justify-center shrink-0">
+      <div className="px-4 py-3 border-b border-[#1C3050] flex items-center gap-3">
+        <div className="h-8 w-8 rounded-full bg-[#0B1628] border border-[#1C3050] flex items-center justify-center shrink-0">
           <UserRound className="h-4 w-4 text-[#A1A1A1]" />
         </div>
         <div className="min-w-0">
@@ -374,7 +374,7 @@ function ConversationRoom({
           <Button
             size="sm"
             variant="outline"
-            className="h-8 border-[#262626] text-white hover:bg-[#161616] rounded-[2px]"
+            className="h-8 border-[#1C3050] text-white hover:bg-[#0B1628] rounded-[2px]"
             onClick={() => {
               setTakingOver(!takingOver);
               toast({
@@ -391,7 +391,7 @@ function ConversationRoom({
           <Button
             size="sm"
             variant="outline"
-            className="h-8 border-[#262626] text-[#A1A1A1] hover:text-white hover:bg-[#161616] rounded-[2px]"
+            className="h-8 border-[#1C3050] text-[#A1A1A1] hover:text-white hover:bg-[#0B1628] rounded-[2px]"
             onClick={closeConversation}
             aria-label="Close conversation"
           >
@@ -404,7 +404,7 @@ function ConversationRoom({
       <div ref={scrollRef} className="flex-1 overflow-y-auto dy-scroll px-4 py-4 space-y-3 max-h-[400px] min-h-[300px]">
         {messages === null ? (
           <div className="flex justify-center py-16">
-            <Loader2 className="h-5 w-5 text-[#E10600] animate-spin" />
+            <Loader2 className="h-5 w-5 text-[#4A90E2] animate-spin" />
           </div>
         ) : (
           messages.map((m) => {
@@ -423,10 +423,10 @@ function ConversationRoom({
                   className={cn(
                     "max-w-[78%] rounded-[2px] px-3.5 py-2.5 border",
                     isAi
-                      ? "border-l-2 border-l-[#E10600] border-[#262626] bg-[#0D0D0D]"
+                      ? "border-l-2 border-l-[#4A90E2] border-[#1C3050] bg-[#0A1322]"
                       : isHuman
-                        ? "border-[#d08700]/50 bg-[#1a1408] border-l-2 border-l-[#d08700]"
-                        : "border-[#262626] bg-[#161616]",
+                        ? "border-[#d08700]/50 bg-[#101e33] border-l-2 border-l-[#d08700]"
+                        : "border-[#1C3050] bg-[#0B1628]",
                   )}
                 >
                   <p className="text-[10px] uppercase tracking-wider font-semibold text-[#A1A1A1]">
@@ -443,8 +443,8 @@ function ConversationRoom({
         )}
         {sending && (
           <div className="flex justify-start">
-            <div className="rounded-[2px] border border-l-2 border-l-[#E10600] border-[#262626] bg-[#0D0D0D] px-3.5 py-2.5">
-              <p className="text-[10px] uppercase tracking-wider font-semibold text-[#E10600]">
+            <div className="rounded-[2px] border border-l-2 border-l-[#4A90E2] border-[#1C3050] bg-[#0A1322] px-3.5 py-2.5">
+              <p className="text-[10px] uppercase tracking-wider font-semibold text-[#4A90E2]">
                 {takingOver ? "Sending" : "AI is replying"}
               </p>
               <p className="mt-1 text-sm text-[#A1A1A1]">
@@ -456,7 +456,7 @@ function ConversationRoom({
       </div>
 
       {/* Composer */}
-      <div className="p-3 border-t border-[#262626] flex gap-2">
+      <div className="p-3 border-t border-[#1C3050] flex gap-2">
         <Input
           value={input}
           onChange={(e) => setInput(e.target.value)}
@@ -472,13 +472,13 @@ function ConversationRoom({
               : "Type as the customer to test the AI employee..."
           }
           disabled={status !== "open"}
-          className="bg-[#0D0D0D] border-[#262626] text-white placeholder:text-[#6b6b6b] rounded-[2px] h-10"
+          className="bg-[#0A1322] border-[#1C3050] text-white placeholder:text-[#6b6b6b] rounded-[2px] h-10"
           aria-label="Message"
         />
         <Button
           onClick={() => send(takingOver ? "human" : "customer")}
           disabled={sending || !input.trim() || status !== "open"}
-          className="bg-[#E10600] hover:bg-[#B80500] text-white rounded-[2px] h-10 px-4"
+          className="bg-[#4A90E2] hover:bg-[#2E7CDE] text-white rounded-[2px] h-10 px-4"
           aria-label="Send message"
         >
           <Send className="h-4 w-4" />

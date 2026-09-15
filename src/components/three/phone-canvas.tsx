@@ -35,10 +35,10 @@ function drawConsole(ctx: CanvasRenderingContext2D, t: number, stats: PhoneStats
   ctx.fillStyle = "#0a0a0a";
   ctx.fillRect(0, 0, W, H);
 
-  // Faint red atmosphere at top
+  // Faint cerulean atmosphere at top
   const grad = ctx.createRadialGradient(W / 2, 90, 20, W / 2, 90, 420);
-  grad.addColorStop(0, "rgba(225,6,0,0.10)");
-  grad.addColorStop(1, "rgba(225,6,0,0)");
+  grad.addColorStop(0, "rgba(10,91,196,0.12)");
+  grad.addColorStop(1, "rgba(10,91,196,0)");
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, W, 420);
 
@@ -62,21 +62,21 @@ function drawConsole(ctx: CanvasRenderingContext2D, t: number, stats: PhoneStats
   ctx.lineWidth = 2;
   rr(ctx, W - 78, 28, 44, 18, 4);
   ctx.stroke();
-  ctx.fillStyle = "#e10600";
+  ctx.fillStyle = "#4a90e2";
   ctx.fillRect(W - 74, 32, 28, 10);
   ctx.fillRect(W - 32, 33, 4, 8);
 
   // Header: LIVE CALL + ticking duration
   const dot = ctx.createRadialGradient(46, 104, 2, 46, 104, 14);
-  dot.addColorStop(0, "rgba(225,6,0,1)");
-  dot.addColorStop(1, "rgba(225,6,0,0)");
+  dot.addColorStop(0, "rgba(74,144,226,1)");
+  dot.addColorStop(1, "rgba(74,144,226,0)");
   ctx.fillStyle = dot;
   ctx.fillRect(30, 88, 34, 34);
-  ctx.fillStyle = "#e10600";
+  ctx.fillStyle = "#4a90e2";
   ctx.beginPath();
   ctx.arc(46, 104, 6, 0, Math.PI * 2);
   ctx.fill();
-  ctx.fillStyle = "#ff4d44";
+  ctx.fillStyle = "#6fd6ff";
   ctx.font = "500 22px ui-monospace, SFMono-Regular, Menlo, monospace";
   ctx.fillText("LIVE CALL", 68, 112);
   const secs = Math.floor(t) % 90;
@@ -93,7 +93,7 @@ function drawConsole(ctx: CanvasRenderingContext2D, t: number, stats: PhoneStats
   ctx.stroke();
 
   // Bubble 1: caller
-  ctx.fillStyle = "#161616";
+  ctx.fillStyle = "#0B1628";
   rr(ctx, 26, 168, 300, 96, 10);
   ctx.fill();
   ctx.strokeStyle = "rgba(255,255,255,0.09)";
@@ -106,21 +106,21 @@ function drawConsole(ctx: CanvasRenderingContext2D, t: number, stats: PhoneStats
   // Bubble 2: ADA with cue chip + latency
   const bx = 152;
   const by = 290;
-  ctx.fillStyle = "rgba(225,6,0,0.07)";
+  ctx.fillStyle = "rgba(10,91,196,0.10)";
   rr(ctx, bx, by, 302, 150, 10);
   ctx.fill();
-  ctx.strokeStyle = "rgba(225,6,0,0.28)";
+  ctx.strokeStyle = "rgba(74,144,226,0.4)";
   ctx.stroke();
-  ctx.fillStyle = "#ff6a5e";
+  ctx.fillStyle = "#6fcbff";
   ctx.font = "500 20px ui-monospace, SFMono-Regular, Menlo, monospace";
   ctx.fillText("ADA · 412MS", bx + 20, by + 34);
   // breathes chip
-  ctx.fillStyle = "rgba(225,6,0,0.12)";
+  ctx.fillStyle = "rgba(47,212,255,0.10)";
   rr(ctx, bx + 148, by + 16, 120, 30, 5);
   ctx.fill();
-  ctx.strokeStyle = "rgba(225,6,0,0.4)";
+  ctx.strokeStyle = "rgba(47,212,255,0.45)";
   ctx.stroke();
-  ctx.fillStyle = "#ff4d44";
+  ctx.fillStyle = "#6fd6ff";
   ctx.font = "500 18px ui-monospace, SFMono-Regular, Menlo, monospace";
   ctx.fillText("BREATHES", bx + 160, by + 37);
   ctx.fillStyle = "#e8e8e8";
@@ -129,12 +129,12 @@ function drawConsole(ctx: CanvasRenderingContext2D, t: number, stats: PhoneStats
   ctx.fillText("nine to two.", bx + 20, by + 114);
 
   // Bubble 3: barge-in
-  ctx.fillStyle = "#161616";
+  ctx.fillStyle = "#0B1628";
   rr(ctx, 26, 468, 260, 84, 10);
   ctx.fill();
   ctx.strokeStyle = "rgba(255,255,255,0.09)";
   ctx.stroke();
-  ctx.fillStyle = "#e10600";
+  ctx.fillStyle = "#4a90e2";
   ctx.font = "500 18px ui-monospace, SFMono-Regular, Menlo, monospace";
   ctx.fillText("INTERRUPTED · BARGE-IN", 46, 500);
   ctx.fillStyle = "#d4d4d4";
@@ -152,7 +152,7 @@ function drawConsole(ctx: CanvasRenderingContext2D, t: number, stats: PhoneStats
   for (let i = 0; i < bars; i++) {
     const amp = Math.abs(Math.sin(t * 2.6 + i * 0.55) * 0.7 + Math.sin(t * 1.1 + i * 0.21) * 0.3);
     const bh = 12 + amp * 78;
-    ctx.fillStyle = amp > 0.72 ? "#ff3527" : "rgba(225,6,0,0.8)";
+    ctx.fillStyle = amp > 0.72 ? "#2fd4ff" : "rgba(74,144,226,0.8)";
     ctx.fillRect(56 + i * bw, 588 + 59 - bh / 2, bw - 5, bh);
   }
 
@@ -181,7 +181,7 @@ function drawConsole(ctx: CanvasRenderingContext2D, t: number, stats: PhoneStats
   // End-call button
   const ex = W / 2;
   const ey = 926;
-  ctx.fillStyle = "#e10600";
+  ctx.fillStyle = "#4a90e2";
   ctx.beginPath();
   ctx.arc(ex, ey, 46, 0, Math.PI * 2);
   ctx.fill();
@@ -290,7 +290,7 @@ function Phone({ stats, reduced }: { stats: PhoneStats; reduced: boolean }) {
       {/* signal red edge light on the right rail */}
       <mesh position={[1.02, 0, 0.0]}>
         <boxGeometry args={[0.02, 3.1, 0.05]} />
-        <meshBasicMaterial color="#e10600" toneMapped={false} />
+        <meshBasicMaterial color="#4a90e2" toneMapped={false} />
       </mesh>
       {/* contact shadow */}
       <mesh position={[0, -2.5, -0.4]} rotation={[-Math.PI / 2.06, 0, 0]}>
@@ -309,11 +309,11 @@ export default function PhoneCanvas({ stats, reduced }: { stats: PhoneStats; red
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
       style={{ background: "transparent" }}
     >
-      <fog attach="fog" args={["#090909", 10, 18]} />
+      <fog attach="fog" args={["#070E1A", 10, 18]} />
       <ambientLight intensity={0.85} />
       <directionalLight position={[5, 7, 6]} intensity={1.5} />
       {/* signal red rim light */}
-      <pointLight position={[-4.4, -0.6, 3.4]} intensity={26} distance={14} decay={2} color="#e10600" />
+      <pointLight position={[-4.4, -0.6, 3.4]} intensity={26} distance={14} decay={2} color="#4a90e2" />
       <pointLight position={[4.4, 2.4, 3]} intensity={10} distance={12} decay={2} color="#ffffff" />
       <Phone stats={stats} reduced={reduced} />
     </Canvas>

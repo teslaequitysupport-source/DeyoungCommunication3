@@ -221,11 +221,11 @@ export function CloneLab({ onSaved }: { onSaved: () => void }) {
   const canSave = !!dna && name.trim().length > 0 && consentName.trim().length > 1 && consentGiven && !saved;
 
   return (
-    <div className="rounded-[4px] border border-[#262626] bg-[#0C0C0C]">
+    <div className="rounded-[4px] border border-[#1C3050] bg-[#0A1220]">
       {/* header */}
-      <div className="flex flex-wrap items-center gap-3 border-b border-[#262626] px-6 py-5">
-        <span className="flex h-11 w-11 items-center justify-center rounded-full border border-[#E9B44C]/40 bg-[#E9B44C]/10">
-          <Fingerprint className="h-5 w-5 text-[#E9B44C]" strokeWidth={1.75} />
+      <div className="flex flex-wrap items-center gap-3 border-b border-[#1C3050] px-6 py-5">
+        <span className="flex h-11 w-11 items-center justify-center rounded-full border border-[#A9E2FF]/40 bg-[#A9E2FF]/10">
+          <Fingerprint className="h-5 w-5 text-[#A9E2FF]" strokeWidth={1.75} />
         </span>
         <div>
           <h2 className="font-display-strong text-xl text-white">Clone Lab</h2>
@@ -238,8 +238,8 @@ export function CloneLab({ onSaved }: { onSaved: () => void }) {
 
       <div className="space-y-8 px-6 py-6">
         {/* privacy banner */}
-        <div className="flex items-start gap-3 rounded-[3px] border border-[#262626] bg-[#111111] px-4 py-3">
-          <ShieldCheck className="mt-0.5 h-4 w-4 flex-none text-[#E9B44C]" />
+        <div className="flex items-start gap-3 rounded-[3px] border border-[#1C3050] bg-[#0A1424] px-4 py-3">
+          <ShieldCheck className="mt-0.5 h-4 w-4 flex-none text-[#A9E2FF]" />
           <p className="text-[12px] leading-relaxed text-[#A1A1A1]">
             Your samples are measured in this browser and never uploaded. No audio leaves this tab:
             only the derived numbers (pitch, pace, energy) are saved, and only after you press save.
@@ -255,7 +255,7 @@ export function CloneLab({ onSaved }: { onSaved: () => void }) {
               onChange={(e) => setName(e.target.value)}
               maxLength={80}
               placeholder="e.g. Ada, Front desk voice"
-              className="rounded-[2px] border-[#262626] bg-[#111111] text-[13px] text-white placeholder:text-[#6b6b6b]"
+              className="rounded-[2px] border-[#1C3050] bg-[#0A1424] text-[13px] text-white placeholder:text-[#6b6b6b]"
             />
           </div>
           <div className="space-y-2">
@@ -265,18 +265,18 @@ export function CloneLab({ onSaved }: { onSaved: () => void }) {
               onChange={(e) => setConsentName(e.target.value)}
               maxLength={120}
               placeholder="Your full name, or the voice owner's"
-              className="rounded-[2px] border-[#262626] bg-[#111111] text-[13px] text-white placeholder:text-[#6b6b6b]"
+              className="rounded-[2px] border-[#1C3050] bg-[#0A1424] text-[13px] text-white placeholder:text-[#6b6b6b]"
             />
           </div>
         </div>
-        <label className="flex cursor-pointer items-start gap-3 rounded-[3px] border border-[#3a2f14] bg-[#151109] px-4 py-3">
+        <label className="flex cursor-pointer items-start gap-3 rounded-[3px] border border-[#16294a] bg-[#0E1B2E] px-4 py-3">
           <input
             type="checkbox"
             checked={consentGiven}
             onChange={(e) => setConsentGiven(e.target.checked)}
-            className="mt-0.5 h-4 w-4 accent-[#E9B44C]"
+            className="mt-0.5 h-4 w-4 accent-[#A9E2FF]"
           />
-          <span className="text-[12px] leading-relaxed text-[#a89b74]">
+          <span className="text-[12px] leading-relaxed text-[#8fb8d8]">
             I confirm I am the owner of this voice, or I hold written permission from the owner to
             clone it. The consent holder and timestamp are stored with the profile, and deleting the
             profile removes it everywhere immediately.
@@ -297,15 +297,15 @@ export function CloneLab({ onSaved }: { onSaved: () => void }) {
           </div>
 
           {recording ? (
-            <div className="mt-3 rounded-[3px] border border-[#E10600]/50 bg-[#E10600]/[0.05] p-4">
+            <div className="mt-3 rounded-[3px] border border-[#4A90E2]/50 bg-[#4A90E2]/[0.05] p-4">
               <div className="flex items-center justify-between">
-                <span className="flex items-center gap-2 font-mono-dy text-[10.5px] tracking-[0.14em] text-[#ff6a5e]">
-                  <span className="dy-status-dot inline-block h-2 w-2 animate-pulse rounded-full bg-[#E10600]" />
+                <span className="flex items-center gap-2 font-mono-dy text-[10.5px] tracking-[0.14em] text-[#6fcbff]">
+                  <span className="dy-status-dot inline-block h-2 w-2 animate-pulse rounded-full bg-[#4A90E2]" />
                   RECORDING {recording.toUpperCase()} · {(recordMs / 1000).toFixed(1)}S
                 </span>
                 <Button
                   onClick={stopRecording}
-                  className="h-9 rounded-[2px] bg-[#E10600] px-4 text-[12.5px] font-semibold text-white hover:bg-[#B80500]"
+                  className="h-9 rounded-[2px] bg-[#4A90E2] px-4 text-[12.5px] font-semibold text-white hover:bg-[#2E7CDE]"
                 >
                   <Square className="mr-1.5 h-3.5 w-3.5" /> Stop and measure
                 </Button>
@@ -314,7 +314,7 @@ export function CloneLab({ onSaved }: { onSaved: () => void }) {
                 Say it naturally: {READ_PROMPTS.find((p) => p.label === recording)?.text ?? "anything works."}
               </p>
               <div className="mt-3">
-                <Waveform amplitudes={amplitudes} height={40} color="#E10600" label="Your live microphone" />
+                <Waveform amplitudes={amplitudes} height={40} color="#4A90E2" label="Your live microphone" />
               </div>
             </div>
           ) : (
@@ -324,10 +324,10 @@ export function CloneLab({ onSaved }: { onSaved: () => void }) {
                   key={p.label}
                   onClick={() => void startRecording(p.label)}
                   disabled={analyzing !== null}
-                  className="group rounded-[3px] border border-[#262626] bg-[#111111] p-3 text-left transition-colors ease-mechanical hover:border-[#E9B44C]/50 disabled:opacity-50"
+                  className="group rounded-[3px] border border-[#1C3050] bg-[#0A1424] p-3 text-left transition-colors ease-mechanical hover:border-[#A9E2FF]/50 disabled:opacity-50"
                 >
                   <span className="flex items-center gap-2">
-                    <Mic className="h-3.5 w-3.5 text-[#E9B44C]" />
+                    <Mic className="h-3.5 w-3.5 text-[#A9E2FF]" />
                     <span className="font-mono-dy text-[9.5px] tracking-[0.14em] text-[#A1A1A1]">
                       RECORD {p.label.toUpperCase()}
                     </span>
@@ -353,7 +353,7 @@ export function CloneLab({ onSaved }: { onSaved: () => void }) {
               variant="outline"
               onClick={() => fileInputRef.current?.click()}
               disabled={recording !== null || analyzing !== null}
-              className="h-9 rounded-[2px] border-[#262626] bg-[#111111] px-4 text-[12.5px] text-[#A1A1A1] hover:text-white"
+              className="h-9 rounded-[2px] border-[#1C3050] bg-[#0A1424] px-4 text-[12.5px] text-[#A1A1A1] hover:text-white"
             >
               {analyzing === "upload" ? <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> : <Upload className="mr-1.5 h-3.5 w-3.5" />}
               Upload a voice file instead
@@ -365,8 +365,8 @@ export function CloneLab({ onSaved }: { onSaved: () => void }) {
 
           {/* measured samples */}
           {analyzing && analyzing !== "upload" && (
-            <div className="mt-3 flex items-center gap-2 rounded-[3px] border border-[#262626] bg-[#111111] px-4 py-3">
-              <Loader2 className="h-4 w-4 animate-spin text-[#E9B44C]" />
+            <div className="mt-3 flex items-center gap-2 rounded-[3px] border border-[#1C3050] bg-[#0A1424] px-4 py-3">
+              <Loader2 className="h-4 w-4 animate-spin text-[#A9E2FF]" />
               <span className="font-mono-dy text-[10.5px] tracking-[0.14em] text-[#A1A1A1]">
                 MEASURING {analyzing.toUpperCase()} · PITCH, PACE, ENERGY
               </span>
@@ -377,18 +377,18 @@ export function CloneLab({ onSaved }: { onSaved: () => void }) {
               {samples.map((s, i) => (
                 <div
                   key={`${s.label}-${i}`}
-                  className="flex flex-wrap items-center gap-3 rounded-[3px] border border-[#2a2312] bg-[#0D0B06] px-4 py-2.5"
+                  className="flex flex-wrap items-center gap-3 rounded-[3px] border border-[#1b3350] bg-[#0A1424] px-4 py-2.5"
                 >
-                  <AudioLines className="h-3.5 w-3.5 text-[#E9B44C]" />
+                  <AudioLines className="h-3.5 w-3.5 text-[#A9E2FF]" />
                   <span className="text-[12.5px] font-medium text-white">{s.label}</span>
-                  <span className="font-mono-dy text-[10px] tracking-[0.08em] text-[#a89b74]">
+                  <span className="font-mono-dy text-[10px] tracking-[0.08em] text-[#8fb8d8]">
                     {fmtSec(s.analysis.durationMs)} ·{" "}
                     {s.analysis.medianPitchHz ? `${Math.round(s.analysis.medianPitchHz)}HZ MEDIAN PITCH` : "PITCH UNCLEAR"} ·{" "}
                     {s.analysis.syllablesPerSec ? `${s.analysis.syllablesPerSec.toFixed(1)} SYLL/SEC` : "PACE UNCLEAR"}
                   </span>
                   <button
                     onClick={() => setSamples((ss) => ss.filter((_, j) => j !== i))}
-                    className="ml-auto text-[#6f6f6a] transition-colors hover:text-[#E10600]"
+                    className="ml-auto text-[#6f6f6a] transition-colors hover:text-[#4A90E2]"
                     aria-label={`Remove ${s.label} sample`}
                   >
                     <Trash2 className="h-3.5 w-3.5" />
@@ -398,35 +398,35 @@ export function CloneLab({ onSaved }: { onSaved: () => void }) {
             </div>
           )}
           {error && (
-            <div className="mt-3 flex items-start gap-2 rounded-[3px] border border-[#E10600]/40 bg-[#E10600]/[0.06] px-4 py-3">
-              <AlertTriangle className="mt-0.5 h-3.5 w-3.5 flex-none text-[#ff6a5e]" />
-              <p className="text-[12px] leading-relaxed text-[#ff9d94]">{error}</p>
+            <div className="mt-3 flex items-start gap-2 rounded-[3px] border border-[#4A90E2]/40 bg-[#4A90E2]/[0.06] px-4 py-3">
+              <AlertTriangle className="mt-0.5 h-3.5 w-3.5 flex-none text-[#6fcbff]" />
+              <p className="text-[12px] leading-relaxed text-[#a9e9ff]">{error}</p>
             </div>
           )}
         </div>
 
         {/* step 3: the built DNA */}
         {dna && (
-          <div className="rounded-[3px] border border-[#E9B44C]/40 bg-[#151109] p-5">
+          <div className="rounded-[3px] border border-[#A9E2FF]/40 bg-[#0E1B2E] p-5">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-2">
-                <Fingerprint className="h-4 w-4 text-[#E9B44C]" />
+                <Fingerprint className="h-4 w-4 text-[#A9E2FF]" />
                 <p className="font-display text-[15px] font-bold text-white">Voice DNA built</p>
               </div>
               <span className="chip-gold">
                 {dna.register.toUpperCase()} REGISTER · {dna.medianPitchHz}HZ · PITCH x{dna.pitchMultiplier} · PACE x{dna.rateMultiplier}
               </span>
             </div>
-            <div className="mt-4 grid gap-px overflow-hidden rounded-[2px] border border-[#2a2312] bg-[#2a2312] sm:grid-cols-4">
+            <div className="mt-4 grid gap-px overflow-hidden rounded-[2px] border border-[#1b3350] bg-[#1b3350] sm:grid-cols-4">
               {[
                 { l: "MEDIAN PITCH", v: `${dna.medianPitchHz} Hz` },
                 { l: "PACE", v: `x${dna.rateMultiplier}` },
                 { l: "ENERGY", v: `${Math.round((dna.energy ?? 0) * 100)}%` },
                 { l: "SAMPLES", v: `${samples.length} · ${fmtSec(totalMs)}` },
               ].map((s) => (
-                <div key={s.l} className="bg-[#0D0B06] p-3">
+                <div key={s.l} className="bg-[#0A1424] p-3">
                   <p className="font-display-strong text-lg text-white">{s.v}</p>
-                  <p className="font-mono-dy mt-1 text-[9px] tracking-[0.14em] text-[#a89b74]">{s.l}</p>
+                  <p className="font-mono-dy mt-1 text-[9px] tracking-[0.14em] text-[#8fb8d8]">{s.l}</p>
                 </div>
               ))}
             </div>
@@ -439,7 +439,7 @@ export function CloneLab({ onSaved }: { onSaved: () => void }) {
                   <PlayCircle className="mr-1.5 h-4 w-4" /> Hear it now
                 </Button>
               ) : (
-                <p className="text-[12px] text-[#a89b74]">Speech synthesis is unavailable in this browser, so no preview is possible. The profile still saves and applies.</p>
+                <p className="text-[12px] text-[#8fb8d8]">Speech synthesis is unavailable in this browser, so no preview is possible. The profile still saves and applies.</p>
               )}
               <div className="min-w-[200px] flex-1">
                 <Textarea
@@ -448,7 +448,7 @@ export function CloneLab({ onSaved }: { onSaved: () => void }) {
                   rows={2}
                   maxLength={500}
                   placeholder="Notes for yourself (optional): where this voice is used, who consented, anything else."
-                  className="rounded-[2px] border-[#2a2312] bg-[#0D0B06] text-[12.5px] text-white placeholder:text-[#6b6b6b]"
+                  className="rounded-[2px] border-[#1b3350] bg-[#0A1424] text-[12.5px] text-white placeholder:text-[#6b6b6b]"
                 />
               </div>
             </div>
@@ -469,7 +469,7 @@ export function CloneLab({ onSaved }: { onSaved: () => void }) {
         )}
 
         {/* engine honesty */}
-        <div className="rounded-[3px] border border-dashed border-[#262626] bg-[#0D0D0D] px-4 py-3 font-mono-dy text-[10px] leading-[1.8] tracking-[0.04em] text-[#6f6f6a]">
+        <div className="rounded-[3px] border border-dashed border-[#1C3050] bg-[#0A1322] px-4 py-3 font-mono-dy text-[10px] leading-[1.8] tracking-[0.04em] text-[#6f6f6a]">
           ENGINE TRUTH · TIMBRE MATCH (LIVE): your real measured pitch, pace and energy drive the
           synthesis voice, register matching and multipliers, in real calls, today. NEURAL CLONE
           (PENDING): rebuilding your exact timbre needs a heavy neural model that does not run in this
@@ -517,16 +517,16 @@ export function CloneVoicesList({
 
   if (clones === null) {
     return (
-      <div className="flex h-24 items-center justify-center rounded-[4px] border border-[#262626]">
-        <Loader2 className="h-5 w-5 animate-spin text-[#E9B44C]" />
+      <div className="flex h-24 items-center justify-center rounded-[4px] border border-[#1C3050]">
+        <Loader2 className="h-5 w-5 animate-spin text-[#A9E2FF]" />
       </div>
     );
   }
 
   return (
-    <div className="rounded-[4px] border border-[#262626] bg-[#0C0C0C]">
-      <div className="flex items-center gap-3 border-b border-[#262626] px-6 py-4">
-        <AudioLines className="h-4 w-4 text-[#E9B44C]" />
+    <div className="rounded-[4px] border border-[#1C3050] bg-[#0A1220]">
+      <div className="flex items-center gap-3 border-b border-[#1C3050] px-6 py-4">
+        <AudioLines className="h-4 w-4 text-[#A9E2FF]" />
         <h2 className="font-display-strong text-lg text-white">Your cloned voices</h2>
         <span className="font-mono-dy text-[10.5px] tracking-[0.12em] text-[#6f6f6a]">
           {clones.length} PROFILE{clones.length === 1 ? "" : "S"}
@@ -538,7 +538,7 @@ export function CloneVoicesList({
           consent holder and timestamp, and deleting one removes it everywhere immediately.
         </p>
       ) : (
-        <div className="divide-y divide-[#262626]">
+        <div className="divide-y divide-[#1C3050]">
           {clones.map((c) => (
             <div key={c.id} className="flex flex-wrap items-center gap-3 px-6 py-4">
               <div className="min-w-0 flex-1">
@@ -548,7 +548,7 @@ export function CloneVoicesList({
                   PITCH x{c.profile?.pitchMultiplier ?? 1} · PACE x{c.profile?.rateMultiplier ?? 1} · {c.sampleCount} SAMPLE{c.sampleCount === 1 ? "" : "S"} ·{" "}
                   TIMBRE MATCH ENGINE
                 </p>
-                <p className="mt-1 flex items-center gap-1.5 text-[11px] text-[#a89b74]">
+                <p className="mt-1 flex items-center gap-1.5 text-[11px] text-[#8fb8d8]">
                   <ShieldCheck className="h-3 w-3" />
                   CONSENT: {c.consentName} ·{" "}
                   {c.consentAt ? new Date(c.consentAt).toLocaleDateString() : "no timestamp"}
@@ -559,7 +559,7 @@ export function CloneVoicesList({
                   variant="outline"
                   size="sm"
                   onClick={() => preview(c)}
-                  className="h-8 rounded-[2px] border-[#3a2f14] bg-[#151109] px-3 text-[12px] text-[#E9B44C] hover:bg-[#1c160c]"
+                  className="h-8 rounded-[2px] border-[#16294a] bg-[#0E1B2E] px-3 text-[12px] text-[#A9E2FF] hover:bg-[#16294a]"
                 >
                   <PlayCircle className="mr-1 h-3.5 w-3.5" /> Preview
                 </Button>
@@ -567,7 +567,7 @@ export function CloneVoicesList({
                   variant="ghost"
                   size="sm"
                   onClick={() => remove(c)}
-                  className="h-8 text-[#6f6f6a] hover:text-[#E10600]"
+                  className="h-8 text-[#6f6f6a] hover:text-[#4A90E2]"
                   aria-label={`Delete ${c.name}`}
                 >
                   <Trash2 className="h-3.5 w-3.5" />

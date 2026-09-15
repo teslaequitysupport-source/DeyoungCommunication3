@@ -38,96 +38,96 @@
   --radius-lg: calc(var(--radius) + 2px);
   --radius-xl: calc(var(--radius) + 4px);
 
-  /* DEYOUNG brand: RED / BLACK / WHITE + GOLD whisper. Disciplined signal color. */
-  --color-brand: #e10600;
-  --color-brand-dark: #b80500;
-  /* Flare range: highlight red for gradients and glows */
-  --color-flare: #ff3b2f;
-  --color-flare-deep: #8f0400;
-  /* Champagne gold: luxury marker, used sparingly (badges, ratings, owner chips) */
-  --color-gold: #e9b44c;
-  --color-gold-deep: #b58531;
-  --color-ink: #090909;
-  --color-ink-2: #0c0c0c;
-  --color-ink-3: #121212;
-  --color-ink-4: #171717;
+  /* DEYOUNG brand: DEEP SIGNAL. Navy field, cerulean primary, electric cyan energy. */
+  --color-brand: #4a90e2;
+  --color-brand-dark: #2e7cde;
+  /* Flare range: electric cyan for gradients and glows */
+  --color-flare: #2fd4ff;
+  --color-flare-deep: #0a5bc4;
+  /* Arctic ice: premium marker, used sparingly (badges, ratings, owner chips) */
+  --color-gold: #a9e2ff;
+  --color-gold-deep: #7cc4e8;
+  --color-ink: #070E1A;
+  --color-ink-2: #0a1220;
+  --color-ink-3: #0D1626;
+  --color-ink-4: #14243D;
   /* Paper tokens resolve dark: the whole surface is ink, never white-flooded */
-  --color-paper: #101010;
-  --color-paper-2: #161616;
+  --color-paper: #081020;
+  --color-paper-2: #0B1628;
   --color-mute: #a1a1a1;
   --color-mute-2: #6f6f6a;
-  --color-line: #262626;
+  --color-line: #1C3050;
 }
 
-/* ---------- Marketing surface: ink black, signal red, white type ---------- */
+/* ---------- Marketing surface: ink black, deep-signal cerulean, white type ---------- */
 :root {
   --radius: 0.25rem;
-  --background: #090909;
+  --background: #070E1A;
   --foreground: #f5f5f3;
-  --card: #111111;
+  --card: #0A1424;
   --card-foreground: #f5f5f3;
   --popover: #141414;
   --popover-foreground: #f5f5f3;
-  --primary: #e10600;
+  --primary: #4a90e2;
   --primary-foreground: #ffffff;
-  --secondary: #161616;
+  --secondary: #0B1628;
   --secondary-foreground: #f5f5f3;
-  --muted: #161616;
+  --muted: #0B1628;
   --muted-foreground: #a1a1a1;
-  --accent: #161616;
+  --accent: #0B1628;
   --accent-foreground: #f5f5f3;
-  --destructive: #b80500;
-  --border: #262626;
-  --input: #262626;
-  --ring: #e10600;
-  --chart-1: #e10600;
-  --chart-2: #090909;
+  --destructive: #2e7cde;
+  --border: #1C3050;
+  --input: #1C3050;
+  --ring: #4a90e2;
+  --chart-1: #4a90e2;
+  --chart-2: #070E1A;
   --chart-3: #a1a1a1;
-  --chart-4: #b80500;
+  --chart-4: #2e7cde;
   --chart-5: #5c5c58;
-  --sidebar: #090909;
+  --sidebar: #070E1A;
   --sidebar-foreground: #f5f5f3;
-  --sidebar-primary: #e10600;
+  --sidebar-primary: #4a90e2;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #121212;
+  --sidebar-accent: #0D1626;
   --sidebar-accent-foreground: #f5f5f3;
-  --sidebar-border: #262626;
-  --sidebar-ring: #e10600;
+  --sidebar-border: #1C3050;
+  --sidebar-ring: #4a90e2;
 }
 
 /* ---------- App + admin product chrome (dark) ---------- */
 .dy-dark {
-  --background: #090909;
+  --background: #070E1A;
   --foreground: #f5f5f3;
-  --card: #111111;
+  --card: #0A1424;
   --card-foreground: #f5f5f3;
   --popover: #141414;
   --popover-foreground: #f5f5f3;
-  --primary: #e10600;
+  --primary: #4a90e2;
   --primary-foreground: #ffffff;
-  --secondary: #161616;
+  --secondary: #0B1628;
   --secondary-foreground: #f5f5f3;
-  --muted: #161616;
+  --muted: #0B1628;
   --muted-foreground: #a1a1a1;
-  --accent: #161616;
+  --accent: #0B1628;
   --accent-foreground: #f5f5f3;
-  --destructive: #e10600;
-  --border: #262626;
-  --input: #262626;
-  --ring: #e10600;
-  --chart-1: #e10600;
+  --destructive: #4a90e2;
+  --border: #1C3050;
+  --input: #1C3050;
+  --ring: #4a90e2;
+  --chart-1: #4a90e2;
   --chart-2: #f5f5f3;
   --chart-3: #a1a1a1;
-  --chart-4: #b80500;
+  --chart-4: #2e7cde;
   --chart-5: #5c5c58;
-  --sidebar: #090909;
+  --sidebar: #070E1A;
   --sidebar-foreground: #f5f5f3;
-  --sidebar-primary: #e10600;
+  --sidebar-primary: #4a90e2;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #161616;
+  --sidebar-accent: #0B1628;
   --sidebar-accent-foreground: #f5f5f3;
-  --sidebar-border: #262626;
-  --sidebar-ring: #e10600;
+  --sidebar-border: #1C3050;
+  --sidebar-ring: #4a90e2;
 }
 
 @layer base {
@@ -140,7 +140,7 @@
     text-rendering: optimizeLegibility;
   }
   ::selection {
-    background: #e10600;
+    background: #4a90e2;
     color: #ffffff;
   }
   html {
@@ -229,7 +229,7 @@
     background-size: 48px 48px;
   }
   .dy-radial-fade {
-    background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(225, 6, 0, 0.09), transparent 65%);
+    background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(10, 91, 196, 0.09), transparent 65%);
   }
   /* Custom scrollbars for long lists */
   .dy-scroll::-webkit-scrollbar {
@@ -279,14 +279,14 @@
   flex: none;
 }
 .dy-status-live .dy-status-dot {
-  background: #e10600;
+  background: #4a90e2;
   animation: dy-pulse 1.6s cubic-bezier(0.7, 0, 0.2, 1) infinite;
 }
-.dy-status-live { color: #e10600; }
+.dy-status-live { color: #4a90e2; }
 .dy-status-connected .dy-status-dot { background: #3e9e63; }
 .dy-status-attention .dy-status-dot { background: #d08700; }
 .dy-status-neutral .dy-status-dot { background: #a1a1a1; }
-.dy-status-blocked .dy-status-dot { background: #e10600; }
+.dy-status-blocked .dy-status-dot { background: #4a90e2; }
 
 @keyframes dy-pulse {
   0% { opacity: 1; }
@@ -312,9 +312,9 @@
   text-transform: uppercase;
   padding: 3px 8px;
   border-radius: 3px;
-  border: 1px solid rgba(225, 6, 0, 0.35);
-  background: rgba(225, 6, 0, 0.08);
-  color: #ff4d44;
+  border: 1px solid rgba(10, 91, 196, 0.35);
+  background: rgba(10, 91, 196, 0.08);
+  color: #6fd6ff;
   white-space: nowrap;
 }
 .cue-chip.cue-soft {
@@ -332,7 +332,7 @@
   display: block;
   width: 3px;
   border-radius: 2px;
-  background: #e10600;
+  background: #4a90e2;
   transform-origin: bottom;
   animation: dy-bar 900ms cubic-bezier(0.7, 0, 0.2, 1) infinite;
 }
@@ -365,19 +365,19 @@
    sheen sweep on hover + real press on click. Never flat.
    ================================================================== */
 
-/* Primary: red flare. The hero action. */
+/* Primary: cerulean flare. The hero action. */
 .btn-flare {
   position: relative;
   isolation: isolate;
   overflow: hidden;
   border-radius: 999px;
-  border: 1px solid rgba(255, 94, 74, 0.6);
-  background: linear-gradient(180deg, #ff3226 0%, #e10600 48%, #a80400 100%);
+  border: 1px solid rgba(47, 212, 255, 0.6);
+  background: linear-gradient(180deg, #45b6ff 0%, #4a90e2 48%, #1a54a8 100%);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.38),
     inset 0 -1px 0 rgba(0, 0, 0, 0.25),
-    0 1px 2px rgba(9, 9, 9, 0.5),
-    0 12px 34px -12px rgba(225, 6, 0, 0.65);
+    0 1px 2px rgba(7, 14, 26, 0.5),
+    0 12px 34px -12px rgba(10, 91, 196, 0.65);
   color: #ffffff;
   font-weight: 600;
   letter-spacing: 0.01em;
@@ -407,8 +407,8 @@
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.42),
     inset 0 -1px 0 rgba(0, 0, 0, 0.25),
-    0 2px 4px rgba(9, 9, 9, 0.5),
-    0 20px 48px -14px rgba(225, 6, 0, 0.8);
+    0 2px 4px rgba(7, 14, 26, 0.5),
+    0 20px 48px -14px rgba(10, 91, 196, 0.8);
 }
 .btn-flare:hover::before {
   transform: translateX(72%) skewX(-6deg);
@@ -419,19 +419,19 @@
   box-shadow:
     inset 0 2px 5px rgba(0, 0, 0, 0.45),
     inset 0 1px 0 rgba(255, 255, 255, 0.18),
-    0 6px 18px -10px rgba(225, 6, 0, 0.5);
+    0 6px 18px -10px rgba(10, 91, 196, 0.5);
 }
 .btn-flare:focus-visible {
-  outline: 2px solid #ff6a5e;
+  outline: 2px solid #6fcbff;
   outline-offset: 2px;
 }
 .btn-flare:disabled {
   filter: grayscale(0.4) brightness(0.75);
   transform: none;
-  box-shadow: 0 6px 18px -12px rgba(225, 6, 0, 0.4);
+  box-shadow: 0 6px 18px -12px rgba(10, 91, 196, 0.4);
 }
 
-/* Secondary: dark glass with a red heart. */
+/* Secondary: dark glass with a cerulean core. */
 .btn-glass {
   position: relative;
   isolation: isolate;
@@ -441,7 +441,7 @@
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.14),
-    0 1px 2px rgba(9, 9, 9, 0.4);
+    0 1px 2px rgba(7, 14, 26, 0.4);
   color: #ffffff;
   font-weight: 600;
   letter-spacing: 0.01em;
@@ -468,11 +468,11 @@
 }
 .btn-glass:hover {
   transform: translateY(-1.5px);
-  border-color: rgba(255, 90, 70, 0.55);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.11), rgba(225, 6, 0, 0.07));
+  border-color: rgba(47, 212, 255, 0.55);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.11), rgba(10, 91, 196, 0.07));
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.18),
-    0 14px 36px -16px rgba(225, 6, 0, 0.45);
+    0 14px 36px -16px rgba(10, 91, 196, 0.45);
 }
 .btn-glass:hover::before {
   transform: translateX(72%) skewX(-6deg);
@@ -484,21 +484,21 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 .btn-glass:focus-visible {
-  outline: 2px solid rgba(255, 106, 94, 0.8);
+  outline: 2px solid rgba(111, 203, 255, 0.8);
   outline-offset: 2px;
 }
 
 /* Gold outline: premium secondary, for owner and highlight moments. */
 .btn-gold {
   border-radius: 999px;
-  border: 1px solid rgba(233, 180, 76, 0.45);
-  background: linear-gradient(180deg, rgba(233, 180, 76, 0.12), rgba(233, 180, 76, 0.04));
-  color: #f2cf82;
+  border: 1px solid rgba(169, 226, 255, 0.45);
+  background: linear-gradient(180deg, rgba(169, 226, 255, 0.12), rgba(169, 226, 255, 0.04));
+  color: #cfeaff;
   font-weight: 600;
   letter-spacing: 0.01em;
   box-shadow:
-    inset 0 1px 0 rgba(255, 226, 150, 0.25),
-    0 10px 30px -14px rgba(233, 180, 76, 0.4);
+    inset 0 1px 0 rgba(200, 240, 255, 0.25),
+    0 10px 30px -14px rgba(169, 226, 255, 0.4);
   transition:
     transform 180ms cubic-bezier(0.7, 0, 0.2, 1),
     box-shadow 220ms cubic-bezier(0.7, 0, 0.2, 1),
@@ -506,10 +506,10 @@
 }
 .btn-gold:hover {
   transform: translateY(-1.5px);
-  border-color: rgba(233, 180, 76, 0.75);
+  border-color: rgba(169, 226, 255, 0.75);
   box-shadow:
-    inset 0 1px 0 rgba(255, 226, 150, 0.35),
-    0 16px 40px -14px rgba(233, 180, 76, 0.55);
+    inset 0 1px 0 rgba(200, 240, 255, 0.35),
+    0 16px 40px -14px rgba(169, 226, 255, 0.55);
 }
 .btn-gold:active {
   transform: translateY(1px);
@@ -517,14 +517,14 @@
 
 /* Flare gradient text: for accent words in display headings. */
 .text-flare {
-  background: linear-gradient(180deg, #ff5a4a 8%, #e10600 82%);
+  background: linear-gradient(180deg, #5fc9ff 8%, #4a90e2 82%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 /* Gold gradient text. */
 .text-goldflare {
-  background: linear-gradient(180deg, #f6d78a 10%, #e9b44c 90%);
+  background: linear-gradient(180deg, #d8f0ff 10%, #a9e2ff 90%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -537,10 +537,10 @@
   gap: 5px;
   padding: 4px 10px;
   border-radius: 999px;
-  border: 1px solid rgba(233, 180, 76, 0.45);
-  background: linear-gradient(180deg, rgba(233, 180, 76, 0.16), rgba(233, 180, 76, 0.05));
-  box-shadow: inset 0 1px 0 rgba(255, 226, 150, 0.28);
-  color: #f2cf82;
+  border: 1px solid rgba(169, 226, 255, 0.45);
+  background: linear-gradient(180deg, rgba(169, 226, 255, 0.16), rgba(169, 226, 255, 0.05));
+  box-shadow: inset 0 1px 0 rgba(200, 240, 255, 0.28);
+  color: #cfeaff;
   font-family: var(--font-jetbrains), monospace;
   font-size: 10px;
   font-weight: 600;
@@ -556,7 +556,7 @@
   overflow: hidden;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  background: #101010;
+  background: #081020;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
     0 18px 44px -22px rgba(0, 0, 0, 0.75);
@@ -576,7 +576,7 @@
 }
 .tilt-3d:hover {
   transform: perspective(1100px) rotateX(0deg) rotateY(0deg) translateY(-6px) scale(1.02);
-  box-shadow: 0 40px 70px -26px rgba(225, 6, 0, 0.35), 0 24px 44px -22px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 40px 70px -26px rgba(10, 91, 196, 0.35), 0 24px 44px -22px rgba(0, 0, 0, 0.8);
 }
 /* Mirror tilt for alternating cards: a staggered composition reads as a real 3D arrangement. */
 .tilt-3d-alt {
@@ -596,17 +596,17 @@
   position: absolute;
   inset: auto 0 0 0;
   height: 62%;
-  background: linear-gradient(180deg, transparent, rgba(9, 9, 9, 0.55) 55%, rgba(9, 9, 9, 0.94));
+  background: linear-gradient(180deg, transparent, rgba(7, 14, 26, 0.55) 55%, rgba(7, 14, 26, 0.94));
 }
 
 /* Flare hairline: gradient energy line for section transitions. */
 .hairline-flare {
   position: relative;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(225, 6, 0, 0.55), transparent);
+  background: linear-gradient(90deg, transparent, rgba(10, 91, 196, 0.55), transparent);
 }
 
 /* Gold radial whisper for premium panels. */
 .dy-radial-gold {
-  background: radial-gradient(ellipse 60% 55% at 50% 0%, rgba(233, 180, 76, 0.07), transparent 65%);
+  background: radial-gradient(ellipse 60% 55% at 50% 0%, rgba(169, 226, 255, 0.07), transparent 65%);
 }

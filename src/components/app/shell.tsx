@@ -51,11 +51,11 @@ function ActivationGate({ reason }: { reason: string }) {
   }, [refresh]);
 
   return (
-    <div className="dy-dark min-h-screen bg-[#090909] text-[#F5F5F3] flex flex-col items-center justify-center px-4 grain-dy">
+    <div className="dy-dark min-h-screen bg-[#070E1A] text-[#F5F5F3] flex flex-col items-center justify-center px-4 grain-dy">
       <div className="absolute inset-0 dy-grid-bg opacity-40" aria-hidden="true" />
-      <div className="relative max-w-lg w-full rounded-[4px] border border-[#262626] bg-[#0C0C0C] p-8 md:p-10 text-center">
-        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-[#262626] bg-[#111111]">
-          <Hourglass className="h-5 w-5 text-[#E10600]" strokeWidth={1.75} />
+      <div className="relative max-w-lg w-full rounded-[4px] border border-[#1C3050] bg-[#0A1220] p-8 md:p-10 text-center">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-[#1C3050] bg-[#0A1424]">
+          <Hourglass className="h-5 w-5 text-[#4A90E2]" strokeWidth={1.75} />
         </div>
         <div className="mt-6 flex items-center justify-center gap-2.5">
           <span className="dy-status dy-status-attention">
@@ -71,7 +71,7 @@ function ActivationGate({ reason }: { reason: string }) {
           approved, this page becomes your dashboard automatically. No refresh needed.
         </p>
         {reason && (
-          <p className="mt-4 rounded-[3px] border border-[#262626] bg-[#111111] px-4 py-3 font-mono-dy text-[11px] leading-relaxed tracking-[0.06em] text-[#A1A1A1]">
+          <p className="mt-4 rounded-[3px] border border-[#1C3050] bg-[#0A1424] px-4 py-3 font-mono-dy text-[11px] leading-relaxed tracking-[0.06em] text-[#A1A1A1]">
             REASON ON FILE: {reason.toUpperCase()}
           </p>
         )}
@@ -86,7 +86,7 @@ function ActivationGate({ reason }: { reason: string }) {
               await logout();
               navigate(ROUTES.home);
             }}
-            className="rounded-[2px] border-[#262626] bg-transparent text-[#F5F5F3] hover:bg-[#111111]"
+            className="rounded-[2px] border-[#1C3050] bg-transparent text-[#F5F5F3] hover:bg-[#0A1424]"
           >
             Sign out
           </Button>
@@ -102,15 +102,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#090909] text-white flex items-center justify-center">
-        <Loader2 className="h-6 w-6 text-[#E10600] animate-spin" />
+      <div className="min-h-screen bg-[#070E1A] text-white flex items-center justify-center">
+        <Loader2 className="h-6 w-6 text-[#4A90E2] animate-spin" />
       </div>
     );
   }
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-[#090909] text-white flex flex-col items-center justify-center gap-4 px-4 dy-grid-bg grain-dy">
+      <div className="min-h-screen bg-[#070E1A] text-white flex flex-col items-center justify-center gap-4 px-4 dy-grid-bg grain-dy">
         <Monogram size={40} className="text-white" />
         <h1 className="font-display text-2xl">Sign in to open your workspace</h1>
         <p className="text-sm text-[#A1A1A1] max-w-sm text-center">
@@ -119,14 +119,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </p>
         <div className="flex gap-3">
           <Button
-            className="bg-[#E10600] hover:bg-[#B80500] text-white rounded-[2px]"
+            className="bg-[#4A90E2] hover:bg-[#2E7CDE] text-white rounded-[2px]"
             onClick={() => navigate(ROUTES.signup)}
           >
             Create your AI employee
           </Button>
           <Button
             variant="outline"
-            className="border-[#262626] text-white hover:bg-[#111111] rounded-[2px]"
+            className="border-[#1C3050] text-white hover:bg-[#0A1424] rounded-[2px]"
             onClick={() => navigate(ROUTES.login)}
           >
             Log in
@@ -145,13 +145,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const mobileActive = NAV.find((n) => (n.exact ? path.length === 1 : is(n.to)));
 
   return (
-    <div className="dy-dark min-h-screen bg-[#090909] text-[#F5F5F3] flex flex-col">
+    <div className="dy-dark min-h-screen bg-[#070E1A] text-[#F5F5F3] flex flex-col">
       {/* Sidebar (desktop) */}
-      <aside className="hidden lg:flex fixed inset-y-0 left-0 w-60 bg-[#090909] border-r border-[#262626] flex-col z-40">
-        <div className="h-16 flex items-center gap-2.5 px-5 border-b border-[#262626]">
+      <aside className="hidden lg:flex fixed inset-y-0 left-0 w-60 bg-[#070E1A] border-r border-[#1C3050] flex-col z-40">
+        <div className="h-16 flex items-center gap-2.5 px-5 border-b border-[#1C3050]">
           <Monogram size={24} className="text-white" />
           <span className="font-display text-base text-white leading-none">
-            DEYOUNG<span className="text-[#E10600]">.</span>
+            DEYOUNG<span className="text-[#4A90E2]">.</span>
           </span>
         </div>
         <nav className="flex-1 py-3 px-3 space-y-0.5 overflow-y-auto dy-scroll" aria-label="Application sections">
@@ -164,16 +164,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 className={cn(
                   "w-full flex items-center gap-3 px-3 py-2 text-sm rounded-[2px] relative transition-colors ease-mechanical group",
                   active
-                    ? "bg-[#111111] text-white"
-                    : "text-[#A1A1A1] hover:text-white hover:bg-[#0D0D0D]",
+                    ? "bg-[#0A1424] text-white"
+                    : "text-[#A1A1A1] hover:text-white hover:bg-[#0A1322]",
                 )}
                 aria-current={active ? "page" : undefined}
               >
                 {active && (
-                  <span className="absolute left-0 top-1.5 bottom-1.5 w-0.5 bg-[#E10600]" aria-hidden="true" />
+                  <span className="absolute left-0 top-1.5 bottom-1.5 w-0.5 bg-[#4A90E2]" aria-hidden="true" />
                 )}
                 <item.icon
-                  className={cn("h-4 w-4 shrink-0 transition-colors", active ? "text-[#E10600]" : "group-hover:text-white")}
+                  className={cn("h-4 w-4 shrink-0 transition-colors", active ? "text-[#4A90E2]" : "group-hover:text-white")}
                   strokeWidth={1.75}
                 />
                 {item.label}
@@ -185,24 +185,24 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <div className="px-3 pb-2">
             <button
               onClick={() => navigate(ROUTES.admin)}
-              className="w-full flex items-center gap-3 rounded-[2px] border border-dashed border-[#2e2e2e] px-3 py-2.5 text-[13px] text-[#A1A1A1] transition-colors ease-mechanical hover:border-[#E10600]/50 hover:text-white"
+              className="w-full flex items-center gap-3 rounded-[2px] border border-dashed border-[#2e2e2e] px-3 py-2.5 text-[13px] text-[#A1A1A1] transition-colors ease-mechanical hover:border-[#4A90E2]/50 hover:text-white"
             >
-              <ShieldCheck className="h-4 w-4 text-[#E10600]" strokeWidth={1.75} />
+              <ShieldCheck className="h-4 w-4 text-[#4A90E2]" strokeWidth={1.75} />
               Admin console
             </button>
           </div>
         )}
-        <div className="p-4 border-t border-[#262626]">
+        <div className="p-4 border-t border-[#1C3050]">
           {isAdmin && (
-            <div className="mb-3 flex items-center justify-between rounded-[6px] border border-[#E9B44C]/35 bg-gradient-to-b from-[#E9B44C]/[0.08] to-transparent px-3 py-2">
-              <span className="font-mono-dy text-[9.5px] font-semibold tracking-[0.16em] text-[#F2CF82]">
+            <div className="mb-3 flex items-center justify-between rounded-[6px] border border-[#A9E2FF]/35 bg-gradient-to-b from-[#A9E2FF]/[0.08] to-transparent px-3 py-2">
+              <span className="font-mono-dy text-[9.5px] font-semibold tracking-[0.16em] text-[#CFEAFF]">
                 OWNER ACCESS
               </span>
               <span className="font-mono-dy text-[9px] tracking-[0.12em] text-[#8f8f89]">$0 · ALL</span>
             </div>
           )}
           <div className="flex items-center gap-2.5">
-            <div className="h-8 w-8 rounded-full bg-[#111111] border border-[#262626] flex items-center justify-center text-xs font-bold text-white">
+            <div className="h-8 w-8 rounded-full bg-[#0A1424] border border-[#1C3050] flex items-center justify-center text-xs font-bold text-white">
               {(user.name ?? user.email).slice(0, 2).toUpperCase()}
             </div>
             <div className="min-w-0 flex-1">
@@ -227,7 +227,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </aside>
 
       {/* Topbar (mobile) */}
-      <header className="lg:hidden sticky top-0 z-40 bg-[#090909] border-b border-[#262626]">
+      <header className="lg:hidden sticky top-0 z-40 bg-[#070E1A] border-b border-[#1C3050]">
         <div className="h-14 px-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Monogram size={20} className="text-white" />
@@ -237,7 +237,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             {isAdmin && (
               <button
                 onClick={() => navigate(ROUTES.admin)}
-                className="p-2 text-[#E10600]"
+                className="p-2 text-[#4A90E2]"
                 aria-label="Admin console"
               >
                 <ShieldCheck className="h-4 w-4" />
@@ -255,7 +255,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </button>
           </div>
         </div>
-        <nav className="flex overflow-x-auto dy-scroll border-t border-[#262626]" aria-label="Application sections">
+        <nav className="flex overflow-x-auto dy-scroll border-t border-[#1C3050]" aria-label="Application sections">
           {NAV.map((item) => {
             const active = item.exact ? path.length === 1 : is(item.to);
             return (
@@ -264,7 +264,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 onClick={() => navigate(item.to)}
                 className={cn(
                   "px-4 py-2.5 text-xs font-medium whitespace-nowrap border-b-2 transition-colors ease-mechanical",
-                  active ? "border-[#E10600] text-white" : "border-transparent text-[#A1A1A1]",
+                  active ? "border-[#4A90E2] text-white" : "border-transparent text-[#A1A1A1]",
                 )}
               >
                 {item.label}
@@ -313,8 +313,8 @@ export function EmptyState({
   action?: React.ReactNode;
 }) {
   return (
-    <div className="rounded-[4px] border border-dashed border-[#262626] bg-[#0D0D0D] px-6 py-14 text-center max-w-lg mx-auto">
-      <div className="mx-auto h-11 w-11 rounded-full border border-[#262626] bg-[#111111] flex items-center justify-center">
+    <div className="rounded-[4px] border border-dashed border-[#1C3050] bg-[#0A1322] px-6 py-14 text-center max-w-lg mx-auto">
+      <div className="mx-auto h-11 w-11 rounded-full border border-[#1C3050] bg-[#0A1424] flex items-center justify-center">
         <Icon className="h-5 w-5 text-[#A1A1A1]" strokeWidth={1.75} />
       </div>
       <h2 className="mt-5 font-display font-bold text-white">{title}</h2>
@@ -336,7 +336,7 @@ export function StatCard({
   live?: boolean;
 }) {
   return (
-    <div className="rounded-[4px] border border-[#262626] bg-[#111111] p-5 transition-all duration-300 ease-mechanical hover:-translate-y-0.5 hover:border-[#333]">
+    <div className="rounded-[4px] border border-[#1C3050] bg-[#0A1424] p-5 transition-all duration-300 ease-mechanical hover:-translate-y-0.5 hover:border-[#333]">
       <p className="font-mono-dy text-[10px] uppercase tracking-[0.2em] text-[#A1A1A1]">{label}</p>
       <p className="mt-3 font-display-strong text-3xl tabular-nums text-white">{value}</p>
       <p className="mt-2 text-xs text-[#A1A1A1] leading-relaxed">{detail}</p>

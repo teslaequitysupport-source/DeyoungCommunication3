@@ -56,7 +56,7 @@ function BarField2D({ reduced }: { reduced: boolean }) {
         const phase = reduced ? 0.5 : 0.5 + 0.4 * Math.sin(t * 0.0012 + i * 0.35);
         const bh = h * 0.08 + phase * h * 0.34;
         const hot = phase > 0.82;
-        ctx.fillStyle = hot ? "#e10600" : "#232323";
+        ctx.fillStyle = hot ? "#4a90e2" : "#232323";
         ctx.fillRect(i * bw + bw * 0.22, h - bh, bw * 0.56, bh);
       }
     };

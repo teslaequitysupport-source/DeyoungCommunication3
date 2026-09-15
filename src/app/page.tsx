@@ -172,13 +172,13 @@ function NotFoundPage() {
   return (
     <MarketingPageShell>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 py-32 text-center">
-        <FileQuestion className="mx-auto h-10 w-10 text-[#E10600]" />
+        <FileQuestion className="mx-auto h-10 w-10 text-[#4A90E2]" />
         <h1 className="mt-6 font-display text-4xl tracking-tight">Page not found</h1>
         <p className="mt-3 text-sm text-neutral-400 max-w-sm mx-auto">
           This page does not exist. The link may be outdated, or the page moved.
         </p>
         <Button
-          className="mt-8 bg-[#E10600] hover:bg-[#B80500] text-white rounded-[2px]"
+          className="mt-8 bg-[#4A90E2] hover:bg-[#2E7CDE] text-white rounded-[2px]"
           onClick={() => navigate(ROUTES.home)}
         >
           Back to home

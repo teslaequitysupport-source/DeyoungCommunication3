@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 1200px; height: 630px; overflow: hidden; font-family: 'Segoe UI', Arial, sans-serif; }
+  .card {
+    width: 1200px; height: 630px; position: relative;
+    background:
+      radial-gradient(ellipse 900px 500px at 78% 30%, rgba(47, 212, 255, 0.22), transparent 60%),
+      radial-gradient(ellipse 700px 400px at 15% 85%, rgba(74, 144, 226, 0.18), transparent 65%),
+      linear-gradient(160deg, #070E1A 0%, #0A1424 55%, #0D1626 100%);
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 0 96px;
+  }
+  .grid {
+    position: absolute; inset: 0; opacity: 0.5;
+    background-image:
+      linear-gradient(rgba(28, 48, 80, 0.35) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(28, 48, 80, 0.35) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .mark { display: flex; align-items: center; gap: 18px; margin-bottom: 42px; }
+  .mark svg { width: 72px; height: 72px; }
+  .word { color: #FFFFFF; font-size: 30px; font-weight: 800; letter-spacing: 0.16em; }
+  .word span { color: #00C8FF; }
+  h1 {
+    color: #FFFFFF; font-size: 76px; font-weight: 800; line-height: 1.06;
+    letter-spacing: -0.015em; max-width: 900px;
+  }
+  h1 em { font-style: normal; color: #2FD4FF; }
+  .sub {
+    margin-top: 34px; color: #A9E2FF; font-size: 27px; font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+  .pills { display: flex; gap: 14px; margin-top: 48px; }
+  .pill {
+    border: 1px solid rgba(169, 226, 255, 0.35); color: #CFE9FF;
+    font-size: 19px; font-weight: 600; letter-spacing: 0.08em;
+    padding: 12px 22px; border-radius: 999px;
+    background: rgba(10, 91, 196, 0.16);
+  }
+  .wave { position: absolute; right: 90px; top: 105px; display: flex; align-items: center; gap: 7px; }
+  .wave i { display: block; width: 6px; border-radius: 3px; background: #2FD4FF; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="grid"></div>
+  <div class="wave">
+    <i style="height: 18px; opacity:.5"></i><i style="height: 34px; opacity:.7"></i><i style="height: 54px"></i><i style="height: 78px"></i><i style="height: 100px"></i><i style="height: 78px"></i><i style="height: 54px"></i><i style="height: 34px; opacity:.7"></i><i style="height: 18px; opacity:.5"></i>
+  </div>
+  <div class="mark">
+    <svg viewBox="0 0 32 32" fill="none">
+      <rect width="32" height="32" rx="7" fill="#0A1424" stroke="rgba(169,226,255,0.35)"/>
+      <rect x="5" y="5" width="4" height="22" rx="1" fill="#FFFFFF"/>
+      <rect x="12" y="8" width="14" height="3.4" rx="1.2" fill="#FFFFFF"/>
+      <rect x="12" y="14.3" width="15" height="3.4" rx="1.2" fill="#00C8FF"/>
+      <rect x="12" y="20.6" width="10" height="3.4" rx="1.2" fill="#FFFFFF"/>
+    </svg>
+    <div class="word">DEYOUNG<span>.</span></div>
+  </div>
+  <h1>AI employees that answer,<br>understand, and <em>act.</em></h1>
+  <div class="sub">Receptionists, sales, support, and scheduling. Ready to talk.</div>
+  <div class="pills">
+    <div class="pill">VOICE CALLS</div>
+    <div class="pill">BUSINESS KNOWLEDGE</div>
+    <div class="pill">HUMAN HANDOFF</div>
+  </div>
+</div>
+</body>
+</html>

@@ -23,7 +23,7 @@ export function OverviewView() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-24">
-        <Loader2 className="h-6 w-6 text-[#E10600] animate-spin" />
+        <Loader2 className="h-6 w-6 text-[#4A90E2] animate-spin" />
       </div>
     );
   }
@@ -46,14 +46,14 @@ export function OverviewView() {
           action={
             <div className="flex flex-col sm:flex-row gap-3">
               <Button
-                className="bg-[#E10600] hover:bg-[#B80500] text-white rounded-[2px]"
+                className="bg-[#4A90E2] hover:bg-[#2E7CDE] text-white rounded-[2px]"
                 onClick={() => navigate(ROUTES.appEmployees)}
               >
                 Create your first AI employee <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
               <Button
                 variant="outline"
-                className="border-[#262626] text-white hover:bg-[#111111] rounded-[2px]"
+                className="border-[#1C3050] text-white hover:bg-[#0A1424] rounded-[2px]"
                 onClick={() => navigate(ROUTES.appIntegrations)}
               >
                 Connect an integration
@@ -78,7 +78,7 @@ export function OverviewView() {
             <StatCard label="Audit entries" value={o?.auditEntries ?? 0} detail="Immutable action log" />
           </div>
 
-          <div className="mt-6 rounded-[2px] border border-[#262626] bg-[#111111] p-6">
+          <div className="mt-6 rounded-[2px] border border-[#1C3050] bg-[#0A1424] p-6">
             <div className="flex items-center justify-between">
               <p className="text-sm font-semibold text-white">Platform activity, last 14 days</p>
               <p className="text-xs text-[#A1A1A1]">Real usage events only</p>
@@ -87,7 +87,7 @@ export function OverviewView() {
               {(o?.eventsByDay ?? []).map((d) => (
                 <div key={d.day} className="flex-1 flex flex-col items-center gap-1.5" title={`${d.day}: ${d.count} events`}>
                   <div
-                    className="w-full bg-[#E10600] rounded-t-[2px] min-h-[2px] ease-mechanical"
+                    className="w-full bg-[#4A90E2] rounded-t-[2px] min-h-[2px] ease-mechanical"
                     style={{ height: `${Math.max(2, (d.count / Math.max(1, Math.max(...(o?.eventsByDay ?? [{ count: 1 }]).map((x) => x.count)))) * 96)}px` }}
                   />
                   <span className="text-[9px] text-[#6b6b6b]">{d.day.slice(8)}</span>
@@ -104,7 +104,7 @@ export function OverviewView() {
           <div className="mt-6 grid sm:grid-cols-3 gap-4">
             <button
               onClick={() => navigate(ROUTES.appEmployees)}
-              className="rounded-[2px] border border-[#262626] bg-[#111111] p-5 text-left hover:border-[#3a3a3a] transition-colors ease-mechanical"
+              className="rounded-[2px] border border-[#1C3050] bg-[#0A1424] p-5 text-left hover:border-[#3a3a3a] transition-colors ease-mechanical"
             >
               <p className="text-xs uppercase tracking-[0.18em] text-[#A1A1A1]">Next step</p>
               <p className="mt-2 text-sm font-semibold text-white">Tune your employees</p>
@@ -112,7 +112,7 @@ export function OverviewView() {
             </button>
             <button
               onClick={() => navigate(ROUTES.appInbox)}
-              className="rounded-[2px] border border-[#262626] bg-[#111111] p-5 text-left hover:border-[#3a3a3a] transition-colors ease-mechanical"
+              className="rounded-[2px] border border-[#1C3050] bg-[#0A1424] p-5 text-left hover:border-[#3a3a3a] transition-colors ease-mechanical"
             >
               <p className="text-xs uppercase tracking-[0.18em] text-[#A1A1A1]">Watch</p>
               <p className="mt-2 text-sm font-semibold text-white">Open the inbox</p>
@@ -120,7 +120,7 @@ export function OverviewView() {
             </button>
             <button
               onClick={() => navigate(ROUTES.appKnowledge)}
-              className="rounded-[2px] border border-[#262626] bg-[#111111] p-5 text-left hover:border-[#3a3a3a] transition-colors ease-mechanical"
+              className="rounded-[2px] border border-[#1C3050] bg-[#0A1424] p-5 text-left hover:border-[#3a3a3a] transition-colors ease-mechanical"
             >
               <p className="text-xs uppercase tracking-[0.18em] text-[#A1A1A1]">Ground it</p>
               <p className="mt-2 text-sm font-semibold text-white">Add knowledge</p>

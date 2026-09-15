@@ -22,6 +22,7 @@ import {
   ProvidedPanel,
   PhotoBand,
 } from "@/components/marketing/sections";
+import { Showreel, AppSection, VoiceCloneSection } from "@/components/marketing/showreel";
 import { useSite } from "@/hooks/use-site";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -116,6 +117,15 @@ export function HomePage() {
 
       <MarketingSection
         num="01"
+        eyebrow="The showreel"
+        title="Watch a call happen."
+        lead="Simulated, honestly labeled. Real cues, real interruptions, real grounding on display."
+      >
+        <Showreel />
+      </MarketingSection>
+
+      <MarketingSection
+        num="02"
         eyebrow="Who it serves"
         title="Built for teams that live on the phone."
         lead="Front desks, intake lines, order queues: the places where waiting costs money."
@@ -124,7 +134,7 @@ export function HomePage() {
       </MarketingSection>
 
       <MarketingSection
-        num="02"
+        num="03"
         eyebrow="What they do"
         title="Employees, not chatbots."
         lead="Each one has a job, a personality, and rules it will not break."
@@ -133,7 +143,7 @@ export function HomePage() {
       </MarketingSection>
 
       <MarketingSection
-        num="03"
+        num="04"
         eyebrow="The hires"
         title="Meet the workforce."
         lead="Ready-made roles, trainable in minutes."
@@ -143,7 +153,7 @@ export function HomePage() {
 
       <MarketingSection
         id="architecture"
-        num="04"
+        num="05"
         eyebrow="The pipeline"
         title="Built for interruption, not monologue."
         lead="Human conversation is overlap and half-finished sentences. Every stage yields the moment you speak."
@@ -156,7 +166,7 @@ export function HomePage() {
       </MarketingSection>
 
       <MarketingSection
-        num="05"
+        num="06"
         eyebrow="Getting started"
         title="From idea to answering in one sitting."
         lead="Describe the job, feed it the truth, take a test call."
@@ -165,7 +175,7 @@ export function HomePage() {
       </MarketingSection>
 
       <MarketingSection
-        num="06"
+        num="07"
         eyebrow="Knowledge"
         title="It only says what you approved."
         lead="Grounded retrieval on every turn. Ungrounded turns go to a human, visibly."
@@ -174,7 +184,16 @@ export function HomePage() {
       </MarketingSection>
 
       <MarketingSection
-        num="07"
+        num="08"
+        eyebrow="Voice cloning"
+        title="Your voice, their shift."
+        lead="Upload a sample, capture consent, and your employee answers in a voice your customers already trust."
+      >
+        <VoiceCloneSection />
+      </MarketingSection>
+
+      <MarketingSection
+        num="09"
         eyebrow="The deal"
         title="You bring nothing. We provide everything."
         lead="Your clients pay you to solve communication. You pay us to make it work end to end."
@@ -182,15 +201,19 @@ export function HomePage() {
         <ProvidedPanel />
       </MarketingSection>
 
-      <MarketingSection num="08" eyebrow="Channels" title="Honest about every channel." lead="What works today, what we provision on request, what is genuinely coming soon.">
+      <MarketingSection num="10" eyebrow="Channels" title="Honest about every channel." lead="What works today, what we provision on request, what is genuinely coming soon.">
         <ChannelsHonest />
       </MarketingSection>
 
-      <MarketingSection num="09" eyebrow="Pricing" title="Priced to start, built to scale." lead="Start free in text. Upgrade for the major functions: voice, emotion, telephony.">
+      <MarketingSection num="11" eyebrow="The app" title="Take the front desk with you." lead="Live calls, transcripts, handoffs. In your pocket, the moment the stores approve." >
+        <AppSection />
+      </MarketingSection>
+
+      <MarketingSection num="12" eyebrow="Pricing" title="Priced to start, built to scale." lead="Start free in text. Upgrade for the major functions: voice, emotion, telephony.">
         <PricingTable />
       </MarketingSection>
 
-      <MarketingSection num="10" eyebrow="Questions" title="Asked honestly, answered honestly." tight>
+      <MarketingSection num="13" eyebrow="Questions" title="Asked honestly, answered honestly." tight>
         <Faq />
       </MarketingSection>
 
