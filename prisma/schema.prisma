@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -51,6 +51,7 @@ model Organization {
   usageEvents    UsageEvent[]
   integrationConns IntegrationConn[]
   voiceClones    VoiceClone[]
+  automationRules AutomationRule[]
 }
 
 // ---- Voice cloning (operator-owned voices) ----
@@ -364,6 +365,43 @@ model WaitlistEntry {
   createdAt DateTime @default(now())
 
   @@unique([email, platform])
+}
+
+// ---- Automation rules: trigger -> action -> logged run ----
+// Real event-driven automation. Triggers fire from actual platform events
+// (call ended, conversation closed, contact inquiry). Actions are real:
+// an LLM-drafted follow-up saved to the run log, or an admin notification
+// through the realtime bus. Every execution is recorded, failures included.
+
+model AutomationRule {
+  id             String   @id @default(cuid())
+  organizationId String
+  name           String
+  trigger        String   @default("call_ended") // call_ended | conversation_closed | lead_created
+  action         String   @default("draft_followup") // draft_followup | notify_admin
+  enabled        Boolean  @default(true)
+  runCount       Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  runs         AutomationRun[]
+
+  @@index([organizationId])
+}
+
+model AutomationRun {
+  id        String   @id @default(cuid())
+  ruleId    String
+  orgId     String
+  trigger   String
+  status    String   @default("ok") // ok | failed
+  detail    String   @default("") // action output (e.g. the drafted follow-up)
+  createdAt DateTime @default(now())
+
+  rule AutomationRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+
+  @@index([orgId])
 }
 
 model ContactInquiry {

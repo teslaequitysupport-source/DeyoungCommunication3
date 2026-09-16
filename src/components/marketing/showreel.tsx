@@ -37,11 +37,11 @@ const SCENARIOS: Scenario[] = [
     employee: "ADA · AI RECEPTIONIST",
     lines: [
       { who: "caller", text: "Hi, um, do you take my insurance? Sorry, I mean, is Doctor Reyes in on Fridays?" },
-      { who: "ai", text: "[warmly] No need to apologize. We take most major plans, and Doctor Reyes is in every Friday until four.", cues: ["warm"], source: "INSURANCE.POLICY" },
+      { who: "ai", text: "No need to apologize. We take most major plans, and Doctor Reyes is in every Friday until four.", cues: ["warm"], source: "INSURANCE.POLICY" },
       { who: "caller", text: "Oh good, so could I book, hold on, what about the morning instead of" },
       { who: "ai", text: "[quick] Friday nine thirty works. Should I hold it for you?", cues: ["quick"], cutIn: 120 },
       { who: "caller", text: "Yes please. Morning person." },
-      { who: "ai", text: "[warmly] Done, nine thirty, held under your name. A reminder text goes out the day before.", cues: ["warm"], source: "BOOKING.RULES", outcome: "APPOINTMENT HELD · SMS REMINDER QUEUED" },
+      { who: "ai", text: "Done, nine thirty, held under your name. A reminder text goes out the day before.", cues: ["warm"], source: "BOOKING.RULES", outcome: "APPOINTMENT HELD · SMS REMINDER QUEUED" },
     ],
   },
   {
@@ -55,7 +55,7 @@ const SCENARIOS: Scenario[] = [
       { who: "caller", text: "And if I only need it for my two busy days, Monday and" },
       { who: "ai", text: "[quick] Then the starter plan covers it. No seat minimums.", cues: ["quick"], cutIn: 140 },
       { who: "caller", text: "Huh. Usually people dodge that question." },
-      { who: "ai", text: "[warmly] Dodging is expensive. Want the two-day setup guide sent over?", cues: ["warm"], outcome: "LEAD QUALIFIED · GUIDE SENT" },
+      { who: "ai", text: "Dodging is expensive. Want the two-day setup guide sent over?", cues: ["warm"], outcome: "LEAD QUALIFIED · GUIDE SENT" },
     ],
   },
   {
@@ -65,11 +65,11 @@ const SCENARIOS: Scenario[] = [
     employee: "JUNE · AI SUPPORT AGENT",
     lines: [
       { who: "caller", text: "This is the second time my order is wrong. I am honestly about to give up on you guys." },
-      { who: "ai", text: "[empathetic] [breath] That is twice too many, and I hear you. Let us make it right before you decide anything.", cues: ["empathetic", "breath"] },
+      { who: "ai", text: "That is twice too many, and I hear you. Let us make it right before you decide anything.", cues: ["empathetic", "breath"] },
       { who: "caller", text: "The charger, again, wrong one in the box. I do not even want to explain it all" },
       { who: "ai", text: "[quick] You do not have to. Order four one two nine, correct charger, ships today, no charge.", cues: ["quick"], cutIn: 130, source: "ORDER.HISTORY" },
       { who: "caller", text: "Well. Okay. That was easy." },
-      { who: "ai", text: "[warmly] It should have been easy the first time. Tracking hits your phone within the hour.", cues: ["warm"], outcome: "RESOLVED · REPLACEMENT SHIPPED" },
+      { who: "ai", text: "It should have been easy the first time. Tracking hits your phone within the hour.", cues: ["warm"], outcome: "RESOLVED · REPLACEMENT SHIPPED" },
     ],
   },
   {
@@ -83,7 +83,7 @@ const SCENARIOS: Scenario[] = [
       { who: "caller", text: "Tomorrow works. Actually wait, does she handle payment APIs or is that" },
       { who: "ai", text: "[quick] Payment APIs are exactly her lane. Eleven tomorrow, thirty minutes, camera optional.", cues: ["quick"], cutIn: 110 },
       { who: "caller", text: "Book it. And sorry for the panic." },
-      { who: "ai", text: "[warmly] No apology needed. Urgent is what tomorrow slots are for.", cues: ["warm"], outcome: "SLOT BOOKED · PREP NOTES SENT TO PRIYA" },
+      { who: "ai", text: "No apology needed. Urgent is what tomorrow slots are for.", cues: ["warm"], outcome: "SLOT BOOKED · PREP NOTES SENT TO PRIYA" },
     ],
   },
 ];
@@ -110,11 +110,14 @@ export function Showreel() {
       return () => clearTimeout(t);
     }
     const line = sc.lines[visible];
-    setTyping(true);
     const readMs = Math.min(2600, 650 + line.text.length * 16);
+    // Start typing inside a microtask so no setState runs synchronously
+    // during the effect body (react-hooks/set-state-in-effect).
+    const t0 = setTimeout(() => setTyping(true), 0);
     const t1 = setTimeout(() => setTyping(false), readMs);
     const t2 = setTimeout(() => setVisible((v) => v + 1), readMs + 420);
     return () => {
+      clearTimeout(t0);
       clearTimeout(t1);
       clearTimeout(t2);
     };
@@ -179,9 +182,6 @@ export function Showreel() {
               >
                 <p className="text-[14px] leading-relaxed">{l.text}</p>
                 <div className="mt-2 flex flex-wrap items-center gap-1.5">
-                  {l.cues?.map((c) => (
-                    <span key={c} className="cue-chip">{c}</span>
-                  ))}
                   {l.source && <span className="cue-chip cue-soft">SOURCE · {l.source}</span>}
                   {l.cutIn !== undefined && (
                     <span className="cue-chip" style={{ borderColor: "rgba(47,212,255,0.5)", color: "#2FD4FF" }}>
@@ -381,8 +381,7 @@ export function AppSection() {
                 </p>
                 <p className="text-white">
                   <span className="font-mono-dy text-[9px] text-[#2FD4FF]">ADA · </span>
-                  [warmly] Four in the afternoon, and the last cleaning slot is at three.
-                  <span className="cue-chip ml-1.5">warm</span>
+                  Four in the afternoon, and the last cleaning slot is at three.
                 </p>
               </div>
               <div className="mt-3 grid grid-cols-2 gap-2">
@@ -397,7 +396,7 @@ export function AppSection() {
 
             {/* Floating telemetry chips */}
             <div className="mx-3 mt-2 flex flex-wrap gap-1.5">
-              <span className="cue-chip cue-soft">EMOTION · WARM</span>
+              <span className="cue-chip cue-soft">VOICE · WARM TONE</span>
               <span className="cue-chip cue-soft">312 MS</span>
               <span className="cue-chip cue-soft">SOURCE · HOURS.TXT</span>
             </div>

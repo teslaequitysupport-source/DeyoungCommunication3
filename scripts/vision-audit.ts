@@ -30,7 +30,7 @@ async function main() {
       });
       console.log(`\n=== ${f} ===\n${res.choices[0]?.message?.content ?? "(no reply)"}`);
     } catch (e) {
-      console.log(`\n=== ${f} ===\nERROR: ${e.message}`);
+      console.log(`\n=== ${f} ===\nERROR: ${String(e)}`);
     }
   }
 }

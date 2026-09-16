@@ -275,6 +275,6 @@ export const CHANNELS = [
   { key: "web_chat", label: "Web Chat", state: "connected" },
   { key: "phone", label: "Phone", state: "not_connected" },
   { key: "sms", label: "SMS", state: "not_connected" },
-  { key: "whatsapp", label: "WhatsApp", state: "coming_soon" },
-  { key: "email", label: "Email", state: "coming_soon" },
+  { key: "whatsapp", label: "WhatsApp", state: "not_connected" },
+  { key: "email", label: "Email", state: "not_connected" },
 ] as const;

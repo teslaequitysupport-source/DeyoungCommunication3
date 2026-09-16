@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { getSessionUser, usage } from "@/lib/server/auth";
 import { emitRealtime } from "@/lib/server/events";
 import { summarizeCues } from "@/lib/emotion";
+import { runAutomations } from "@/lib/server/automations";
 import { z } from "zod";
 
 export const dynamic = "force-dynamic";
@@ -52,5 +53,15 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     cuesSummary: JSON.parse(ended.cuesSummary || "{}"),
     at: new Date().toISOString(),
   });
+  // Fire the organization's automation rules on this real event.
+  try {
+    await runAutomations("call_ended", { id: user.organizationId, name: user.organizationName }, {
+      context: ended.transcript || "(no transcript was captured)",
+      meta: `${parsed.data.status} call, ${Math.floor(durationSec / 60)}m ${durationSec % 60}s, ${turns.length} turns`,
+      actorUserId: user.userId,
+    });
+  } catch {
+    /* automation failures are logged as runs; never block the call end */
+  }
   return NextResponse.json({ ok: true, durationSec, turnsCount: turns.length });
 }

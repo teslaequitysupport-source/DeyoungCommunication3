@@ -172,8 +172,121 @@ export interface SpeakHandle {
   cancel(): void;
 }
 
+/* ---- Audible humanization: real breaths, sighs, sniffs ----
+ * Emotion is carried IN THE VOICE, never written out. Filtered-noise
+ * synthesis shapes soft inhales, exhales, sniffs (crying) and light
+ * chuckles that play under the speech pauses, so the employee sounds
+ * like it is actually breathing while it talks. */
+
+type HumanSound = "breath" | "sigh" | "sniff" | "chuckle";
+
+const SOUND_MS: Record<HumanSound, number> = {
+  breath: 430,
+  sigh: 560,
+  sniff: 170,
+  chuckle: 330,
+};
+
+let audioCtx: AudioContext | null = null;
+let noiseBuf: AudioBuffer | null = null;
+
+function getAudioGraph(): { ctx: AudioContext; noise: AudioBuffer } | null {
+  try {
+    if (!audioCtx) {
+      const AC = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      if (!AC) return null;
+      audioCtx = new AC();
+    }
+    if (audioCtx.state === "suspended") void audioCtx.resume();
+    if (!noiseBuf) {
+      const len = Math.floor(audioCtx.sampleRate * 1.2);
+      noiseBuf = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
+      const data = noiseBuf.getChannelData(0);
+      for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
+    }
+    return { ctx: audioCtx, noise: noiseBuf };
+  } catch {
+    return null;
+  }
+}
+
+/** Play a soft human vocal sound (breath / sigh / sniff / chuckle). */
+function playHumanSound(kind: HumanSound, gainScale = 1): void {
+  const g0 = getAudioGraph();
+  if (!g0) return;
+  const { ctx, noise } = g0;
+  const t0 = ctx.currentTime + 0.01;
+  const dur = SOUND_MS[kind] / 1000;
+
+  const src = ctx.createBufferSource();
+  src.buffer = noise;
+  src.loop = true;
+
+  const filter = ctx.createBiquadFilter();
+  const gain = ctx.createGain();
+
+  if (kind === "breath") {
+    // Soft inhale: bandpass sweeping up, gentle swell.
+    filter.type = "bandpass";
+    filter.frequency.setValueAtTime(420, t0);
+    filter.frequency.linearRampToValueAtTime(760, t0 + dur * 0.7);
+    filter.Q.value = 0.9;
+    gain.gain.setValueAtTime(0.0001, t0);
+    gain.gain.linearRampToValueAtTime(0.09 * gainScale, t0 + dur * 0.55);
+    gain.gain.linearRampToValueAtTime(0.0001, t0 + dur);
+  } else if (kind === "sigh") {
+    // Falling exhale: lowpass sweeping down, longer decay.
+    filter.type = "lowpass";
+    filter.frequency.setValueAtTime(950, t0);
+    filter.frequency.exponentialRampToValueAtTime(380, t0 + dur);
+    filter.Q.value = 0.4;
+    gain.gain.setValueAtTime(0.0001, t0);
+    gain.gain.linearRampToValueAtTime(0.085 * gainScale, t0 + dur * 0.25);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+  } else if (kind === "sniff") {
+    // Quick sharp nasal catch-breath: high bandpass, fast attack.
+    filter.type = "bandpass";
+    filter.frequency.setValueAtTime(1750, t0);
+    filter.frequency.linearRampToValueAtTime(2350, t0 + dur);
+    filter.Q.value = 1.6;
+    gain.gain.setValueAtTime(0.0001, t0);
+    gain.gain.linearRampToValueAtTime(0.13 * gainScale, t0 + 0.045);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+  } else {
+    // Light chuckle: three short filtered bursts with falling energy.
+    filter.type = "bandpass";
+    filter.frequency.setValueAtTime(560, t0);
+    filter.Q.value = 1.1;
+    const burst = 0.075;
+    const gap = 0.055;
+    gain.gain.setValueAtTime(0.0001, t0);
+    for (let b = 0; b < 3; b++) {
+      const at = t0 + b * (burst + gap);
+      gain.gain.setValueAtTime(0.0001, at);
+      gain.gain.linearRampToValueAtTime((0.09 - b * 0.02) * gainScale, at + burst * 0.35);
+      gain.gain.exponentialRampToValueAtTime(0.0001, at + burst);
+    }
+  }
+
+  src.connect(filter).connect(gain).connect(ctx.destination);
+  src.start(t0);
+  src.stop(t0 + dur + 0.05);
+}
+
+/** Which audible human sound a cue kind implies (null = prosody only). */
+function cueSound(kind: string): HumanSound | null {
+  if (kind === "breath") return "breath";
+  if (kind === "sigh") return "sigh";
+  if (kind === "strong") return "sniff"; // tears / voice breaking: catch-breath
+  if (kind === "laugh") return "chuckle";
+  return null;
+}
+
 /** Speak parsed segments; each segment inherits rate/pitch/silence from its cue,
- *  then the operator's voice profile bias (cloned pitch/pace) is applied. */
+ *  then the operator's voice profile bias (cloned pitch/pace) is applied.
+ *  Cues with an audible character play a real breath/sigh/sniff/chuckle sound
+ *  inside the pause, and strongly emotional segments get slight pitch jitter
+ *  so the voice sounds unsteady, the way real upset speech does. */
 export function speakSegments(
   segments: VoiceSegment[],
   opts: {
@@ -193,14 +306,14 @@ export function speakSegments(
       setTimeout(resolve, ms);
     });
 
-  const speakOne = (text: string, rate: number, pitch: number) =>
+  const speakOne = (text: string, rate: number, pitch: number, volume = 1) =>
     new Promise<void>((resolve) => {
       if (cancelled) return resolve();
       const u = new SpeechSynthesisUtterance(text);
       if (opts.voice) u.voice = opts.voice;
       u.rate = Math.max(0.4, Math.min(2, rate));
       u.pitch = Math.max(0.4, Math.min(2, pitch));
-      u.volume = 1;
+      u.volume = Math.max(0.1, Math.min(1, volume));
       let settled = false;
       const finish = () => {
         if (!settled) {
@@ -225,15 +338,37 @@ export function speakSegments(
     for (const seg of segments) {
       if (cancelled) break;
       const cue = seg.cueBefore;
-      if (cue) await wait(cue.preSilenceMs);
+      if (cue) {
+        const sound = cueSound(cue.kind);
+        const soundMs = sound ? SOUND_MS[sound] : 0;
+        if (sound && cue.preSilenceMs < soundMs) {
+          // Lead with the audible breath, then any remaining pause.
+          playHumanSound(sound);
+          await wait(Math.min(soundMs, cue.preSilenceMs));
+          await wait(cue.preSilenceMs - soundMs);
+        } else {
+          if (sound) playHumanSound(sound);
+          await wait(cue.preSilenceMs);
+        }
+      }
       if (cancelled) break;
+      // Unsteady voice under strong emotion: subtle per-segment pitch wobble.
+      const strong = cue?.kind === "strong";
+      const jitter = strong ? (Math.random() * 0.09 - 0.045) : 0;
       await speakOne(
         seg.text,
         (cue ? cue.rate : 1) * rateBias,
-        (cue ? cue.pitch : 1) * pitchBias,
+        Math.max(0.4, (cue ? cue.pitch : 1) + jitter) * pitchBias,
+        strong ? 0.92 : 1,
       );
       if (cancelled) break;
-      if (cue) await wait(cue.postSilenceMs);
+      if (cue) {
+        if (cue.kind === "strong" && cue.postSilenceMs > 250) {
+          // A quiet second catch-breath while recovering.
+          playHumanSound("sniff", 0.6);
+        }
+        await wait(cue.postSilenceMs);
+      }
     }
     opts.onDone?.();
   };

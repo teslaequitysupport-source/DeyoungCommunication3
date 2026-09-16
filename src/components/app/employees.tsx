@@ -736,7 +736,6 @@ function EmployeeBuilder({
                     aria-pressed={selected}
                   >
                     {c.label}
-                    {c.state === "coming_soon" && <span className="ml-1.5 text-[9px] text-[#6b6b6b]">SOON</span>}
                   </button>
                 );
               })}

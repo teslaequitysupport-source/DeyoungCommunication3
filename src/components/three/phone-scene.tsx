@@ -86,25 +86,23 @@ function MissionControl({ stats }: { stats: PhoneStats }) {
         </div>
 
         <div className="mt-4 space-y-3">
-          <div className="max-w-[80%] rounded-[3px] rounded-bl-none border border-white/10 bg-ink-3 px-4 py-3">
-            <p className="text-[13px] leading-snug text-neutral-300">
+          <div className="relative max-w-[80%] rounded-[18px] rounded-bl-[6px] border border-white/10 bg-[#101B2E] px-4 py-3 shadow-[0_10px_28px_-14px_rgba(0,0,0,0.8)]">
+            <p className="text-[13px] leading-snug text-neutral-200">
               &ldquo;Hi, do you take bookings on Sundays?&rdquo;
             </p>
+            <p className="mt-1 text-right font-mono-dy text-[8.5px] tracking-[0.1em] text-[#5d6b7d]">14:02</p>
           </div>
-          <div className="ml-auto max-w-[85%] rounded-[3px] rounded-br-none border border-brand/25 bg-brand/[0.07] px-4 py-3">
-            <div className="flex flex-wrap items-center gap-1.5">
-              <span className="font-mono-dy text-[10px] tracking-[0.14em] text-[#6fcbff]">ADA · 412MS</span>
-              <span className="cue-chip">breathes</span>
-            </div>
-            <p className="mt-1.5 text-[13px] leading-snug text-neutral-200">
+          <div className="ml-auto max-w-[85%] rounded-[18px] rounded-br-[6px] border border-[#2FD4FF]/20 bg-gradient-to-br from-[#1E5FB8]/40 to-[#2E7CDE]/25 px-4 py-3 shadow-[0_10px_28px_-14px_rgba(10,91,196,0.55)]">
+            <p className="text-[13px] leading-snug text-[#F4FAFF]">
               &ldquo;We do. Sundays run nine to two. Would you like me to hold a slot?&rdquo;
             </p>
+            <p className="mt-1 text-right font-mono-dy text-[8.5px] tracking-[0.1em] text-[#9FC6E8]">ADA · 412MS</p>
           </div>
-          <div className="max-w-[80%] rounded-[3px] rounded-bl-none border border-white/10 bg-ink-3 px-4 py-3">
+          <div className="max-w-[80%] rounded-[18px] rounded-bl-[6px] border border-white/10 bg-[#101B2E] px-4 py-3 shadow-[0_10px_28px_-14px_rgba(0,0,0,0.8)]">
             <div className="mb-1 flex items-center gap-2">
               <span className="font-mono-dy text-[9.5px] tracking-[0.14em] text-brand">INTERRUPTED · BARGE-IN</span>
             </div>
-            <p className="text-[13px] leading-snug text-neutral-300">&ldquo;Wait, afternoon instead&rdquo;</p>
+            <p className="text-[13px] leading-snug text-neutral-200">&ldquo;Wait, afternoon instead&rdquo;</p>
           </div>
         </div>
 

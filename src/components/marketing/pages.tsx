@@ -27,7 +27,7 @@ import { Showreel, AppSection, VoiceCloneSection } from "@/components/marketing/
 import { useSite } from "@/hooks/use-site";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Phone, Brain, MessageSquare, BookOpen, Hand, Workflow, Timer, Mic, Waves } from "lucide-react";
+import { ArrowRight, Phone, Brain, MessageSquare, BookOpen, Hand, Workflow, Timer, Mic, Waves, Megaphone } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /* ---------------- Shared page scaffolding ---------------- */
@@ -198,7 +198,7 @@ export function HomePage() {
         <ProvidedPanel />
       </MarketingSection>
 
-      <MarketingSection num="10" eyebrow="Channels" title="Honest about every channel." lead="What works today, what we provision on request, what is genuinely coming soon.">
+      <MarketingSection num="10" eyebrow="Channels" title="Honest about every channel." lead="What works today, and what we provision on request. No mystery states.">
         <ChannelsHonest />
       </MarketingSection>
 
@@ -215,7 +215,7 @@ export function HomePage() {
       </MarketingSection>
 
       <PhotoBand
-        img="/img/abstract-signal.png"
+        img="/img/abstract-signal.jpg"
         eyebrow="The signal is ready"
         title="Every call your business misses tonight is gone by morning."
         note="Put an AI employee on the line and find out what answering everything feels like."
@@ -232,10 +232,10 @@ export function HomePage() {
 export function ProductIndexPage() {
   const { navigate } = useDyRouter();
   const cards = [
-    { img: "/img/agent-reception.png", icon: Phone, title: "AI Employees", body: "Hire a receptionist, sales assistant, support agent, or scheduler in minutes.", href: ROUTES.productEmployees },
-    { img: "/img/blog-emotion.png", icon: Mic, title: "Voice Engine", body: "The streaming pipeline that listens, thinks, speaks: and lets you interrupt.", href: ROUTES.productVoice },
-    { img: "/img/blog-handoff.png", icon: BookOpen, title: "Knowledge", body: "Answers grounded in your approved documents, never invented.", href: ROUTES.productKnowledge },
-    { img: "/img/network-map.png", icon: MessageSquare, title: "Channels", body: "Web chat, phone, and SMS. We provision the numbers.", href: ROUTES.productChannels },
+    { img: "/img/agent-reception.jpg", icon: Phone, title: "AI Employees", body: "Hire a receptionist, sales assistant, support agent, or scheduler in minutes.", href: ROUTES.productEmployees },
+    { img: "/img/blog-emotion.jpg", icon: Mic, title: "Voice Engine", body: "The streaming pipeline that listens, thinks, speaks: and lets you interrupt.", href: ROUTES.productVoice },
+    { img: "/img/blog-handoff.jpg", icon: BookOpen, title: "Knowledge", body: "Answers grounded in your approved documents, never invented.", href: ROUTES.productKnowledge },
+    { img: "/img/network-map.jpg", icon: MessageSquare, title: "Channels", body: "Web chat, phone, and SMS. We provision the numbers.", href: ROUTES.productChannels },
   ];
   return (
     <MarketingPageShell>
@@ -341,7 +341,7 @@ export function ProductVoicePage() {
         </div>
       </MarketingSection>
       <PhotoBand
-        img="/img/blog-emotion.png"
+        img="/img/blog-emotion.jpg"
         eyebrow="Hear it yourself"
         title="A voice that breathes."
         note="Take a test call in Voice Studio and interrupt it. That is the demo."
@@ -406,7 +406,7 @@ export function ProductAutomationsPage() {
       <PageHero
         kicker="Product: Automations"
         title="Rules that fire while you sleep."
-        intro="Escalation is automation's most honest form: a rule, a trigger, and a human who receives full context. The workflow builder for post-call follow-ups is Phase 2: labeled honestly as exactly that."
+        intro="Real event-driven automation: a trigger from the live platform, an action with real output, and a complete run log. Every execution is recorded, failures included."
       />
       <MarketingSection num="01" eyebrow="Today" title="What runs now, for real." lead="These automations are live in the current build.">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -415,10 +415,11 @@ export function ProductAutomationsPage() {
           <ProseBlock icon={BookOpen} title="Knowledge updates" body="New sources are indexed and immediately available to every deployed employee." />
         </div>
       </MarketingSection>
-      <MarketingSection num="02" eyebrow="Phase 2" title="What is honestly not built yet." lead="Coming soon: and it will say live the day it is.">
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <ProseBlock icon={Timer} title="Post-call follow-ups" body="Scheduled summaries and follow-up messages after a call ends. Not built yet: no preview pretending otherwise." />
-          <ProseBlock icon={Workflow} title="Visual workflow builder" body="Drag-and-drop branches over the same trigger engine. Designed, not shipped." />
+      <MarketingSection num="02" eyebrow="Automation rules" title="Trigger, action, run log." lead="You build the rule. The platform fires it on real events and shows you every run.">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <ProseBlock icon={Timer} title="Post-call follow-up drafts" body="When a call ends, the AI drafts a warm follow-up message from the actual transcript and files it in the run log, ready to send." />
+          <ProseBlock icon={Workflow} title="Instant owner alerts" body="New inquiries, closed conversations, and finished calls notify the owner the moment they happen, with the full context attached." />
+          <ProseBlock icon={Megaphone} title="Complete run log" body="Every execution is recorded with its output and outcome. Failed runs say why they failed, in plain words." />
         </div>
       </MarketingSection>
       <CtaBand />
@@ -481,9 +482,9 @@ function SolutionShell({
 export function SolutionsIndexPage() {
   const { navigate } = useDyRouter();
   const cards = [
-    { img: "/img/avatar-2.png", label: "Individuals", desc: "One assistant, your voice, your rules.", href: ROUTES.solutionsIndividuals },
-    { img: "/img/avatar-1.png", label: "Businesses", desc: "A front desk that scales with the phones.", href: ROUTES.solutionsBusiness },
-    { img: "/img/team-studio.png", label: "Agencies", desc: "Run communication as a service.", href: ROUTES.solutionsAgencies },
+    { img: "/img/avatar-2.jpg", label: "Individuals", desc: "One assistant, your voice, your rules.", href: ROUTES.solutionsIndividuals },
+    { img: "/img/avatar-1.jpg", label: "Businesses", desc: "A front desk that scales with the phones.", href: ROUTES.solutionsBusiness },
+    { img: "/img/team-studio.jpg", label: "Agencies", desc: "Run communication as a service.", href: ROUTES.solutionsAgencies },
   ];
   return (
     <MarketingPageShell>

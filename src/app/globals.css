@@ -401,6 +401,26 @@
   pointer-events: none;
 }
 
+/* ---- Messenger-grade chat motion ---- */
+
+/* Typing indicator dots (inbox + call console). */
+@keyframes dy-dot {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.55; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}
+
+/* New message entry: soft rise, like a real messenger. */
+@keyframes dy-msg-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.dy-msg-in {
+  animation: dy-msg-in 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .dy-msg-in { animation: none; }
+}
+
 /* ---------- Accessibility: reduce motion kills decoration, keeps data. ---------- */
 @media (prefers-reduced-motion: reduce) {
   *,

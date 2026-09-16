@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import type { AiEmployeeDTO, ConversationDTO, MessageDTO } from "@/lib/types";
-import { Inbox, Loader2, Send, X, UserRound, Hand, CircleStop } from "lucide-react";
+import { Inbox, Loader2, Send, X, Hand, CircleStop } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function InboxView() {
@@ -262,6 +262,38 @@ function StartConversationDialog({
   );
 }
 
+
+/* ---------------- Messenger-grade primitives ---------------- */
+
+function TypingDots() {
+  return (
+    <span className="flex items-end gap-1 px-0.5 pb-0.5" aria-label="typing">
+      {[0, 1, 2].map((i) => (
+        <span
+          key={i}
+          className="h-[5px] w-[5px] rounded-full bg-[#6fcbff]"
+          style={{ animation: `dy-dot 1.2s ${i * 0.18}s ease-in-out infinite` }}
+        />
+      ))}
+    </span>
+  );
+}
+
+function DeliveredTicks() {
+  return (
+    <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-label="delivered" className="ml-0.5">
+      <path d="M1 5.5L4 8.5L9 1.5" stroke="#7FB9EE" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M5.5 5.5L8.5 8.5L13.5 1.5" stroke="#7FB9EE" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" opacity="0.55" />
+    </svg>
+  );
+}
+
+function msgTime(iso: string) {
+  return new Date(iso).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+}
+
+/* ---------------- Room ---------------- */
+
 function ConversationRoom({
   conversationId,
   onClosed,
@@ -294,8 +326,8 @@ function ConversationRoom({
   }, [load]);
 
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
-  }, [messages]);
+    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+  }, [messages, sending]);
 
   async function send(role: "customer" | "human") {
     if (!input.trim()) return;
@@ -350,21 +382,26 @@ function ConversationRoom({
   }
 
   const employee = messages?.find((m) => m.role === "ai")?.speakerName;
+  const roomName = messages?.[0]?.content?.includes("with AI employee")
+    ? messages[0].content.split("with AI employee ")[1]?.replace(/\.$/, "")
+    : employee ?? "AI employee";
 
   return (
-    <div className="rounded-[2px] border border-[#1C3050] bg-[#0A1424] flex flex-col overflow-hidden">
+    <div className="flex flex-col overflow-hidden rounded-[14px] border border-[#1C3050] bg-[#0A1424] shadow-[0_30px_80px_-40px_rgba(0,0,0,0.9)]">
       {/* Room header */}
-      <div className="px-4 py-3 border-b border-[#1C3050] flex items-center gap-3">
-        <div className="h-8 w-8 rounded-full bg-[#0B1628] border border-[#1C3050] flex items-center justify-center shrink-0">
-          <UserRound className="h-4 w-4 text-[#A1A1A1]" />
+      <div className="flex items-center gap-3 border-b border-[#1C3050] bg-[#0B1322]/80 px-4 py-3">
+        <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#2E7CDE] to-[#1E5FB8] text-[12px] font-bold text-white shadow-[0_0_0_2px_rgba(74,144,226,0.25)]">
+          {roomName.slice(0, 2).toUpperCase()}
+          <span className="absolute -bottom-0.5 -right-0.5 flex h-3 w-3 rounded-full border-2 border-[#0B1322] bg-[#2FD4FF]">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#2FD4FF] opacity-60 motion-reduce:hidden" />
+          </span>
         </div>
         <div className="min-w-0">
-          <p className="text-sm font-semibold text-white truncate">
-            {messages?.[0]?.content?.includes("with AI employee")
-              ? messages[0].content.split("with AI employee ")[1]?.replace(/\.$/, "")
-              : employee ?? "AI employee"}
+          <p className="truncate text-[14px] font-semibold text-white">{roomName}</p>
+          <p className="flex items-center gap-1.5 text-[11px] text-[#8FA6C0]">
+            <span className={`inline-block h-1.5 w-1.5 rounded-full ${status === "open" ? "bg-[#2FD4FF]" : "bg-neutral-500"}`} />
+            web chat · {status === "open" ? "online" : status}
           </p>
-          <p className="text-[11px] text-[#A1A1A1]">web chat · {status}</p>
         </div>
         <div className="ml-auto flex items-center gap-2">
           <span className={`dy-status ${takingOver ? "dy-status-attention" : "dy-status-live"}`}>
@@ -374,7 +411,7 @@ function ConversationRoom({
           <Button
             size="sm"
             variant="outline"
-            className="h-8 border-[#1C3050] text-white hover:bg-[#0B1628] rounded-[2px]"
+            className="h-8 rounded-full border-[#1C3050] text-white hover:bg-[#0B1628]"
             onClick={() => {
               setTakingOver(!takingOver);
               toast({
@@ -391,7 +428,7 @@ function ConversationRoom({
           <Button
             size="sm"
             variant="outline"
-            className="h-8 border-[#1C3050] text-[#A1A1A1] hover:text-white hover:bg-[#0B1628] rounded-[2px]"
+            className="h-8 rounded-full border-[#1C3050] text-[#A1A1A1] hover:text-white hover:bg-[#0B1628]"
             onClick={closeConversation}
             aria-label="Close conversation"
           >
@@ -400,41 +437,77 @@ function ConversationRoom({
         </div>
       </div>
 
-      {/* Transcript */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto dy-scroll px-4 py-4 space-y-3 max-h-[400px] min-h-[300px]">
+      {/* Transcript: a real messenger surface */}
+      <div
+        ref={scrollRef}
+        className="dy-scroll relative min-h-[340px] flex-1 space-y-1 overflow-y-auto px-4 py-4 max-h-[440px]"
+        style={{
+          backgroundImage:
+            "radial-gradient(ellipse 60% 40% at 50% -10%, rgba(46,124,222,0.08), transparent)",
+        }}
+      >
+        <p className="pb-2 text-center font-mono-dy text-[9.5px] tracking-[0.14em] text-[#5d6b7d]">
+          TODAY · WEB CHAT · EVERYTHING SAVED
+        </p>
         {messages === null ? (
           <div className="flex justify-center py-16">
-            <Loader2 className="h-5 w-5 text-[#4A90E2] animate-spin" />
+            <Loader2 className="h-5 w-5 animate-spin text-[#4A90E2]" />
           </div>
         ) : (
-          messages.map((m) => {
+          messages.map((m, i) => {
             if (m.role === "system") {
               return (
-                <p key={m.id} className="text-center text-[11px] text-[#6b6b6b] py-1 font-mono">
+                <p key={m.id} className="py-1.5 text-center text-[11px] text-[#6b6b6b]">
                   {m.content}
                 </p>
               );
             }
             const isAi = m.role === "ai";
             const isHuman = m.role === "human";
+            const next = messages[i + 1];
+            const prev = messages[i - 1];
+            const sameAsNext = !!(next && next.role === m.role);
+            const sameAsPrev = !!(prev && prev.role === m.role);
             return (
-              <div key={m.id} className={cn("flex", isAi ? "justify-start" : "justify-end")}>
+              <div key={m.id} className={cn("flex items-end gap-2.5", isAi ? "justify-start" : "justify-end flex-row-reverse")}>
+                {isAi && (
+                  <div
+                    className={cn(
+                      "flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#2E7CDE] to-[#1E5FB8] text-[9px] font-bold text-white",
+                      sameAsNext && "invisible",
+                    )}
+                  >
+                    {roomName.slice(0, 2).toUpperCase()}
+                  </div>
+                )}
                 <div
                   className={cn(
-                    "max-w-[78%] rounded-[2px] px-3.5 py-2.5 border",
+                    "dy-msg-in max-w-[75%] px-3.5 py-2.5 text-[13.5px] leading-relaxed",
                     isAi
-                      ? "border-l-2 border-l-[#4A90E2] border-[#1C3050] bg-[#0A1322]"
+                      ? cn(
+                          "rounded-[18px] rounded-bl-[6px] border border-[#2FD4FF]/15 bg-gradient-to-br from-[#1E5FB8]/45 to-[#2E7CDE]/25 text-[#F4FAFF] shadow-[0_10px_28px_-14px_rgba(10,91,196,0.65)]",
+                          sameAsPrev && "mt-1",
+                        )
                       : isHuman
-                        ? "border-[#d08700]/50 bg-[#101e33] border-l-2 border-l-[#d08700]"
-                        : "border-[#1C3050] bg-[#0B1628]",
+                        ? cn(
+                            "rounded-[18px] rounded-br-[6px] border border-[#d08700]/40 bg-[#1a1a10]/80 text-[#f2e9d8] shadow-[0_10px_28px_-16px_rgba(0,0,0,0.8)]",
+                            sameAsPrev && "mt-1",
+                          )
+                        : cn(
+                            "rounded-[18px] rounded-br-[6px] border border-[#24344F] bg-[#101B2E] text-neutral-200 shadow-[0_10px_28px_-16px_rgba(0,0,0,0.8)]",
+                            sameAsPrev && "mt-1",
+                          ),
                   )}
                 >
-                  <p className="text-[10px] uppercase tracking-wider font-semibold text-[#A1A1A1]">
-                    {m.speakerName ?? (isAi ? "AI" : "Customer")}
-                  </p>
-                  <p className="mt-1 text-sm text-white/95 leading-relaxed whitespace-pre-wrap">{m.content}</p>
-                  <p className="mt-1.5 text-[10px] text-[#6b6b6b]">
-                    {new Date(m.createdAt).toLocaleTimeString()}
+                  {isHuman && (
+                    <p className="mb-0.5 font-mono-dy text-[8.5px] tracking-[0.16em] text-[#d08700]">
+                      {(m.speakerName ?? "YOU").toUpperCase()} · HUMAN
+                    </p>
+                  )}
+                  <p className="whitespace-pre-wrap">{m.content}</p>
+                  <p className={cn("mt-1 flex items-center justify-end gap-1 font-mono-dy text-[8.5px] tracking-[0.08em]", isAi ? "text-[#9FC6E8]" : "text-[#5d6b7d]")}>
+                    {msgTime(m.createdAt)}
+                    {!isAi && <DeliveredTicks />}
                   </p>
                 </div>
               </div>
@@ -442,47 +515,51 @@ function ConversationRoom({
           })
         )}
         {sending && (
-          <div className="flex justify-start">
-            <div className="rounded-[2px] border border-l-2 border-l-[#4A90E2] border-[#1C3050] bg-[#0A1322] px-3.5 py-2.5">
-              <p className="text-[10px] uppercase tracking-wider font-semibold text-[#4A90E2]">
-                {takingOver ? "Sending" : "AI is replying"}
-              </p>
-              <p className="mt-1 text-sm text-[#A1A1A1]">
-                {takingOver ? "Sending your message..." : "The model is generating a real reply..."}
-              </p>
+          <div className="flex items-end gap-2.5">
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#2E7CDE] to-[#1E5FB8] text-[9px] font-bold text-white">
+              {roomName.slice(0, 2).toUpperCase()}
+            </div>
+            <div className="flex items-center rounded-[18px] rounded-bl-[6px] border border-[#2FD4FF]/15 bg-gradient-to-br from-[#1E5FB8]/45 to-[#2E7CDE]/25 px-4 py-3.5">
+              {takingOver ? (
+                <span className="font-mono-dy text-[9.5px] tracking-[0.14em] text-[#9FC6E8]">SENDING…</span>
+              ) : (
+                <TypingDots />
+              )}
             </div>
           </div>
         )}
       </div>
 
       {/* Composer */}
-      <div className="p-3 border-t border-[#1C3050] flex gap-2">
-        <Input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              send(takingOver ? "human" : "customer");
+      <div className="flex items-center gap-2 border-t border-[#1C3050] bg-[#0B1322]/80 p-3">
+        <div className="flex h-10 flex-1 items-center rounded-full border border-[#24344F] bg-[#0E1B2E] pl-4 pr-1 transition-colors focus-within:border-[#4A90E2]/50">
+          <input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                send(takingOver ? "human" : "customer");
+              }
+            }}
+            placeholder={
+              takingOver
+                ? "Reply as the human agent…"
+                : "Type as the customer to test the AI employee…"
             }
-          }}
-          placeholder={
-            takingOver
-              ? "Reply as the human agent..."
-              : "Type as the customer to test the AI employee..."
-          }
-          disabled={status !== "open"}
-          className="bg-[#0A1322] border-[#1C3050] text-white placeholder:text-[#6b6b6b] rounded-[2px] h-10"
-          aria-label="Message"
-        />
-        <Button
-          onClick={() => send(takingOver ? "human" : "customer")}
-          disabled={sending || !input.trim() || status !== "open"}
-          className="bg-[#4A90E2] hover:bg-[#2E7CDE] text-white rounded-[2px] h-10 px-4"
-          aria-label="Send message"
-        >
-          <Send className="h-4 w-4" />
-        </Button>
+            disabled={status !== "open"}
+            className="h-full w-full bg-transparent text-[13.5px] text-white placeholder:text-[#5d6b7d] focus:outline-none disabled:opacity-50"
+            aria-label="Message"
+          />
+          <Button
+            onClick={() => send(takingOver ? "human" : "customer")}
+            disabled={sending || !input.trim() || status !== "open"}
+            className="ml-2 h-8 w-8 shrink-0 rounded-full bg-gradient-to-br from-[#4A90E2] to-[#2E7CDE] p-0 text-white shadow-[0_6px_18px_-6px_rgba(10,91,196,0.8)] transition-all hover:shadow-[0_8px_22px_-6px_rgba(10,91,196,0.9)] disabled:opacity-40"
+            aria-label="Send message"
+          >
+            <Send className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
     </div>
   );

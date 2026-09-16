@@ -150,7 +150,7 @@ export function Hero() {
             />
             {settings.flagShowStats && (
               <motion.p
-                className="mt-2 text-center font-mono-dy text-[10.5px] leading-relaxed tracking-[0.04em] text-neutral-600 lg:mt-3"
+                className="relative z-[1] mt-2 text-center font-mono-dy text-[10.5px] leading-relaxed tracking-[0.04em] text-neutral-600 lg:mt-3"
                 initial={reduced ? false : { opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.7, delay: 0.45 }}
@@ -172,7 +172,7 @@ export function Hero() {
                 {[
                   "STREAMING SPEECH",
                   "LLM REASONING",
-                  "EMOTION CUES",
+                  "EMOTION IN THE VOICE",
                   "BARGE-IN",
                   "HUMAN HANDOFF",
                   "KNOWLEDGE GROUNDED",

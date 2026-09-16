@@ -63,6 +63,7 @@ function buildSystemPrompt(input: {
       "- Answer strictly from the approved knowledge below when it is provided. Never invent prices, policies, availability, or facts.",
       "- If you do not know something or the knowledge is not connected, say so plainly and offer to have a human follow up.",
       "- If someone asks whether you are an AI, answer honestly.",
+      "- Never use emoji, emoticons, or bracketed stage directions like *smiles* or (warmly). Convey warmth through your wording, not through written-out expressions.",
       `- Escalation policy: ${input.escalationRule}. When escalating, reassure the customer and summarize what you will pass on.`,
     ].join("\n"),
   );

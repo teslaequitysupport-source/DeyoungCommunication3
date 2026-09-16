@@ -586,7 +586,7 @@ export function LiveCallsView() {
                     <span className="font-mono-dy text-[11px] tabular-nums tracking-[0.06em] text-[#6f6f6a]">
                       {c.status === "live" ? "0" : `${Math.floor(c.durationSec / 60)}m ${c.durationSec % 60}s`} ·{" "}
                       {c.turnsCount} TURNS · {c.interruptions} BARGE-IN{c.interruptions === 1 ? "" : "S"} ·{" "}
-                      {cueCount} CUES
+                      {cueCount} VOICE SHIFTS
                     </span>
                   </div>
                   <span className="font-mono-dy text-[10px] tracking-[0.1em] text-[#6f6f6a]">
@@ -604,33 +604,333 @@ export function LiveCallsView() {
 
 /* ---------------- Automations ---------------- */
 
+/* ---------------- Automations: real rules + run log ---------------- */
+
+type RuleDTO = {
+  id: string;
+  name: string;
+  trigger: string;
+  action: string;
+  enabled: boolean;
+  runCount: number;
+  createdAt: string;
+};
+
+type RunDTO = {
+  id: string;
+  ruleId: string;
+  trigger: string;
+  status: string;
+  detail: string;
+  createdAt: string;
+};
+
+const TRIGGER_OPTIONS = [
+  { value: "call_ended", label: "Call ends" },
+  { value: "conversation_closed", label: "Conversation closes" },
+  { value: "lead_created", label: "New contact inquiry" },
+];
+
+const ACTION_OPTIONS = [
+  { value: "draft_followup", label: "Draft a follow-up message (AI)" },
+  { value: "notify_admin", label: "Notify the owner instantly" },
+];
+
 export function AutomationsView() {
+  const { toast } = useToast();
+  const [rules, setRules] = useState<RuleDTO[] | null>(null);
+  const [runs, setRuns] = useState<RunDTO[]>([]);
+  const [createOpen, setCreateOpen] = useState(false);
+  const [draft, setDraft] = useState({ name: "", trigger: "call_ended", action: "draft_followup" });
+  const [pending, setPending] = useState(false);
+
+  const load = useCallback(() => {
+    fetch("/api/automations", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((d) => {
+        setRules(d.rules ?? []);
+        setRuns(d.runs ?? []);
+      })
+      .catch(() => setRules([]));
+  }, []);
+
+  useEffect(() => {
+    load();
+    const id = setInterval(load, 10000);
+    return () => clearInterval(id);
+  }, [load]);
+
+  async function createRule() {
+    if (!draft.name.trim()) {
+      toast({ title: "Give the rule a name first." });
+      return;
+    }
+    setPending(true);
+    try {
+      const res = await fetch("/api/automations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(draft),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setCreateOpen(false);
+        setDraft({ name: "", trigger: "call_ended", action: "draft_followup" });
+        load();
+        toast({
+          title: "Automation is live.",
+          description: "It fires the moment its trigger happens for real. Every run lands in the log below.",
+        });
+      } else {
+        toast({ title: data.error ?? "Could not create the rule." });
+      }
+    } finally {
+      setPending(false);
+    }
+  }
+
+  async function toggle(rule: RuleDTO) {
+    await fetch("/api/automations", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: rule.id, enabled: !rule.enabled }),
+    });
+    load();
+  }
+
+  async function remove(rule: RuleDTO) {
+    await fetch("/api/automations", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: rule.id, remove: true }),
+    });
+    load();
+    toast({ title: "Automation removed." });
+  }
+
+  const rulesByName = new Map((rules ?? []).map((r) => [r.id, r.name]));
+
   return (
     <div>
       <AppPageHead
         title="Automations"
-        intro="Flows that fire on real platform events: trigger, condition, AI action, tool action, routing, and a complete run log."
+        intro="Rules that fire on real platform events. Trigger, action, and a complete run log: the follow-up draft is written by the AI from the actual transcript, and every run is recorded, failures included."
+        actions={
+          <Button
+            className="bg-[#4A90E2] hover:bg-[#2E7CDE] text-white rounded-[2px]"
+            onClick={() => setCreateOpen(true)}
+          >
+            <Plus className="mr-1.5 h-4 w-4" />
+            New automation
+          </Button>
+        }
       />
-      <EmptyState
-        icon={Workflow}
-        title="The automation engine ships in Phase 2"
-        body="Automations run on the real event stream, so they ship with the engine, not before it. Triggers like incoming call, lead inquiry, and missed call become configurable the moment the engine is live. Until then, this page says exactly that."
-      />
-      <div className="mt-4 rounded-[2px] border border-[#1C3050] bg-[#0A1424] p-6">
-        <p className="text-xs uppercase tracking-[0.2em] text-[#A1A1A1]">Planned flow structure</p>
-        <div className="mt-4 flex flex-wrap gap-2 items-center text-xs font-semibold uppercase tracking-wide">
-          {["Trigger", "Condition", "AI action", "Tool action", "Route", "Log"].map((s, i) => (
-            <span key={s} className="flex items-center gap-2">
-              <span className="px-3 py-2 border border-[#1C3050] rounded-[2px] text-white/80">{s}</span>
-              {i < 5 && <span className="text-[#6b6b6b]">→</span>}
-            </span>
-          ))}
+
+      {rules === null ? (
+        <div className="flex justify-center py-24">
+          <Loader2 className="h-6 w-6 animate-spin text-[#4A90E2]" />
         </div>
-        <p className="mt-4 text-xs text-[#6b6b6b] leading-relaxed">
-          Every run records its trigger, conditions, steps, and outcome. Dead-lettered runs are
-          visible to admins with the failure reason.
-        </p>
-      </div>
+      ) : rules.length === 0 ? (
+        <EmptyState
+          icon={Workflow}
+          title="No automations yet"
+          body="Create a rule: when a call ends, when a conversation closes, or when a new inquiry arrives, the platform acts on it automatically and logs the run."
+          action={
+            <Button
+              className="bg-[#4A90E2] hover:bg-[#2E7CDE] text-white rounded-[2px]"
+              onClick={() => setCreateOpen(true)}
+            >
+              Create the first automation
+            </Button>
+          }
+        />
+      ) : (
+        <div className="grid gap-4 lg:grid-cols-2">
+          <div className="space-y-3">
+            {(rules ?? []).map((r) => (
+              <div
+                key={r.id}
+                className="rounded-[4px] border border-[#1C3050] bg-[#0A1424] p-4 transition-all duration-300 ease-mechanical hover:border-[#2E7CDE]/40"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="text-[14px] font-semibold text-white">{r.name}</p>
+                    <div className="mt-2 flex flex-wrap items-center gap-2 font-mono-dy text-[10px] tracking-[0.1em]">
+                      <span className="rounded-[2px] border border-[#24344F] bg-[#0B1628] px-2 py-1 text-[#9FC6E8]">
+                        WHEN · {TRIGGER_OPTIONS.find((t) => t.value === r.trigger)?.label ?? r.trigger}
+                      </span>
+                      <ArrowRight className="h-3 w-3 text-[#4A90E2]" />
+                      <span className="rounded-[2px] border border-[#24344F] bg-[#0B1628] px-2 py-1 text-[#9FC6E8]">
+                        DO · {ACTION_OPTIONS.find((a) => a.value === r.action)?.label ?? r.action}
+                      </span>
+                    </div>
+                    <p className="mt-2.5 text-[11.5px] text-[#6f6f6a]">
+                      {r.runCount} run{r.runCount === 1 ? "" : "s"} · created {new Date(r.createdAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                  <div className="flex shrink-0 items-center gap-2">
+                    <button
+                      onClick={() => toggle(r)}
+                      className={cn(
+                        "relative h-6 w-11 rounded-full border transition-colors",
+                        r.enabled ? "border-[#2E7CDE] bg-[#2E7CDE]/30" : "border-[#24344F] bg-[#0B1628]",
+                      )}
+                      role="switch"
+                      aria-checked={r.enabled}
+                      aria-label={r.enabled ? "Pause automation" : "Enable automation"}
+                    >
+                      <span
+                        className={cn(
+                          "absolute top-1/2 h-4 w-4 -translate-y-1/2 rounded-full transition-all",
+                          r.enabled ? "left-[22px] bg-[#2FD4FF]" : "left-1 bg-neutral-500",
+                        )}
+                      />
+                    </button>
+                    <button
+                      onClick={() => remove(r)}
+                      className="p-1.5 text-[#6f6f6a] transition-colors hover:text-white"
+                      aria-label="Delete automation"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Run log */}
+          <div className="flex flex-col overflow-hidden rounded-[4px] border border-[#1C3050] bg-[#0A1220]">
+            <div className="flex items-center justify-between border-b border-[#1C3050] px-4 py-3">
+              <p className="text-[13px] font-semibold text-white">Run log</p>
+              <span className="font-mono-dy text-[10px] tracking-[0.14em] text-[#6f6f6a]">
+                LAST 25 · LIVE
+              </span>
+            </div>
+            <div className="dy-scroll max-h-[520px] flex-1 overflow-y-auto">
+              {runs.length === 0 ? (
+                <p className="px-4 py-10 text-center font-mono-dy text-[10.5px] leading-relaxed tracking-[0.1em] text-[#6f6f6a]">
+                  NO RUNS YET · END A CALL, CLOSE A CHAT, OR RECEIVE AN INQUIRY AND THE RULE
+                  FIRES FOR REAL, RIGHT HERE.
+                </p>
+              ) : (
+                runs.map((run) => (
+                  <div key={run.id} className="border-b border-[#0B1628] px-4 py-3 last:border-b-0">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="flex items-center gap-2 font-mono-dy text-[10.5px] font-semibold tracking-[0.08em] text-neutral-300">
+                        <span
+                          className={cn(
+                            "h-1.5 w-1.5 rounded-full",
+                            run.status === "ok" ? "bg-[#2FD4FF]" : "bg-[#d08700]",
+                          )}
+                        />
+                        {rulesByName.get(run.ruleId) ?? run.ruleId.slice(0, 8)}
+                      </span>
+                      <span className="font-mono-dy text-[9.5px] tabular-nums text-[#6f6f6a]">
+                        {new Date(run.createdAt).toLocaleString()}
+                      </span>
+                    </div>
+                    {run.detail && (
+                      <p
+                        className={cn(
+                          "mt-1.5 whitespace-pre-wrap rounded-[3px] border px-3 py-2 text-[12px] leading-relaxed",
+                          run.status === "ok"
+                            ? "border-[#24344F] bg-[#0B1628] text-neutral-300"
+                            : "border-[#d08700]/30 bg-[#d08700]/[0.06] text-[#e8d9b8]",
+                        )}
+                      >
+                        {run.detail}
+                      </p>
+                    )}
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      <Dialog open={createOpen} onOpenChange={setCreateOpen}>
+        <DialogContent className="bg-[#0A1322] border-[#1C3050] text-[#F5F5F3]">
+          <DialogHeader>
+            <DialogTitle className="text-white">New automation</DialogTitle>
+            <DialogDescription className="text-[#A1A1A1]">
+              A real rule on real events. It runs the moment its trigger happens, and every
+              execution lands in the run log.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="mt-2 space-y-4">
+            <div className="space-y-2">
+              <Label className="text-[#A1A1A1]" htmlFor="rule-name">Rule name</Label>
+              <Input
+                id="rule-name"
+                value={draft.name}
+                maxLength={120}
+                onChange={(e) => setDraft({ ...draft, name: e.target.value })}
+                placeholder="Follow up after every call"
+                className="rounded-[2px] border-[#1C3050] bg-[#0A1424] text-white"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-[#A1A1A1]">Trigger: when it fires</Label>
+              <div className="flex flex-wrap gap-2">
+                {TRIGGER_OPTIONS.map((t) => (
+                  <button
+                    key={t.value}
+                    type="button"
+                    onClick={() => setDraft({ ...draft, trigger: t.value })}
+                    className={cn(
+                      "rounded-[2px] border px-3.5 py-2 font-mono-dy text-[11px] tracking-[0.08em] transition-colors",
+                      draft.trigger === t.value
+                        ? "border-[#2E7CDE] bg-[#2E7CDE]/10 text-[#9FC6E8]"
+                        : "border-[#1C3050] text-neutral-500 hover:border-neutral-500",
+                    )}
+                  >
+                    {t.label.toUpperCase()}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label className="text-[#A1A1A1]">Action: what it does</Label>
+              <div className="flex flex-wrap gap-2">
+                {ACTION_OPTIONS.map((a) => (
+                  <button
+                    key={a.value}
+                    type="button"
+                    onClick={() => setDraft({ ...draft, action: a.value })}
+                    className={cn(
+                      "rounded-[2px] border px-3.5 py-2 font-mono-dy text-[11px] tracking-[0.08em] transition-colors",
+                      draft.action === a.value
+                        ? "border-[#2E7CDE] bg-[#2E7CDE]/10 text-[#9FC6E8]"
+                        : "border-[#1C3050] text-neutral-500 hover:border-neutral-500",
+                    )}
+                  >
+                    {a.label.toUpperCase()}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+          <DialogFooter className="mt-4">
+            <Button
+              variant="outline"
+              onClick={() => setCreateOpen(false)}
+              className="rounded-[2px] border-[#1C3050] text-[#A1A1A1]"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={createRule}
+              disabled={pending || !draft.name.trim()}
+              className="rounded-[2px] bg-[#4A90E2] text-white hover:bg-[#2E7CDE]"
+            >
+              {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Activate rule
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
@@ -673,7 +973,7 @@ export function IntegrationsView() {
     <div>
       <AppPageHead
         title="Integrations"
-        intro="Every integration states what it does and the exact state it is in: Connected, Needs attention, Not connected, or Coming soon."
+        intro="Every integration states what it does and the exact state it is in: Connected, Needs attention, or Not connected. Request setup and the owner provisions it."
       />
       {items === null ? (
         <div className="flex justify-center py-24">

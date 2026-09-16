@@ -1,8 +1,18 @@
+"use client";
+
+import { useId } from "react";
 import { cn } from "@/lib/utils";
 
 /**
  * DEYOUNG speech-act monogram: a D built from a stem plus three staggered
  * voice bars. Reads as both a D and a leveled waveform. No AI cliches.
+ *
+ * Rendering notes:
+ * - The whole site runs on dark ink backgrounds, so every component here
+ *   defaults to LIGHT strokes/text (visible on dark). Pass variant="ink"
+ *   only for the rare light-background placement.
+ * - SVG gradient/filter ids are unique per instance (useId): multiple
+ *   lockups on one page can never cross-reference each other's defs.
  */
 export function Monogram({
   size = 28,
@@ -13,6 +23,10 @@ export function Monogram({
   className?: string;
   redBar?: boolean;
 }) {
+  // useId returns ids with ":" which are invalid inside SVG url(#...) references.
+  const uid = useId().replace(/[:]/g, "");
+  const gradId = `dyMarkGrad-${uid}`;
+  const glowId = `dyMarkGlow-${uid}`;
   return (
     <svg
       width={size}
@@ -21,15 +35,15 @@ export function Monogram({
       fill="none"
       aria-label="DEYOUNG mark"
       role="img"
-      className={className}
+      className={cn("text-[#EAF2FF]", className)}
     >
       <defs>
-        <linearGradient id="dyMarkGrad" x1="10" y1="12" x2="30" y2="20" gradientUnits="userSpaceOnUse">
+        <linearGradient id={gradId} x1="10" y1="12" x2="30" y2="20" gradientUnits="userSpaceOnUse">
           <stop offset="0" stopColor="#6FCBFF" />
           <stop offset="0.55" stopColor="#2FD4FF" />
           <stop offset="1" stopColor="#2E7CDE" />
         </linearGradient>
-        <filter id="dyMarkGlow" x="-60%" y="-60%" width="220%" height="220%">
+        <filter id={glowId} x="-60%" y="-60%" width="220%" height="220%">
           <feGaussianBlur stdDeviation="1.1" result="b" />
           <feMerge>
             <feMergeNode in="b" />
@@ -37,7 +51,7 @@ export function Monogram({
           </feMerge>
         </filter>
       </defs>
-      <g filter="url(#dyMarkGlow)">
+      <g filter={`url(#${glowId})`}>
         <rect x="5" y="5" width="4" height="22" rx="1" fill="currentColor" />
         <rect x="12" y="8" width="14" height="3.4" rx="1.2" fill="currentColor" />
         <rect
@@ -46,7 +60,7 @@ export function Monogram({
           width="15"
           height="3.4"
           rx="1.2"
-          fill={redBar ? "url(#dyMarkGrad)" : "currentColor"}
+          fill={redBar ? `url(#${gradId})` : "currentColor"}
         />
         <rect x="12" y="20.6" width="10" height="3.4" rx="1.2" fill="currentColor" />
       </g>
@@ -55,24 +69,23 @@ export function Monogram({
 }
 
 export function Wordmark({
-  variant = "dark",
+  variant = "light",
   className,
   compact = false,
 }: {
-  variant?: "dark" | "light" | "mono-white" | "mono-black";
+  /** "light" = light text for dark backgrounds (site default). "ink" = dark text. */
+  variant?: "light" | "ink" | "mono-white" | "mono-black";
   className?: string;
   compact?: boolean;
 }) {
   const mainColor =
-    variant === "light" || variant === "mono-white" ? "#FFFFFF" : "#070E1A";
+    variant === "ink" || variant === "mono-black" ? "#070E1A" : "#FFFFFF";
   const subColor =
     variant === "mono-white"
       ? "#FFFFFF"
       : variant === "mono-black"
         ? "#070E1A"
-        : variant === "light"
-          ? "#A1A1A1"
-          : "#A1A1A1";
+        : "#9FB4CC";
   if (compact) {
     return (
       <span
@@ -103,17 +116,17 @@ export function Wordmark({
 }
 
 export function LogoLockup({
-  variant = "dark",
+  variant = "light",
   size = 34,
   className,
 }: {
-  variant?: "dark" | "light";
+  variant?: "light" | "ink";
   size?: number;
   className?: string;
 }) {
   return (
     <span className={cn("inline-flex items-center gap-3", className)}>
-      <Monogram size={size} className={variant === "light" ? "text-white" : "text-[#070E1A]"} />
+      <Monogram size={size} className={variant === "ink" ? "text-[#070E1A]" : "text-white"} />
       <Wordmark variant={variant} />
     </span>
   );
@@ -126,17 +139,17 @@ export function LogoLockup({
  */
 export function SiteLockup({
   siteName,
-  variant = "dark",
+  variant = "light",
   size = 30,
   className,
 }: {
   siteName: string;
-  variant?: "dark" | "light";
+  variant?: "light" | "ink";
   size?: number;
   className?: string;
 }) {
-  const mainColor = variant === "light" ? "#FFFFFF" : "#070E1A";
-  const subColor = variant === "light" ? "#A1A1A1" : "#A1A1A1";
+  const mainColor = variant === "ink" ? "#070E1A" : "#FFFFFF";
+  const subColor = variant === "ink" ? "#5B6B7E" : "#9FB4CC";
   const trimmed = siteName.trim() || "DEYOUNG COMMUNICATION";
   const words = trimmed.split(/\s+/);
   const first = words[0].toUpperCase();
@@ -144,7 +157,7 @@ export function SiteLockup({
 
   return (
     <span className={cn("inline-flex items-center gap-2.5", className)}>
-      <Monogram size={size} className={variant === "light" ? "text-white" : "text-[#070E1A]"} />
+      <Monogram size={size} className={variant === "ink" ? "text-[#070E1A]" : "text-white"} />
       {rest ? (
         <span className="inline-flex flex-col select-none">
           <span

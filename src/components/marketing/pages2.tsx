@@ -37,6 +37,8 @@ import {
   Fingerprint,
   AudioLines,
   Megaphone,
+  MessageCircle,
+  CalendarPlus,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -165,9 +167,9 @@ export function ResourcesIndexPage() {
       />
       <div className="border-t border-white/10 bg-ink-3 py-16 md:py-24">
         <div className="container-dy grid grid-cols-1 gap-5 md:grid-cols-3">
-          <ResourceCard img="/img/blog-handoff.png" icon={Compass} title="Guides" body="Practical walkthroughs for building your first employee." empty="First guide ships with the public launch" />
-          <ResourceCard img="/img/network-map.png" icon={Code2} title="Documentation" body="The API surface with honest scope markers." empty="Skeleton live: deep pages in progress" />
-          <ResourceCard img="/img/blog-emotion.png" icon={History} title="Changelog" body="Every change to the platform, dated and reasoned." empty="First entry: the build you are looking at" />
+          <ResourceCard img="/img/blog-handoff.jpg" icon={Compass} title="Guides" body="Practical walkthroughs for building your first employee." empty="First guide ships with the public launch" />
+          <ResourceCard img="/img/network-map.jpg" icon={Code2} title="Documentation" body="The API surface with honest scope markers." empty="Skeleton live: deep pages in progress" />
+          <ResourceCard img="/img/blog-emotion.jpg" icon={History} title="Changelog" body="Every change to the platform, dated and reasoned." empty="First entry: the build you are looking at" />
         </div>
       </div>
       <CtaBand />
@@ -371,7 +373,7 @@ export function SecurityPage() {
         </div>
       </MarketingSection>
       <PhotoBand
-        img="/img/security-core.png"
+        img="/img/security-core.jpg"
         eyebrow="Under the shell"
         title="Security you can inspect, not just feel."
         note="Every claim on this page maps to a control in the code. Ask us to point at it."
@@ -409,7 +411,7 @@ export function AboutPage() {
           <div className="tilt-3d">
             <div className="photo-frame aspect-[21/9]">
               <Image
-                src="/img/team-studio.png"
+                src="/img/team-studio.jpg"
                 alt="The studio where DEYOUNG COMMUNICATION is built"
                 fill
                 sizes="100vw"
@@ -581,6 +583,29 @@ export function ContactPage() {
               <p className="font-display mt-4 text-[15px] font-bold text-white">Direct email</p>
               <p className="mt-1.5 text-[13.5px] text-neutral-400">{settings.supportEmail}</p>
             </div>
+            <a
+              href="https://wa.me/?text=Hello%20DEYOUNG%20COMMUNICATION%2C%20I%20want%20to%20talk%20about%20AI%20employees."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block rounded-[4px] border border-white/10 bg-ink-2 p-6 transition-all ease-mechanical hover:-translate-y-0.5 hover:border-brand/40"
+            >
+              <MessageCircle className="h-5 w-5 text-brand" strokeWidth={1.8} />
+              <p className="font-display mt-4 text-[15px] font-bold text-white">WhatsApp</p>
+              <p className="mt-1.5 text-[13.5px] text-neutral-400">
+                Tap to open a WhatsApp chat with us instantly. Works from any phone.
+              </p>
+            </a>
+            <a
+              href="/api/booking/ics"
+              download
+              className="block rounded-[4px] border border-white/10 bg-ink-2 p-6 transition-all ease-mechanical hover:-translate-y-0.5 hover:border-brand/40"
+            >
+              <CalendarPlus className="h-5 w-5 text-brand" strokeWidth={1.8} />
+              <p className="font-display mt-4 text-[15px] font-bold text-white">Book a slot in your calendar</p>
+              <p className="mt-1.5 text-[13.5px] text-neutral-400">
+                Download the appointment as a real calendar event (.ics) - exactly what your AI scheduler sends when it books on a call.
+              </p>
+            </a>
             <div className="rounded-[4px] border border-white/10 bg-ink-2 p-6">
               <MapPin className="h-5 w-5 text-brand" strokeWidth={1.8} />
               <p className="font-display mt-4 text-[15px] font-bold text-white">Where we work</p>

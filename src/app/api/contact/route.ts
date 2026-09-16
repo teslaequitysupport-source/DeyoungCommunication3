@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { emitRealtime } from "@/lib/server/events";
+import { runAutomations } from "@/lib/server/automations";
 import { z } from "zod";
 
 const schema = z.object({
@@ -29,6 +30,25 @@ export async function POST(req: NextRequest) {
     preview: parsed.data.message.slice(0, 90),
     at: inquiry.createdAt.toISOString(),
   });
+  // Fire every org's lead automation on this real event (public form,
+  // so we run for all orgs that created lead_created rules). Non-blocking:
+  // the visitor's form must not wait for rule execution.
+  void (async () => {
+    try {
+      const orgs = await db.organization.findMany({
+        where: { status: "active" },
+        select: { id: true, name: true },
+      });
+      for (const org of orgs) {
+        await runAutomations("lead_created", org, {
+          context: `Contact inquiry from ${parsed.data.name} <${parsed.data.email}>${parsed.data.company ? ` (${parsed.data.company})` : ""}:\n${parsed.data.message}`,
+          meta: `topic: ${parsed.data.topic}, from ${parsed.data.name}`,
+        });
+      }
+    } catch {
+      /* automation failures are logged as runs; never block the inquiry */
+    }
+  })();
   return NextResponse.json({ ok: true });
 }
 

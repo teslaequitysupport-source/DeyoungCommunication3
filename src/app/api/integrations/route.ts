@@ -5,14 +5,16 @@ import { z } from "zod";
 
 /**
  * Integration connection states. These reflect what this build actually supports.
- * web_chat is native (connected by default). Telephony and messaging providers
- * are honest "configuration required" surfaces until credentials exist.
+ * web_chat is native (connected by default). WhatsApp click-to-chat is live on
+ * the public site. Everything else is an honest "configuration required"
+ * surface until credentials exist - nothing is labeled coming soon anymore
+ * except the mobile app (which is not an integration).
  */
 const INTEGRATION_CATALOG: {
   type: string;
   label: string;
   category: string;
-  state: "connected" | "not_connected" | "coming_soon";
+  state: "connected" | "not_connected" | "needs_attention";
   detail: string;
 }[] = [
   {
@@ -21,6 +23,13 @@ const INTEGRATION_CATALOG: {
     category: "Channel",
     state: "connected",
     detail: "Native channel. Embed the widget or use the test console in the app.",
+  },
+  {
+    type: "whatsapp_chat",
+    label: "WhatsApp Click-to-Chat",
+    category: "Channel",
+    state: "connected",
+    detail: "Live on the public site: visitors open a WhatsApp chat with you in one tap.",
   },
   {
     type: "phone",
@@ -38,52 +47,52 @@ const INTEGRATION_CATALOG: {
   },
   {
     type: "whatsapp",
-    label: "WhatsApp Business",
+    label: "WhatsApp Business API",
     category: "Channel",
-    state: "coming_soon",
-    detail: "WhatsApp Business Platform integration ships in Phase 2 with per-conversation cost display.",
+    state: "not_connected",
+    detail: "Connect your WhatsApp Business API credentials and the AI answers WhatsApp conversations automatically.",
   },
   {
     type: "email",
     label: "Email",
     category: "Channel",
-    state: "coming_soon",
-    detail: "Inbound email routing ships in Phase 2.",
+    state: "not_connected",
+    detail: "Configuration required: connect an inbound mailbox (IMAP or provider webhook) to route email to employees.",
+  },
+  {
+    type: "calendar",
+    label: "Calendar (.ics)",
+    category: "Tool",
+    state: "connected",
+    detail: "Live: appointments generate real calendar events (.ics downloads on the contact page).",
   },
   {
     type: "openai",
     label: "AI Provider (LLM)",
     category: "Provider",
     state: "connected",
-    detail: "Platform-managed model access is active. Bring-your-own keys ship with the provider settings in Phase 1.",
+    detail: "Platform-managed model access is active. Bring-your-own keys ship with the provider settings.",
   },
   {
     type: "deepgram",
     label: "Speech-to-Text",
     category: "Provider",
     state: "not_connected",
-    detail: "Configuration required for live calls. Not needed for web chat.",
+    detail: "Optional for production telephony. Browser voice and web chat need no provider.",
   },
   {
     type: "elevenlabs",
     label: "Text-to-Speech",
     category: "Provider",
     state: "not_connected",
-    detail: "Configuration required for voice. Practice mode in Voice Studio needs no provider.",
+    detail: "Optional premium voices for production. Browser voice works without it.",
   },
   {
     type: "livekit",
     label: "LiveKit Media",
     category: "Infrastructure",
     state: "not_connected",
-    detail: "Configuration required for real-time voice sessions.",
-  },
-  {
-    type: "calendar",
-    label: "Calendar (booking)",
-    category: "Tool",
-    state: "coming_soon",
-    detail: "Appointment tool actions ship in Phase 1 with the tool worker.",
+    detail: "Optional real-time media infrastructure for scaled voice sessions.",
   },
 ];
 
@@ -124,12 +133,6 @@ export async function PATCH(req: NextRequest) {
   if (!parsed.success) return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   const item = INTEGRATION_CATALOG.find((i) => i.type === parsed.data.type);
   if (!item) return NextResponse.json({ error: "Unknown integration" }, { status: 404 });
-  if (item.state === "coming_soon") {
-    return NextResponse.json(
-      { error: `${item.label} is coming soon and cannot be configured yet.` },
-      { status: 400 },
-    );
-  }
   await db.integrationConn.upsert({
     where: { organizationId_type: { organizationId: user.organizationId, type: item.type } },
     create: {

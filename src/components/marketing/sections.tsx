@@ -160,10 +160,10 @@ export function MarketingSection({
 /* ---------------- Industries showcase (photo led) ---------------- */
 
 const INDUSTRIES = [
-  { img: "/img/industry-clinic.png", title: "Clinics & practices", line: "Bookings, reminders, insurance questions: answered while the front desk works." },
-  { img: "/img/industry-law.png", title: "Law firms", line: "Intake calls captured after hours. Nothing missed, nothing invented." },
-  { img: "/img/industry-realestate.png", title: "Real estate", line: "Lead qualification and viewing bookings, around the clock." },
-  { img: "/img/industry-ecommerce.png", title: "E-commerce", line: "Order status, returns, and sizing questions handled in seconds." },
+  { img: "/img/industry-clinic.jpg", title: "Clinics & practices", line: "Bookings, reminders, insurance questions: answered while the front desk works." },
+  { img: "/img/industry-law.jpg", title: "Law firms", line: "Intake calls captured after hours. Nothing missed, nothing invented." },
+  { img: "/img/industry-realestate.jpg", title: "Real estate", line: "Lead qualification and viewing bookings, around the clock." },
+  { img: "/img/industry-ecommerce.jpg", title: "E-commerce", line: "Order status, returns, and sizing questions handled in seconds." },
 ];
 
 export function IndustriesShowcase() {
@@ -202,19 +202,19 @@ export function IndustriesShowcase() {
 
 const AGENTS = [
   {
-    img: "/img/agent-reception.png",
+    img: "/img/agent-reception.jpg",
     role: "Receptionist",
     line: "Greets, routes, books. Never a busy line.",
     chips: ["BOOKING", "ROUTING", "FAQ"],
   },
   {
-    img: "/img/agent-sales.png",
+    img: "/img/agent-sales.jpg",
     role: "Sales assistant",
     line: "Qualifies leads and captures intent, live.",
     chips: ["QUALIFYING", "NOTES", "FOLLOW-UP"],
   },
   {
-    img: "/img/agent-support.png",
+    img: "/img/agent-support.jpg",
     role: "Support agent",
     line: "Order status and returns without the queue.",
     chips: ["TICKETS", "LOOKUP", "ESCALATION"],
@@ -315,7 +315,7 @@ export function ProvidedPanel() {
 /* ---------------- Photo band: full-bleed image with headline + CTA ---------------- */
 
 export function PhotoBand({
-  img = "/img/abstract-signal.png",
+  img = "/img/abstract-signal.jpg",
   eyebrow,
   title,
   note,
@@ -428,9 +428,10 @@ export function FeatureGrid() {
 const CHANNEL_ROWS = [
   { name: "Web chat", state: "connected", detail: "Live in every workspace today" },
   { name: "Live voice (browser)", state: "connected", detail: "Real-time STT → LLM → TTS with barge-in" },
+  { name: "WhatsApp click-to-chat", state: "connected", detail: "Working now: visitors reach you in one tap from the site" },
   { name: "Phone (PSTN)", state: "attention", detail: "Requires telephony provider activation: honestly not included in the free tier" },
   { name: "SMS", state: "attention", detail: "Production stack ready, provider activation required" },
-  { name: "WhatsApp", state: "neutral", detail: "Coming soon: we will say live when it is" },
+  { name: "WhatsApp Business API", state: "attention", detail: "Connect your Business API credentials and we light it up" },
 ];
 
 export function ChannelsHonest() {
@@ -885,10 +886,10 @@ export function MemoryAndKnowledge() {
 const INTEGRATIONS = [
   { name: "Web chat", state: "connected", note: "Live now" },
   { name: "Browser voice", state: "connected", note: "Live now" },
+  { name: "WhatsApp chat", state: "connected", note: "Live now" },
   { name: "Phone numbers", state: "attention", note: "We provision" },
   { name: "SMS", state: "attention", note: "We provision" },
-  { name: "WhatsApp", state: "neutral", note: "Coming soon" },
-  { name: "Calendar tools", state: "neutral", note: "Planned" },
+  { name: "Calendar (ICS)", state: "connected", note: "Live now" },
 ];
 
 export function IntegrationsPreview() {

@@ -398,6 +398,7 @@ export function CallConsole({
   };
 
   const cueTotal = Object.values(summary?.cues ?? {}).reduce((a, b) => a + b, 0);
+  void cueTotal; // kept for honest diagnostics only; never shown as text to callers
 
   /* ================= RENDER ================= */
 
@@ -515,9 +516,9 @@ export function CallConsole({
                       employee&apos;s instructions and knowledge. Per-turn latency is measured.
                     </p>
                     <p>
-                      <span className="text-white">3 · VOICE OUT ·</span> runs in your browser. The reply
-                      returns with bracketed cues and is spoken by speech synthesis, pitch and rate
-                      modulated by the emotion engine.
+                      <span className="text-white">3 · VOICE OUT ·</span> runs in your browser. The reply is
+                      spoken by speech synthesis: pitch, pace, pauses, and breathing shift with the
+                      emotion of what is being said, so feeling is carried in the voice, never read out.
                     </p>
                     <p>
                       <span className="text-white">4 · BARGE-IN ·</span> your speech restarts recognition
@@ -570,7 +571,7 @@ export function CallConsole({
             {[
               { l: "TURNS", v: summary.turns },
               { l: "BARGE-INS", v: summary.interruptions },
-              { l: "EMOTION CUES", v: cueTotal },
+              { l: "DURATION", v: fmtDur(summary.durationSec) },
             ].map((s) => (
               <div key={s.l} className="bg-[#0A1424] p-4">
                 <p className="font-display-strong text-2xl text-white">{s.v}</p>
@@ -578,15 +579,6 @@ export function CallConsole({
               </div>
             ))}
           </div>
-          {cueTotal > 0 && (
-            <div className="mt-4 flex flex-wrap justify-center gap-2">
-              {Object.entries(summary.cues).map(([cue, n]) => (
-                <span key={cue} className="cue-chip">
-                  {cue} ×{n}
-                </span>
-              ))}
-            </div>
-          )}
           <Button
             onClick={() => setPhase("idle")}
             className="mt-7 rounded-[2px] bg-white text-[13px] font-semibold text-[#070E1A] hover:bg-neutral-200"
@@ -650,9 +642,9 @@ export function CallConsole({
               instructions and knowledge. Latency shown above is the measured round trip.
             </p>
             <p>
-              <span className="text-white">3 · VOICE OUT ·</span> runs in your browser. The reply returns
-              with bracketed cues and is spoken by speech synthesis, its pitch and rate modulated
-              by the emotion engine.
+              <span className="text-white">3 · VOICE OUT ·</span> runs in your browser. The reply is
+              spoken by speech synthesis: pitch, pace, pauses, and breathing shift with the emotion
+              of what is being said, so feeling is carried in the voice, never read out.
             </p>
             <p>
               <span className="text-white">4 · BARGE-IN ·</span> your speech restarts recognition and
@@ -683,7 +675,7 @@ export function CallConsole({
         {turns.map((t) =>
           t.source === "operator_pending" ? (
             <div key={t.id} className="flex justify-end">
-              <div className="max-w-[86%] rounded-[3px] rounded-br-none border border-dashed border-[#A9E2FF]/50 bg-[#A9E2FF]/[0.04] px-4 py-3">
+              <div className="dy-msg-in max-w-[86%] rounded-[18px] rounded-br-[6px] border border-dashed border-[#A9E2FF]/50 bg-[#A9E2FF]/[0.04] px-4 py-3">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="font-mono-dy text-[9.5px] tracking-[0.16em] text-[#A9E2FF]">
                     YOUR ORDER · PENDING
@@ -696,29 +688,34 @@ export function CallConsole({
               </div>
             </div>
           ) : t.speaker === "human" ? (
-            <div key={t.id} className="flex justify-start">
-              <div className="max-w-[82%] rounded-[3px] rounded-bl-none border border-[#1C3050] bg-[#0A1424] px-4 py-3">
-                <p className="font-mono-dy text-[9.5px] tracking-[0.16em] text-[#6f6f6a]">YOU</p>
-                <p className="mt-1 text-[13.5px] leading-snug text-neutral-200">{t.content}</p>
+            <div key={t.id} className="flex items-end gap-2.5">
+              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#24344F] bg-[#101B2E] text-[9px] font-bold text-[#8FA6C0]">
+                YOU
+              </div>
+              <div className="dy-msg-in max-w-[82%] rounded-[18px] rounded-bl-[6px] border border-[#24344F] bg-[#101B2E] px-4 py-3 shadow-[0_10px_28px_-16px_rgba(0,0,0,0.8)]">
+                <p className="text-[13.5px] leading-snug text-neutral-200">{t.content}</p>
+                <p className="mt-1 text-right font-mono-dy text-[8.5px] tracking-[0.08em] text-[#5d6b7d]">
+                  {new Date(t.at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                </p>
               </div>
             </div>
           ) : (
-            <div key={t.id} className="flex justify-end">
+            <div key={t.id} className="flex items-end justify-end gap-2.5">
               <div
                 className={cn(
-                  "max-w-[86%] rounded-[3px] rounded-br-none border px-4 py-3",
+                  "dy-msg-in max-w-[86%] rounded-[18px] rounded-br-[6px] border px-4 py-3 shadow-[0_10px_28px_-14px_rgba(10,91,196,0.6)]",
                   t.source === "operator_injection"
-                    ? "border-[#A9E2FF]/60 bg-[#A9E2FF]/[0.06]"
+                    ? "border-[#A9E2FF]/50 bg-[#A9E2FF]/[0.08]"
                     : t.interrupted
-                      ? "border-[#4A90E2]/60 bg-[#4A90E2]/[0.06]"
-                      : "border-[#4A90E2]/25 bg-[#4A90E2]/[0.05]",
+                      ? "border-[#4A90E2]/55 bg-[#4A90E2]/[0.08]"
+                      : "border-[#2FD4FF]/15 bg-gradient-to-br from-[#1E5FB8]/45 to-[#2E7CDE]/25",
                 )}
               >
                 <div className="flex flex-wrap items-center gap-2">
                   <span
                     className={cn(
                       "font-mono-dy text-[9.5px] tracking-[0.16em]",
-                      t.source === "operator_injection" ? "text-[#A9E2FF]" : "text-[#6fcbff]",
+                      t.source === "operator_injection" ? "text-[#A9E2FF]" : "text-[#9FC6E8]",
                     )}
                   >
                     {employee?.name.toUpperCase()}
@@ -730,30 +727,56 @@ export function CallConsole({
                           ? `: ${t.latencyMs}MS`
                           : ""}
                   </span>
-                  {t.cues.map((c) => (
-                    <span key={c} className="cue-chip">
-                      {c}
-                    </span>
-                  ))}
                 </div>
-                <p className="mt-1.5 text-[13.5px] leading-snug text-neutral-200">{stripCues(t.content)}</p>
+                <p className="mt-1.5 text-[13.5px] leading-snug text-[#F4FAFF]">{stripCues(t.content)}</p>
+                <p className="mt-1 flex items-center justify-end gap-1 font-mono-dy text-[8.5px] tracking-[0.08em] text-[#9FC6E8]">
+                  {new Date(t.at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                  <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-label="spoken" className="ml-0.5">
+                    <path d="M1 5.5L4 8.5L9 1.5" stroke="#7FB9EE" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M5.5 5.5L8.5 8.5L13.5 1.5" stroke="#7FB9EE" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" opacity="0.55" />
+                  </svg>
+                </p>
+              </div>
+              <div
+                className={cn(
+                  "flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#2E7CDE] to-[#1E5FB8] text-[9px] font-bold text-white",
+                  t.source === "operator_injection" && "border border-[#A9E2FF]/50",
+                )}
+              >
+                {employee?.name.slice(0, 2).toUpperCase()}
               </div>
             </div>
           ),
         )}
         {interim && (
-          <div className="flex justify-start">
-            <div className="max-w-[82%] rounded-[3px] rounded-bl-none border border-dashed border-[#1C3050] bg-transparent px-4 py-3">
-              <p className="font-mono-dy text-[9.5px] tracking-[0.16em] text-[#6f6f6a]">YOU: SPEAKING</p>
+          <div className="flex items-end gap-2.5">
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#24344F] bg-[#101B2E] text-[9px] font-bold text-[#8FA6C0]">
+              YOU
+            </div>
+            <div className="max-w-[82%] rounded-[18px] rounded-bl-[6px] border border-dashed border-[#24344F] bg-transparent px-4 py-3">
+              <p className="flex items-center gap-1.5 font-mono-dy text-[9.5px] tracking-[0.16em] text-[#6f6f6a]">
+                SPEAKING
+                <span className="flex items-end gap-1">
+                  <i className="h-1 w-1 rounded-full bg-[#6f6f6a]" style={{ animation: "dy-dot 1.2s 0s ease-in-out infinite" }} />
+                  <i className="h-1 w-1 rounded-full bg-[#6f6f6a]" style={{ animation: "dy-dot 1.2s 0.18s ease-in-out infinite" }} />
+                  <i className="h-1 w-1 rounded-full bg-[#6f6f6a]" style={{ animation: "dy-dot 1.2s 0.36s ease-in-out infinite" }} />
+                </span>
+              </p>
               <p className="mt-1 text-[13.5px] leading-snug text-neutral-500">{interim}</p>
-          </div>
+            </div>
           </div>
         )}
         {thinking && (
-          <div className="flex justify-end">
-            <div className="flex items-center gap-2 rounded-[3px] border border-[#4A90E2]/20 bg-[#0A1322] px-4 py-3">
-              <Loader2 className="h-3.5 w-3.5 animate-spin text-[#4A90E2]" />
-              <span className="font-mono-dy text-[10px] tracking-[0.14em] text-[#A1A1A1]">THINKING…</span>
+          <div className="flex items-end justify-end gap-2.5">
+            <div className="flex items-center rounded-[18px] rounded-br-[6px] border border-[#2FD4FF]/15 bg-gradient-to-br from-[#1E5FB8]/45 to-[#2E7CDE]/25 px-4 py-3.5">
+              <span className="flex items-end gap-1" aria-label="thinking">
+                <i className="h-[5px] w-[5px] rounded-full bg-[#6fcbff]" style={{ animation: "dy-dot 1.2s 0s ease-in-out infinite" }} />
+                <i className="h-[5px] w-[5px] rounded-full bg-[#6fcbff]" style={{ animation: "dy-dot 1.2s 0.18s ease-in-out infinite" }} />
+                <i className="h-[5px] w-[5px] rounded-full bg-[#6fcbff]" style={{ animation: "dy-dot 1.2s 0.36s ease-in-out infinite" }} />
+              </span>
+            </div>
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#2E7CDE] to-[#1E5FB8] text-[9px] font-bold text-white">
+              {employee?.name.slice(0, 2).toUpperCase()}
             </div>
           </div>
         )}

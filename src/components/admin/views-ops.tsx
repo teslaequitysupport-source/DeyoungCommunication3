@@ -341,7 +341,7 @@ export function AdminCallsView() {
     <div>
       <AdminHead
         title="Live Calls"
-        intro={`Every voice session across all workspaces, streaming in real time. ${live.length > 0 ? `${live.length} live right now.` : "No calls live at this moment: turns appear the instant they happen."} Transcripts include the emotion cues and barge-in markers exactly as they occurred.`}
+        intro={`Every voice session across all workspaces, streaming in real time. ${live.length > 0 ? `${live.length} live right now.` : "No calls live at this moment: turns appear the instant they happen."} Transcripts show the spoken words; barge-ins are marked exactly where they occurred.`}
       />
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-5">
