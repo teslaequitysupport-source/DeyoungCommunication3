@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { useDyRouter, ROUTES } from "@/lib/router";
+import { IconOrb } from "@/components/brand/icon-orb";
 import { useSite, usePublicStats } from "@/hooks/use-site";
 import { Button } from "@/components/ui/button";
 import {
@@ -300,7 +301,7 @@ export function ProvidedPanel() {
         {PROVIDED.map((p, i) => (
           <Reveal key={p.title} delay={0.06 + i * 0.05}>
             <div className="h-full rounded-[10px] border border-white/10 bg-ink-2 p-5 transition-all duration-300 ease-mechanical hover:-translate-y-0.5 hover:border-brand/40">
-              <p.icon className="h-5 w-5 text-flare" strokeWidth={1.8} />
+              <IconOrb icon={p.icon} size={38} />
               <h3 className="font-display mt-3.5 text-[14.5px] font-bold text-white">{p.title}</h3>
               <p className="mt-1.5 text-[12px] leading-snug text-neutral-400">{p.body}</p>
             </div>
@@ -406,9 +407,7 @@ export function FeatureGrid() {
               "hover:-translate-y-0.5",
             )}
           >
-            <span className="flex h-10 w-10 items-center justify-center rounded-[3px] border border-white/10 bg-ink-3 transition-colors ease-mechanical group-hover:border-brand/40">
-              <f.icon className="h-[18px] w-[18px] text-brand" strokeWidth={1.8} />
-            </span>
+            <IconOrb icon={f.icon} size={44} className="group-hover:-translate-y-0.5" />
             <span className="font-display mt-5 text-[19px] font-bold tracking-[-0.02em] text-white">
               {f.title}
             </span>
@@ -507,9 +506,7 @@ function FlowSlab({ icon: Icon, label, sub, latency, active }: { icon: typeof Mi
       style={{ transform: "perspective(900px) rotateX(6deg)" }}
     >
       <div className="flex items-center justify-between">
-        <span className="flex h-9 w-9 items-center justify-center rounded-[3px] border border-white/10 bg-ink-4">
-          <Icon className="h-4 w-4 text-brand" strokeWidth={1.8} />
-        </span>
+        <IconOrb icon={Icon} size={36} />
         <span className="font-mono-dy text-[10.5px] tracking-[0.14em] text-neutral-500">{latency}</span>
       </div>
       <span className="font-display mt-4 text-[15px] font-bold text-white">{label}</span>
@@ -798,7 +795,7 @@ export function SecurityStrip() {
         {SECURITY_ITEMS.map((s, i) => (
           <Reveal key={s.title} delay={i * 0.07}>
             <div className="group h-full rounded-[4px] border border-white/10 bg-ink-3 p-6 transition-all duration-300 ease-mechanical hover:-translate-y-0.5 hover:border-brand/30">
-              <s.icon className="h-5 w-5 text-brand" strokeWidth={1.8} />
+              <IconOrb icon={s.icon} size={40} />
               <h3 className="font-display mt-4 text-[15px] font-bold text-white">{s.title}</h3>
               <p className="mt-2 text-[13px] leading-relaxed text-neutral-400">{s.body}</p>
             </div>
@@ -870,9 +867,7 @@ export function MemoryAndKnowledge() {
         ].map((b, i) => (
           <Reveal key={b.title} delay={0.1 + i * 0.08}>
             <div className="flex gap-4">
-              <span className="mt-1 flex h-9 w-9 flex-none items-center justify-center rounded-[3px] border border-white/10 bg-ink-3">
-                <b.icon className="h-4 w-4 text-brand" strokeWidth={1.8} />
-              </span>
+              <IconOrb icon={b.icon} size={36} />
               <div>
                 <h3 className="font-display text-[17px] font-bold tracking-[-0.01em] text-white">{b.title}</h3>
                 <p className="mt-2 text-[14px] leading-relaxed text-neutral-400">{b.body}</p>
@@ -902,7 +897,7 @@ export function IntegrationsPreview() {
       {INTEGRATIONS.map((ig, i) => (
         <Reveal key={ig.name} delay={i * 0.05}>
           <div className="flex h-full flex-col rounded-[4px] border border-white/10 bg-ink-3 p-5 transition-all duration-300 ease-mechanical hover:-translate-y-0.5 hover:border-brand/40">
-            <Plug className="h-4 w-4 text-neutral-400" strokeWidth={1.8} />
+            <IconOrb icon={Plug} size={34} />
             <p className="font-display mt-4 text-[14px] font-bold text-white">{ig.name}</p>
             <p
               className={cn(

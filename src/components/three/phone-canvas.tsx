@@ -152,8 +152,24 @@ function drawConsole(ctx: CanvasRenderingContext2D, t: number, stats: PhoneStats
   for (let i = 0; i < bars; i++) {
     const amp = Math.abs(Math.sin(t * 2.6 + i * 0.55) * 0.7 + Math.sin(t * 1.1 + i * 0.21) * 0.3);
     const bh = 12 + amp * 78;
-    ctx.fillStyle = amp > 0.72 ? "#2fd4ff" : "rgba(74,144,226,0.8)";
-    ctx.fillRect(56 + i * bw, 588 + 59 - bh / 2, bw - 5, bh);
+    const x = 56 + i * bw;
+    const y = 588 + 59 - bh / 2;
+    // Vertical gradient per bar: glossy studio meter, not a flat block.
+    const g = ctx.createLinearGradient(0, y, 0, y + bh);
+    if (amp > 0.72) {
+      g.addColorStop(0, "#6fd6ff");
+      g.addColorStop(1, "#2fd4ff");
+    } else {
+      g.addColorStop(0, "rgba(111,203,255,0.95)");
+      g.addColorStop(1, "rgba(46,124,222,0.85)");
+    }
+    ctx.fillStyle = g;
+    rr(ctx, x, y, bw - 5, bh, 2);
+    ctx.fill();
+    // Specular tip for glass depth.
+    ctx.fillStyle = "rgba(232,248,255,0.5)";
+    rr(ctx, x, y, bw - 5, Math.max(2, bh * 0.16), 2);
+    ctx.fill();
   }
 
   // Live counters row

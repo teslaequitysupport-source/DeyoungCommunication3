@@ -1,7 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <defs>
+    <linearGradient id="dyMarkGrad" x1="10" y1="12" x2="30" y2="20" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6FCBFF"/>
+      <stop offset="0.55" stop-color="#2FD4FF"/>
+      <stop offset="1" stop-color="#2E7CDE"/>
+    </linearGradient>
+    <filter id="dyMarkGlow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="1.1" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
   <rect width="32" height="32" rx="7" fill="#070E1A"/>
-  <rect x="5" y="5" width="4" height="22" rx="1" fill="#FFFFFF"/>
-  <rect x="12" y="8" width="14" height="3.4" rx="1.2" fill="#FFFFFF"/>
-  <rect x="12" y="14.3" width="15" height="3.4" rx="1.2" fill="#00C8FF"/>
-  <rect x="12" y="20.6" width="10" height="3.4" rx="1.2" fill="#FFFFFF"/>
+  <g filter="url(#dyMarkGlow)">
+    <rect x="5" y="5" width="4" height="22" rx="1" fill="#FFFFFF"/>
+    <rect x="12" y="8" width="14" height="3.4" rx="1.2" fill="#FFFFFF"/>
+    <rect x="12" y="14.3" width="15" height="3.4" rx="1.2" fill="url(#dyMarkGrad)"/>
+    <rect x="12" y="20.6" width="10" height="3.4" rx="1.2" fill="#FFFFFF"/>
+  </g>
 </svg>

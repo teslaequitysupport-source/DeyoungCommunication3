@@ -323,18 +323,82 @@
   color: #b8b8b3;
 }
 
-/* Audio-reactive bars in the call console */
+/* Icon orb: a lit glass sphere that carries a single line icon.
+   Light enters top-left, pools in cerulean below, and leaves a specular
+   streak across the crown. Hover lifts it out of the page. */
+.icon-orb {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  border-radius: 999px;
+  color: #e8f6ff;
+  background:
+    radial-gradient(130% 130% at 28% 16%, rgba(111, 203, 255, 0.42), rgba(10, 91, 196, 0.14) 52%, rgba(7, 14, 26, 0.92) 100%),
+    linear-gradient(180deg, rgba(74, 144, 226, 0.36), rgba(10, 91, 196, 0.26));
+  border: 1px solid rgba(169, 226, 255, 0.42);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.38),
+    inset 0 -10px 16px -10px rgba(10, 91, 196, 0.7),
+    0 8px 22px -10px rgba(7, 14, 26, 0.9);
+  transition:
+    transform 260ms cubic-bezier(0.7, 0, 0.2, 1),
+    box-shadow 260ms cubic-bezier(0.7, 0, 0.2, 1),
+    border-color 260ms cubic-bezier(0.7, 0, 0.2, 1);
+}
+.icon-orb-glow {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.38),
+    inset 0 -10px 16px -10px rgba(10, 91, 196, 0.7),
+    0 10px 28px -12px rgba(10, 91, 196, 0.72),
+    0 8px 22px -10px rgba(7, 14, 26, 0.9);
+}
+/* Specular crown: the tell of a glass sphere. */
+.icon-orb::after {
+  content: "";
+  position: absolute;
+  inset: 9% 16% 56% 16%;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0));
+  pointer-events: none;
+}
+.icon-orb-svg {
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 2px 3px rgba(7, 14, 26, 0.75));
+}
+.icon-orb:hover {
+  transform: translateY(-2px) scale(1.05);
+  border-color: rgba(111, 203, 255, 0.7);
+}
+
+/* Audio-reactive bars in the call console: glossy, dimensional, studio-meter feel. */
 @keyframes dy-bar {
   0%, 100% { transform: scaleY(0.3); }
   50% { transform: scaleY(1); }
 }
 .dy-bar-anim > span {
   display: block;
-  width: 3px;
-  border-radius: 2px;
-  background: #4a90e2;
-  transform-origin: bottom;
+  position: relative;
+  width: 4px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #6fcbff 0%, #4a90e2 55%, #2e7cde 100%);
+  box-shadow:
+    0 0 8px rgba(74, 144, 226, 0.55),
+    0 0 2px rgba(111, 203, 255, 0.8);
+  transform-origin: bottom center;
   animation: dy-bar 900ms cubic-bezier(0.7, 0, 0.2, 1) infinite;
+}
+/* Specular tip: light catches the top of each bar like glass. */
+.dy-bar-anim > span::after {
+  content: "";
+  position: absolute;
+  inset: 2px 0.5px auto 0.5px;
+  height: 28%;
+  border-radius: 3px 3px 1px 1px;
+  background: linear-gradient(180deg, rgba(232, 248, 255, 0.85), rgba(232, 248, 255, 0));
+  pointer-events: none;
 }
 
 /* ---------- Accessibility: reduce motion kills decoration, keeps data. ---------- */

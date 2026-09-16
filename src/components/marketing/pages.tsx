@@ -1,6 +1,7 @@
 "use client";
 
 import { useDyRouter, ROUTES } from "@/lib/router";
+import { IconOrb } from "@/components/brand/icon-orb";
 import { MarketingPageShell, CtaBand } from "@/components/marketing/footer";
 import { Hero } from "@/components/marketing/hero";
 import {
@@ -87,11 +88,7 @@ export function ProseBlock({
 }) {
   return (
     <div className="group h-full rounded-[4px] border border-white/10 bg-ink-3 p-6 transition-all duration-300 ease-mechanical hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-[0_16px_40px_-20px_rgba(0,0,0,0.55)] md:p-7">
-      {Icon && (
-        <span className="flex h-10 w-10 items-center justify-center rounded-[3px] border border-white/10 bg-ink-2 transition-colors ease-mechanical group-hover:border-brand/40">
-          <Icon className="h-[18px] w-[18px] text-brand" strokeWidth={1.8} />
-        </span>
-      )}
+      {Icon && <IconOrb icon={Icon} size={44} className="group-hover:-translate-y-0.5" />}
       <h3 className="font-display mt-5 text-[18px] font-bold tracking-[-0.02em] text-white">{title}</h3>
       <p className="mt-2.5 text-[14px] leading-relaxed text-neutral-400">{body}</p>
       {points && (

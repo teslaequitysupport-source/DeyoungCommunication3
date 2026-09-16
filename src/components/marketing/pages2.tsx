@@ -278,7 +278,7 @@ export function PricingPage() {
       <PageHero
         kicker="Pricing"
         title="Free to build. Fair to scale."
-        intro="Start free in text. Upgrade for the major functions: voice, emotion, and real phone channels."
+        intro="Start free in text. Upgrade for the major functions: voice, emotion, and real phone channels. Solo use is fully supported: one person, one assistant, same platform."
       />
       {isOwner && (
         <div className="border-t border-white/10">
@@ -310,6 +310,7 @@ export function PricingPage() {
       <MarketingSection num="01" eyebrow="Questions" title="The fine print, in plain print." tight>
         <div className="mx-auto max-w-3xl rounded-[4px] border border-white/10">
           {[
+            ["Is this only for businesses?", "No. Individuals get the same platform: a solo receptionist or personal assistant runs identically. One employee on Starter is free forever, voice on Business."],
             ["What does 'forever free' mean?", "The Starter tier: one employee and web chat: stays free. Voice needs Business. We do not pretend otherwise."],
             ["What is 'usage' on Business?", "Carrier-billed minutes on real phone numbers, passed through at cost, plus per-message SMS fees. Never marked up."],
             ["Can I leave?", "Yes. Export your transcripts and knowledge from Settings, then cancel. No hostage data, no exit fees."],

@@ -23,17 +23,33 @@ export function Monogram({
       role="img"
       className={className}
     >
-      <rect x="5" y="5" width="4" height="22" rx="1" fill="currentColor" />
-      <rect x="12" y="8" width="14" height="3.4" rx="1.2" fill="currentColor" />
-      <rect
-        x="12"
-        y="14.3"
-        width="15"
-        height="3.4"
-        rx="1.2"
-        fill={redBar ? "#00C8FF" : "currentColor"}
-      />
-      <rect x="12" y="20.6" width="10" height="3.4" rx="1.2" fill="currentColor" />
+      <defs>
+        <linearGradient id="dyMarkGrad" x1="10" y1="12" x2="30" y2="20" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stopColor="#6FCBFF" />
+          <stop offset="0.55" stopColor="#2FD4FF" />
+          <stop offset="1" stopColor="#2E7CDE" />
+        </linearGradient>
+        <filter id="dyMarkGlow" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="1.1" result="b" />
+          <feMerge>
+            <feMergeNode in="b" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+      <g filter="url(#dyMarkGlow)">
+        <rect x="5" y="5" width="4" height="22" rx="1" fill="currentColor" />
+        <rect x="12" y="8" width="14" height="3.4" rx="1.2" fill="currentColor" />
+        <rect
+          x="12"
+          y="14.3"
+          width="15"
+          height="3.4"
+          rx="1.2"
+          fill={redBar ? "url(#dyMarkGrad)" : "currentColor"}
+        />
+        <rect x="12" y="20.6" width="10" height="3.4" rx="1.2" fill="currentColor" />
+      </g>
     </svg>
   );
 }

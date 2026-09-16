@@ -49,13 +49,17 @@ export function Waveform({
     const data = dataRef.current;
     const step = barWidth + gap;
     const count = Math.max(8, Math.floor(w / step));
-    const values = data.length
-      ? data.slice(-count)
-      : [];
+    const values = data.length ? data.slice(-count) : [];
 
-    // Flat baseline first (idle = visibly still).
-    ctx.fillStyle = baselineColor;
+    // Baseline: hairline with a soft glow, reads as a powered rail.
+    const baseGrad = ctx.createLinearGradient(0, 0, w, 0);
+    baseGrad.addColorStop(0, "rgba(28,48,80,0)");
+    baseGrad.addColorStop(0.5, baselineColor);
+    baseGrad.addColorStop(1, "rgba(28,48,80,0)");
+    ctx.fillStyle = baseGrad;
     ctx.fillRect(0, mid - 0.75, w, 1.5);
+
+    if (!values.length) return;
 
     const pad = Math.max(0, (w - values.length * step) / 2);
     for (let i = 0; i < values.length; i++) {
@@ -65,9 +69,42 @@ export function Waveform({
       // Center-weighted emphasis like real speech energy.
       const edge = Math.abs(i / Math.max(1, values.length - 1) - 0.5) * 2;
       const amp = barH * (1 - 0.35 * edge);
-      ctx.fillStyle = i === values.length - 1 ? color : color;
-      ctx.globalAlpha = i === values.length - 1 ? 1 : 0.55 + 0.45 * v;
-      ctx.fillRect(x, mid - amp / 2, barWidth, amp);
+      const y = mid - amp / 2;
+      const isLead = i === values.length - 1;
+      const alpha = isLead ? 1 : 0.5 + 0.45 * v;
+
+      // Vertical cerulean-to-cyan gradient per bar: glossy, dimensional.
+      const g = ctx.createLinearGradient(0, y, 0, y + amp);
+      g.addColorStop(0, `rgba(111,203,255,${alpha})`);
+      g.addColorStop(0.5, `rgba(74,144,226,${alpha})`);
+      g.addColorStop(1, `rgba(46,124,222,${alpha})`);
+
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      // Glow pass under the bar.
+      ctx.shadowColor = isLead ? "rgba(47,212,255,0.9)" : "rgba(74,144,226,0.55)";
+      ctx.shadowBlur = isLead ? 10 : 5;
+      ctx.fillStyle = g;
+      // Rounded caps: reads like a real studio meter, not a CSS block.
+      const r = Math.min(barWidth / 2, 1.5);
+      ctx.beginPath();
+      if (typeof ctx.roundRect === "function") {
+        ctx.roundRect(x, y, barWidth, amp, r);
+      } else {
+        ctx.rect(x, y, barWidth, amp);
+      }
+      ctx.fill();
+      // Specular top tip for glass depth.
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = `rgba(200,240,255,${0.35 * v})`;
+      ctx.beginPath();
+      if (typeof ctx.roundRect === "function") {
+        ctx.roundRect(x, y, barWidth, Math.max(1, amp * 0.18), r);
+      } else {
+        ctx.rect(x, y, barWidth, Math.max(1, amp * 0.18));
+      }
+      ctx.fill();
+      ctx.restore();
     }
     ctx.globalAlpha = 1;
   }, [barWidth, gap, height, color, baselineColor]);

@@ -25,7 +25,7 @@ const CONTENT_BLOCKS: Array<{
   { key: "home.hero.eyebrow", group: "home", label: "Hero eyebrow", type: "text", value: "AI employees for real conversations", sortOrder: 1 },
   { key: "home.hero.title", group: "home", label: "Hero headline", type: "textarea", value: "Hire intelligence that\never puts a caller on hold.", sortOrder: 2 },
   { key: "home.hero.title.accent", group: "home", label: "Hero headline accent word", type: "text", value: "never", sortOrder: 3 },
-  { key: "home.hero.sub", group: "home", label: "Hero subheading", type: "textarea", value: "AI employees that answer every call and chat, know your business, and hand off to humans when it matters. You bring nothing: we provide everything.", sortOrder: 4 },
+  { key: "home.hero.sub", group: "home", label: "Hero subheading", type: "textarea", value: "AI employees that answer every call and chat, know your business, and hand off to humans when it matters. For companies and individuals alike: you bring nothing, we provide everything.", sortOrder: 4 },
   { key: "home.stats.honest_note", group: "home", label: "Stats honest note", type: "text", value: "These counters are live. They read from the database: zero until real work happens here.", sortOrder: 5 },
   // Banner
   { key: "banner.eyebrow", group: "banner", label: "Banner (in Settings)", type: "text", value: "Managed in Admin → Settings", sortOrder: 1 },

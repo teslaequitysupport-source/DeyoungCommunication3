@@ -29,7 +29,7 @@ export function Hero() {
   const sub =
     content["home.hero.sub"]?.visible && content["home.hero.sub"]?.value
       ? content["home.hero.sub"].value
-      : "AI employees that answer every call and chat, know your business, and hand off to humans when it matters. You bring nothing: we provide everything.";
+      : "AI employees that answer every call and chat, know your business, and hand off to humans when it matters. For companies and individuals alike: you bring nothing, we provide everything.";
 
   // Accent the matching word wherever it appears in the title.
   const accentLines = titleLines.map((l) => {
