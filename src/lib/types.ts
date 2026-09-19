@@ -90,6 +90,8 @@ export type VoiceProfileDTO = {
   cloneId?: string;
   name?: string;
   voiceUri?: string;
+  /** Worker voice id (e.g. af_sky) used when the self-hosted neural engine is on */
+  workerVoice?: string;
   pitch?: number;
   rate?: number;
 };

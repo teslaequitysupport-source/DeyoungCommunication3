@@ -354,7 +354,6 @@ export function StatusPill({ state }: { state: string }) {
     connected: { cls: "dy-status-connected", label: "Connected" },
     needs_attention: { cls: "dy-status-attention", label: "Needs attention" },
     not_connected: { cls: "dy-status-neutral", label: "Not connected" },
-    coming_soon: { cls: "dy-status-neutral", label: "Coming soon" },
     draft: { cls: "dy-status-neutral", label: "Draft" },
     deployed: { cls: "dy-status-connected", label: "Deployed" },
     paused: { cls: "dy-status-attention", label: "Paused" },

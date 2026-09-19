@@ -28,7 +28,15 @@ import { cn } from "@/lib/utils";
 import { attachMicAnalyser, Waveform } from "@/components/brand/waveform";
 import { analyzeAudioBlob, buildVoiceDNA, type SampleAnalysis, type VoiceDNA } from "@/lib/voice-dna";
 import { parseSegments } from "@/lib/emotion";
-import { speakSegments, resolveProfileVoice, primeVoices, speechSupported } from "@/lib/voice-engine";
+import {
+  speakSegments,
+  resolveProfileVoice,
+  primeVoices,
+  speechSupported,
+  fetchVoiceEngineStatus,
+  workerVoiceForRegister,
+  type VoiceEngineStatus,
+} from "@/lib/voice-engine";
 import type { VoiceCloneDTO } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
 
@@ -56,6 +64,13 @@ export function CloneLab({ onSaved }: { onSaved: () => void }) {
   const [dna, setDna] = useState<VoiceDNA | null>(null);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+
+  // Voice engine: when the admin connects the self-hosted neural worker, previews
+  // and calls use its natural neural voices (with the browser engine as fallback).
+  const [voiceEngine, setVoiceEngine] = useState<VoiceEngineStatus | null>(null);
+  useEffect(() => {
+    void fetchVoiceEngineStatus().then(setVoiceEngine);
+  }, []);
 
   const recorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -176,6 +191,10 @@ export function CloneLab({ onSaved }: { onSaved: () => void }) {
       voice: resolveProfileVoice({ voiceUri: dna.matchedVoiceUri }),
       pitchBias: dna.pitchMultiplier,
       rateBias: dna.rateMultiplier,
+      neural:
+        voiceEngine && voiceEngine.mode === "selfhost" && voiceEngine.ttsConfigured
+          ? { voice: workerVoiceForRegister(dna.register) }
+          : undefined,
     });
   }
 
@@ -471,10 +490,12 @@ export function CloneLab({ onSaved }: { onSaved: () => void }) {
         {/* engine honesty */}
         <div className="rounded-[3px] border border-dashed border-[#1C3050] bg-[#0A1322] px-4 py-3 font-mono-dy text-[10px] leading-[1.8] tracking-[0.04em] text-[#6f6f6a]">
           ENGINE TRUTH · TIMBRE MATCH (LIVE): your real measured pitch, pace and energy drive the
-          synthesis voice, register matching and multipliers, in real calls, today. NEURAL CLONE
-          (PENDING): rebuilding your exact timbre needs a heavy neural model that does not run in this
-          environment; when a free provider connects, this same profile upgrades in place. Until then
-          it is labeled exactly like this, never faked as done.
+          synthesis voice, register matching and multipliers, in real calls, today. NEURAL VOICES
+          (LIVE WHEN CONNECTED): with the self-hosted worker on (admin panel, off switch included),
+          this profile maps to a natural neural voice matched to your register, in previews and
+          real calls. NEURAL TIMBRE CLONE (GPU WORKER): rebuilding your exact timbre needs the GPU
+          cloning engine (voice-worker/README.md, Kaggle); it is provided and documented, not yet
+          verified here, so it is labeled exactly like this, never faked as done.
         </div>
       </div>
     </div>

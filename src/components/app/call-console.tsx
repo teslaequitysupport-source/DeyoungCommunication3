@@ -16,8 +16,10 @@ import {
   recognitionSupported,
   resolveProfileVoice,
   speechSupported,
+  fetchVoiceEngineStatus,
   type RecognitionHandle,
   type SpeakHandle,
+  type VoiceEngineStatus,
 } from "@/lib/voice-engine";
 import { attachMicAnalyser, Waveform } from "@/components/brand/waveform";
 import { Button } from "@/components/ui/button";
@@ -88,6 +90,19 @@ export function CallConsole({
   const [coachBusy, setCoachBusy] = useState(false);
 
   const employee = deployed.find((e) => e.id === employeeId) ?? null;
+
+  // Voice engine: browser by default; the self-hosted neural worker when the
+  // admin connects one. Refetched whenever a call starts, so flipping the
+  // switch in the admin panel applies to the next call without a reload.
+  const [voiceEngine, setVoiceEngine] = useState<VoiceEngineStatus | null>(null);
+  const voiceEngineRef = useRef<VoiceEngineStatus | null>(null);
+  useEffect(() => {
+    voiceEngineRef.current = voiceEngine;
+  }, [voiceEngine]);
+  useEffect(() => {
+    void fetchVoiceEngineStatus().then(setVoiceEngine);
+  }, [phase]);
+  const neuralOn = !!(voiceEngine && voiceEngine.mode === "selfhost" && voiceEngine.ttsConfigured);
 
   // engine refs
   const recognitionRef = useRef<RecognitionHandle | null>(null);
@@ -184,16 +199,23 @@ export function CallConsole({
         };
         setTurns((ts) => [...ts, aiTurn]);
 
-        // Speak with emotion + the employee's assigned (cloned) voice profile
+        // Speak with emotion + the employee's assigned (cloned) voice profile.
+        // Neural worker first when the admin connected one; browser otherwise.
         if (speechSupported()) {
           const segments = parseSegments(data.aiTurn.content);
           speakingRef.current = true;
           setSpeaking(true);
           const vp = employee?.voiceProfile ?? null;
+          const ve = voiceEngineRef.current;
+          const neural =
+            ve && ve.mode === "selfhost" && ve.ttsConfigured
+              ? { voice: vp?.workerVoice ?? (ve.ttsVoice || undefined) }
+              : undefined;
           const handle = speakSegments(segments, {
             voice: resolveProfileVoice(vp),
             pitchBias: vp?.pitch ?? 1,
             rateBias: vp?.rate ?? 1,
+            neural,
             onDone: () => {
               speakingRef.current = false;
               setSpeaking(false);
@@ -210,7 +232,7 @@ export function CallConsole({
         setThinking(false);
       }
     },
-    [],
+    [employee],
   );
 
   /* ---- barge-in: user talks while AI speaks ---- */
@@ -240,10 +262,16 @@ export function CallConsole({
       speakingRef.current = true;
       setSpeaking(true);
       const vp = employee?.voiceProfile ?? null;
+      const ve = voiceEngineRef.current;
+      const neural =
+        ve && ve.mode === "selfhost" && ve.ttsConfigured
+          ? { voice: vp?.workerVoice ?? (ve.ttsVoice || undefined) }
+          : undefined;
       const handle = speakSegments(segments, {
         voice: resolveProfileVoice(vp),
         pitchBias: vp?.pitch ?? 1,
         rateBias: vp?.rate ?? 1,
+        neural,
         onDone: () => {
           speakingRef.current = false;
           setSpeaking(false);
@@ -487,9 +515,20 @@ export function CallConsole({
               </div>
 
               <div className="mt-6 rounded-[3px] border border-[#1C3050] bg-[#0A1424] px-4 py-3 font-mono-dy text-[10.5px] leading-relaxed tracking-[0.06em] text-[#6f6f6a]">
-                ENGINE: BROWSER VOICE (REAL-TIME, NO PROVIDER ACCOUNT NEEDED). PRODUCTION PHONE
-                CALLS USE THE TELEPHONY STACK AND REQUIRE A PROVIDER ACCOUNT · LABELED HONESTLY,
-                NEVER FAKED.
+                {neuralOn ? (
+                  <>
+                    ENGINE: SELF-HOSTED NEURAL VOICE (YOUR WORKER, FREE, WITH AN OFF SWITCH IN THE
+                    ADMIN PANEL). IF THE WORKER IS OFF OR ASLEEP, CALLS FALL BACK TO BROWSER VOICE
+                    AUTOMATICALLY.
+                  </>
+                ) : (
+                  <>
+                    ENGINE: BROWSER VOICE (REAL-TIME, NO PROVIDER ACCOUNT NEEDED). CONNECT THE
+                    SELF-HOSTED NEURAL WORKER IN ADMIN SETTINGS FOR NATURAL NEURAL VOICES. PRODUCTION
+                    PHONE CALLS USE THE TELEPHONY STACK AND REQUIRE A PROVIDER ACCOUNT · LABELED
+                    HONESTLY, NEVER FAKED.
+                  </>
+                )}
                 {recError && <span className="mt-1 block text-[#6fcbff]">{recError.toUpperCase()}</span>}
               </div>
 
@@ -516,9 +555,10 @@ export function CallConsole({
                       employee&apos;s instructions and knowledge. Per-turn latency is measured.
                     </p>
                     <p>
-                      <span className="text-white">3 · VOICE OUT ·</span> runs in your browser. The reply is
-                      spoken by speech synthesis: pitch, pace, pauses, and breathing shift with the
-                      emotion of what is being said, so feeling is carried in the voice, never read out.
+                      <span className="text-white">3 · VOICE OUT ·</span>{" "}
+                      {neuralOn
+                        ? "runs on your self-hosted neural worker (the one with the off switch in the admin panel). The reply is synthesized with natural neural prosody, and pitch, pace, pauses, and breathing still shift with the emotion of what is being said. If the worker is off or asleep, the call falls back to browser synthesis mid-call without breaking."
+                        : "runs in your browser. The reply is spoken by speech synthesis: pitch, pace, pauses, and breathing shift with the emotion of what is being said, so feeling is carried in the voice, never read out."}
                     </p>
                     <p>
                       <span className="text-white">4 · BARGE-IN ·</span> your speech restarts recognition
@@ -602,7 +642,14 @@ export function CallConsole({
           <div>
             <p className="font-display text-[15px] font-bold text-white">{employee?.name}</p>
             <p className="font-mono-dy text-[10.5px] tracking-[0.1em] text-[#A1A1A1]">
-              BROWSER VOICE ENGINE · {recognitionSupported() ? "STT ACTIVE" : "TEXT MODE"}
+              {neuralOn ? (
+                <span className="text-[#6fcbff]">
+                  SELF-HOSTED NEURAL VOICE · {(voiceEngine?.ttsModel || "kokoro").toUpperCase()}
+                </span>
+              ) : (
+                "BROWSER VOICE ENGINE"
+              )}{" "}
+              · {recognitionSupported() ? "STT ACTIVE" : "TEXT MODE"}
             </p>
           </div>
         </div>
@@ -642,9 +689,10 @@ export function CallConsole({
               instructions and knowledge. Latency shown above is the measured round trip.
             </p>
             <p>
-              <span className="text-white">3 · VOICE OUT ·</span> runs in your browser. The reply is
-              spoken by speech synthesis: pitch, pace, pauses, and breathing shift with the emotion
-              of what is being said, so feeling is carried in the voice, never read out.
+              <span className="text-white">3 · VOICE OUT ·</span>{" "}
+              {neuralOn
+                ? "runs on your self-hosted neural worker (the one with the off switch in the admin panel). Natural neural prosody, with pitch, pace, pauses, and breathing still shifting with the emotion of what is being said. If the worker is off or asleep, this call falls back to browser synthesis without breaking."
+                : "runs in your browser. The reply is spoken by speech synthesis: pitch, pace, pauses, and breathing shift with the emotion of what is being said, so feeling is carried in the voice, never read out."}
             </p>
             <p>
               <span className="text-white">4 · BARGE-IN ·</span> your speech restarts recognition and

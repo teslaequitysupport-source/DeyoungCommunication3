@@ -279,6 +279,8 @@ model SiteSettings {
   flagShowTestimonials Boolean @default(true)
   flagShowVoiceDemo    Boolean @default(true)
   flagRequireApproval  Boolean @default(true)
+  // Self-hosted neural voice engine (browser fallback when off/empty)
+  voiceEngineJson String   @default("{}")
   updatedAt     DateTime @updatedAt
 }
 

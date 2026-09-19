@@ -31,6 +31,9 @@ import {
   AlignLeft,
   Megaphone,
   Check,
+  AudioLines,
+  Power,
+  Signal,
 } from "lucide-react";
 
 const fetcher = (url: string) => fetch(url, { cache: "no-store" }).then((r) => r.json());
@@ -389,6 +392,41 @@ const FLAGS: { key: keyof SiteSettingsDTO; label: string; desc: string }[] = [
   { key: "flagRequireApproval", label: "Require account approval", desc: "New signups wait in the admin queue (recommended)" },
 ];
 
+/* ---- Voice engine (self-hosted worker) ---- */
+
+type VoiceEngineDraft = {
+  mode: "browser" | "selfhost";
+  ttsUrl: string;
+  ttsKey: string;
+  ttsModel: string;
+  ttsVoice: string;
+  sttUrl: string;
+  sttKey: string;
+  sttModel: string;
+};
+
+const EMPTY_VE: VoiceEngineDraft = {
+  mode: "browser",
+  ttsUrl: "",
+  ttsKey: "",
+  ttsModel: "kokoro",
+  ttsVoice: "af_sky",
+  sttUrl: "",
+  sttKey: "",
+  sttModel: "",
+};
+
+type VoiceTestResult = {
+  online: boolean;
+  reason?: string;
+  health?: Record<string, unknown> | null;
+  healthMs?: number | null;
+  synthOk?: boolean;
+  synthMs?: number | null;
+  synthBytes?: number;
+  stt?: { configured?: boolean; reachable?: boolean; error?: string };
+};
+
 export function AdminSettingsView() {
   const { toast } = useToast();
   const { lastEvent } = useAdminRealtime();
@@ -399,12 +437,90 @@ export function AdminSettingsView() {
   const [draft, setDraft] = useState<Partial<SiteSettingsDTO>>({});
   const [saving, setSaving] = useState(false);
 
+  // voice engine (self-hosted worker) state
+  const [ve, setVe] = useState<VoiceEngineDraft>(EMPTY_VE);
+  const [veDirty, setVeDirty] = useState(false);
+  const [veInit, setVeInit] = useState(false);
+  const [testing, setTesting] = useState(false);
+  const [testResult, setTestResult] = useState<VoiceTestResult | null>(null);
+  const [shuttingDown, setShuttingDown] = useState(false);
+  const [confirmOff, setConfirmOff] = useState(false);
+
   useEffect(() => {
     if (lastEvent?.event === "settings:updated") mutate();
   }, [lastEvent, mutate]);
 
+  // load the saved voice engine config once
+  useEffect(() => {
+    if (veInit || !data?.settings) return;
+    const raw = (data.settings as Record<string, unknown>).voiceEngineJson;
+    try {
+      const parsed = typeof raw === "string" && raw.trim() ? (JSON.parse(raw) as Partial<VoiceEngineDraft>) : {};
+      setVe({ ...EMPTY_VE, ...parsed });
+    } catch {
+      /* keep honest defaults */
+    }
+    setVeInit(true);
+  }, [data, veInit]);
+
+  const setVeField = <K extends keyof VoiceEngineDraft>(key: K, value: VoiceEngineDraft[K]) => {
+    setVe((v) => ({ ...v, [key]: value }));
+    setVeDirty(true);
+    setTestResult(null);
+  };
+
+  const runVoiceTest = async () => {
+    setTesting(true);
+    setTestResult(null);
+    try {
+      const res = await fetch("/api/admin/voice-test", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ttsUrl: ve.ttsUrl,
+          ttsKey: ve.ttsKey,
+          ttsModel: ve.ttsModel,
+          ttsVoice: ve.ttsVoice,
+        }),
+      });
+      setTestResult((await res.json()) as VoiceTestResult);
+    } catch {
+      setTestResult({ online: false, reason: "The test request itself failed." });
+    } finally {
+      setTesting(false);
+    }
+  };
+
+  const shutdownWorker = async () => {
+    if (!confirmOff) {
+      setConfirmOff(true);
+      setTimeout(() => setConfirmOff(false), 4000);
+      return;
+    }
+    setConfirmOff(false);
+    setShuttingDown(true);
+    try {
+      const res = await fetch("/api/admin/voice-shutdown", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ttsUrl: ve.ttsUrl, ttsKey: ve.ttsKey }),
+      });
+      const d = (await res.json()) as { ok: boolean; message?: string; reason?: string };
+      if (d.ok) {
+        toast({ title: "Worker powered off", description: d.message });
+        setTestResult({ online: false, reason: "Powered off from the control center (off switch)." });
+      } else {
+        toast({ title: "Nothing powered off", description: d.reason });
+      }
+    } catch {
+      toast({ title: "Shutdown request failed", variant: "destructive" });
+    } finally {
+      setShuttingDown(false);
+    }
+  };
+
   const s = { ...(data?.settings ?? {}), ...draft } as Partial<SiteSettingsDTO>;
-  const dirty = Object.keys(draft).length > 0;
+  const dirty = Object.keys(draft).length > 0 || veDirty;
   const set = <K extends keyof SiteSettingsDTO>(key: K, value: SiteSettingsDTO[K]) =>
     setDraft((d) => ({ ...d, [key]: value }));
 
@@ -414,11 +530,12 @@ export function AdminSettingsView() {
       const res = await fetch("/api/admin/settings", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(draft),
+        body: JSON.stringify({ ...draft, ...(veDirty ? { voiceEngine: ve } : {}) }),
       });
       if (res.ok) {
         toast({ title: "Settings live", description: "The whole site now reflects these values." });
         setDraft({});
+        setVeDirty(false);
         mutate();
       } else {
         toast({ title: "Save failed", variant: "destructive" });
@@ -575,15 +692,189 @@ export function AdminSettingsView() {
             ))}
           </div>
         </div>
+        {/* Voice engine: self-hosted neural worker with the off switch */}
+        <div className="rounded-[4px] border border-[#1C3050] bg-[#0A1424] p-6 xl:col-span-2">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2.5">
+              <AudioLines className="h-4 w-4 text-[#4A90E2]" strokeWidth={1.75} />
+              <h2 className="font-display text-[15px] font-bold text-white">Voice engine, self-hosted worker</h2>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="font-mono-dy text-[10px] tracking-[0.14em] text-[#A1A1A1]">
+                {ve.mode === "selfhost" ? "NEURAL WORKER: ON" : "BROWSER VOICE (OFF)"}
+              </span>
+              <Switch
+                checked={ve.mode === "selfhost"}
+                onCheckedChange={(v) => setVeField("mode", v ? "selfhost" : "browser")}
+                aria-label="Toggle self-hosted voice engine"
+              />
+            </div>
+          </div>
+          <p className="mt-1.5 text-[12.5px] leading-relaxed text-[#6f6f6a]">
+            Free and yours: run the bundled worker (voice-worker/ in the repo) on Kaggle, a spare
+            machine, or any free host, and the site speaks with neural voices instead of browser
+            TTS. Every call falls back to the browser engine the moment the worker is off, so
+            nothing breaks. The token is stored server-side; browsers never see it.
+          </p>
+          <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-3">
+            <div className="space-y-2 md:col-span-3">
+              <Label className="font-mono-dy text-[10px] tracking-[0.16em] text-[#A1A1A1]">
+                WORKER TTS URL (OPENAI-COMPATIBLE)
+              </Label>
+              <Input
+                value={ve.ttsUrl}
+                onChange={(e) => setVeField("ttsUrl", e.target.value)}
+                placeholder="https://your-worker.trycloudflare.com/v1/audio/speech"
+                maxLength={400}
+                disabled={ve.mode !== "selfhost"}
+                className="rounded-[2px] border-[#1C3050] bg-[#0A1220] font-mono-dy text-[12.5px] text-white focus-visible:ring-[#4A90E2] disabled:opacity-50"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="font-mono-dy text-[10px] tracking-[0.16em] text-[#A1A1A1]">WORKER TOKEN</Label>
+              <Input
+                type="password"
+                value={ve.ttsKey}
+                onChange={(e) => setVeField("ttsKey", e.target.value)}
+                placeholder="the WORKER_TOKEN you set"
+                maxLength={200}
+                disabled={ve.mode !== "selfhost"}
+                className="rounded-[2px] border-[#1C3050] bg-[#0A1220] text-[13px] text-white focus-visible:ring-[#4A90E2] disabled:opacity-50"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="font-mono-dy text-[10px] tracking-[0.16em] text-[#A1A1A1]">MODEL</Label>
+              <Input
+                value={ve.ttsModel}
+                onChange={(e) => setVeField("ttsModel", e.target.value)}
+                placeholder="kokoro"
+                maxLength={100}
+                disabled={ve.mode !== "selfhost"}
+                className="rounded-[2px] border-[#1C3050] bg-[#0A1220] text-[13px] text-white focus-visible:ring-[#4A90E2] disabled:opacity-50"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="font-mono-dy text-[10px] tracking-[0.16em] text-[#A1A1A1]">VOICE</Label>
+              <Input
+                value={ve.ttsVoice}
+                onChange={(e) => setVeField("ttsVoice", e.target.value)}
+                placeholder="af_sky"
+                maxLength={100}
+                disabled={ve.mode !== "selfhost"}
+                className="rounded-[2px] border-[#1C3050] bg-[#0A1220] text-[13px] text-white focus-visible:ring-[#4A90E2] disabled:opacity-50"
+              />
+            </div>
+          </div>
+          <p className="mt-3 font-mono-dy text-[10px] leading-relaxed tracking-[0.06em] text-[#6f6f6a]">
+            OPTIONAL STT SERVER (leave empty to keep the browser speech recognition that already
+            works): same worker or any OpenAI-compatible transcription server.
+          </p>
+          <div className="mt-2 grid grid-cols-1 gap-4 md:grid-cols-3">
+            <div className="space-y-2 md:col-span-2">
+              <Label className="font-mono-dy text-[10px] tracking-[0.16em] text-[#A1A1A1]">STT URL (OPTIONAL)</Label>
+              <Input
+                value={ve.sttUrl}
+                onChange={(e) => setVeField("sttUrl", e.target.value)}
+                placeholder="https://your-worker.trycloudflare.com/v1/audio/transcriptions"
+                maxLength={400}
+                disabled={ve.mode !== "selfhost"}
+                className="rounded-[2px] border-[#1C3050] bg-[#0A1220] font-mono-dy text-[12.5px] text-white focus-visible:ring-[#4A90E2] disabled:opacity-50"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="font-mono-dy text-[10px] tracking-[0.16em] text-[#A1A1A1]">STT MODEL</Label>
+              <Input
+                value={ve.sttModel}
+                onChange={(e) => setVeField("sttModel", e.target.value)}
+                placeholder="whisper-1"
+                maxLength={100}
+                disabled={ve.mode !== "selfhost"}
+                className="rounded-[2px] border-[#1C3050] bg-[#0A1220] text-[13px] text-white focus-visible:ring-[#4A90E2] disabled:opacity-50"
+              />
+            </div>
+          </div>
+          <div className="mt-5 flex flex-wrap items-center gap-2.5">
+            <Button
+              variant="outline"
+              onClick={runVoiceTest}
+              disabled={testing || ve.mode !== "selfhost"}
+              className="rounded-[2px] border-[#1C3050] text-[12.5px] text-white hover:bg-[#0A1220]"
+            >
+              {testing ? (
+                <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
+              ) : (
+                <Signal className="mr-1.5 h-3.5 w-3.5" strokeWidth={1.75} />
+              )}
+              Test connection
+            </Button>
+            <Button
+              onClick={shutdownWorker}
+              disabled={shuttingDown || ve.mode !== "selfhost"}
+              className={cn(
+                "rounded-[2px] px-4 text-[12.5px] font-semibold text-white",
+                confirmOff ? "bg-[#d08700] hover:bg-[#b57600]" : "bg-[#23324d] hover:bg-[#2E7CDE]",
+              )}
+            >
+              {shuttingDown ? (
+                <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
+              ) : (
+                <Power className="mr-1.5 h-3.5 w-3.5" strokeWidth={1.75} />
+              )}
+              {confirmOff ? "Really power off?" : "Shut down worker"}
+            </Button>
+            {testResult &&
+              (testResult.online ? (
+                <span className="dy-status dy-status-connected">
+                  <span className="dy-status-dot" />
+                  ONLINE · {String(testResult.health?.engine ?? "?")} ON {String(testResult.health?.device ?? "?")} ·{" "}
+                  {Object.keys((testResult.health?.voices as Record<string, unknown>) ?? {}).length} VOICES
+                  {typeof testResult.healthMs === "number" ? ` · HEALTH ${testResult.healthMs}MS` : ""}
+                  {typeof testResult.synthMs === "number" ? ` · SYNTHESIS ${testResult.synthMs}MS` : ""}
+                  {testResult.stt?.configured
+                    ? ` · STT ${testResult.stt.reachable ? "REACHABLE" : "NO ANSWER"}`
+                    : ""}
+                </span>
+              ) : (
+                <span className="font-mono-dy text-[10px] leading-relaxed tracking-[0.08em] text-[#d08700]">
+                  OFFLINE · {testResult.reason ?? "no answer from the worker"}
+                </span>
+              ))}
+          </div>
+          <div className="mt-5 rounded-[3px] border border-dashed border-[#1C3050] bg-[#0A1322] px-4 py-3 font-mono-dy text-[10px] leading-[1.8] tracking-[0.04em] text-[#6f6f6a]">
+            OFF SWITCH · MODE OFF: the site stops calling the worker entirely, every call uses the
+            browser engine. SHUT DOWN: powers the worker process off right now, so free quota stops
+            burning. AUTO-SLEEP: the worker exits by itself after 15 idle minutes. UPGRADE PATH: as
+            call volume grows, point this same URL at a bigger host; nothing else changes.
+          </div>
+        </div>
       </div>
 
       {dirty && (
         <div className="sticky bottom-4 mt-6 flex items-center justify-between rounded-[4px] border border-[#4A90E2]/40 bg-[#0A1424] px-5 py-4 shadow-[0_16px_48px_-12px_rgba(10,91,196,0.45)]">
           <span className="font-mono-dy text-[11px] tracking-[0.1em] text-[#6fcbff]">
-            {Object.keys(draft).length} UNSAVED SETTING{Object.keys(draft).length === 1 ? "" : "S"}: NOT YET LIVE
+            {Object.keys(draft).length + (veDirty ? 1 : 0)} UNSAVED SETTING
+            {Object.keys(draft).length + (veDirty ? 1 : 0) === 1 ? "" : "S"}: NOT YET LIVE
           </span>
           <div className="flex gap-2">
-            <Button variant="ghost" onClick={() => setDraft({})} className="rounded-[2px] text-[12px] text-[#A1A1A1]">
+            <Button
+              variant="ghost"
+              onClick={() => {
+                setDraft({});
+                const raw = (data?.settings ?? {}) as Record<string, unknown>;
+                try {
+                  const parsed =
+                    typeof raw.voiceEngineJson === "string" && raw.voiceEngineJson.trim()
+                      ? (JSON.parse(raw.voiceEngineJson) as Partial<VoiceEngineDraft>)
+                      : {};
+                  setVe({ ...EMPTY_VE, ...parsed });
+                } catch {
+                  setVe(EMPTY_VE);
+                }
+                setVeDirty(false);
+                setTestResult(null);
+              }}
+              className="rounded-[2px] text-[12px] text-[#A1A1A1]"
+            >
               Discard
             </Button>
             <Button

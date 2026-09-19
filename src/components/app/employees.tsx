@@ -28,7 +28,7 @@ import { ROLE_TEMPLATES, CHANNELS, type AiEmployeeDTO, type VoiceCloneDTO, type 
 import { UserRound, Plus, Loader2, Trash2, Rocket, MessageSquare, AudioLines, ScrollText, PlayCircle, BadgeCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { parseSegments } from "@/lib/emotion";
-import { speakSegments, resolveProfileVoice } from "@/lib/voice-engine";
+import { speakSegments, resolveProfileVoice, workerVoiceForRegister } from "@/lib/voice-engine";
 
 function newRuleId() {
   return `r-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
@@ -267,7 +267,7 @@ function EmployeeBuilder({
     language: "en",
   });
   const [rules, setRules] = useState<ScriptRuleDTO[]>([]);
-  const [voiceProfile, setVoiceProfile] = useState<{ cloneId: string; name: string; voiceUri: string; pitch: number; rate: number } | null>(null);
+  const [voiceProfile, setVoiceProfile] = useState<{ cloneId: string; name: string; voiceUri: string; workerVoice: string; pitch: number; rate: number } | null>(null);
   const [clones, setClones] = useState<VoiceCloneDTO[]>([]);
   const [pending, setPending] = useState(false);
 
@@ -304,6 +304,7 @@ function EmployeeBuilder({
                 cloneId: String((vp as { cloneId?: string }).cloneId),
                 name: String(vp.name ?? ""),
                 voiceUri: String(vp.voiceUri ?? ""),
+                workerVoice: String((vp as { workerVoice?: string }).workerVoice ?? ""),
                 pitch: Number(vp.pitch ?? 1),
                 rate: Number(vp.rate ?? 1),
               }
@@ -342,7 +343,7 @@ function EmployeeBuilder({
       const payload = {
         ...form,
         scriptRules: cleanRules,
-        voiceProfile: voiceProfile ?? { cloneId: "", name: "", voiceUri: "", pitch: 1, rate: 1 },
+        voiceProfile: voiceProfile ?? { cloneId: "", name: "", voiceUri: "", workerVoice: "", pitch: 1, rate: 1 },
       };
       const res = await fetch(
         editing ? `/api/employees/${editing.id}` : "/api/employees",
@@ -383,6 +384,7 @@ function EmployeeBuilder({
       cloneId: clone.id,
       name: clone.name,
       voiceUri: clone.profile?.matchedVoiceUri ?? "",
+      workerVoice: workerVoiceForRegister(clone.profile?.register),
       pitch: clone.profile?.pitchMultiplier ?? 1,
       rate: clone.profile?.rateMultiplier ?? 1,
     });

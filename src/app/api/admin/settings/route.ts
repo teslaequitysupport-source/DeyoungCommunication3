@@ -13,6 +13,17 @@ export async function GET() {
   return NextResponse.json({ settings: row });
 }
 
+const voiceEngineSchema = z.object({
+  mode: z.enum(["browser", "selfhost"]),
+  ttsUrl: z.string().max(400).optional().default(""),
+  ttsKey: z.string().max(200).optional().default(""),
+  ttsModel: z.string().max(100).optional().default(""),
+  ttsVoice: z.string().max(100).optional().default(""),
+  sttUrl: z.string().max(400).optional().default(""),
+  sttKey: z.string().max(200).optional().default(""),
+  sttModel: z.string().max(100).optional().default(""),
+});
+
 const settingsSchema = z.object({
   siteName: z.string().min(1).max(80).optional(),
   tagline: z.string().max(200).optional(),
@@ -26,6 +37,7 @@ const settingsSchema = z.object({
   flagShowTestimonials: z.boolean().optional(),
   flagShowVoiceDemo: z.boolean().optional(),
   flagRequireApproval: z.boolean().optional(),
+  voiceEngine: voiceEngineSchema.optional(),
 });
 
 export async function PATCH(req: NextRequest) {
@@ -35,10 +47,18 @@ export async function PATCH(req: NextRequest) {
   const parsed = settingsSchema.safeParse(await req.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "Invalid settings payload." }, { status: 400 });
 
+  const { voiceEngine, ...flat } = parsed.data;
   await db.siteSettings.upsert({
     where: { id: "site" },
-    update: parsed.data,
-    create: { id: "site", ...parsed.data },
+    update: {
+      ...flat,
+      ...(voiceEngine ? { voiceEngineJson: JSON.stringify(voiceEngine) } : {}),
+    },
+    create: {
+      id: "site",
+      ...flat,
+      ...(voiceEngine ? { voiceEngineJson: JSON.stringify(voiceEngine) } : {}),
+    },
   });
   await audit({ userId: guard.user.userId, actor: "admin", action: "admin.settings.update", target: "site" });
   await emitRealtime("settings:updated", { at: new Date().toISOString() });

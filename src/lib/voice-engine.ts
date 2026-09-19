@@ -282,17 +282,110 @@ function cueSound(kind: string): HumanSound | null {
   return null;
 }
 
+/* ---- Self-hosted neural worker path (optional, off by default) ----
+ * When the admin connects a voice worker, speech goes through the server
+ * proxy (/api/voice/tts) to the operator's own neural engine (Kokoro, XTTS,
+ * or any OpenAI-compatible server). The token never touches the browser.
+ * Every failure falls straight back to the browser engine: the call never
+ * breaks because a worker is asleep (that is what the off switch is for). */
+
+export type VoiceEngineStatus = {
+  mode: "browser" | "selfhost";
+  ttsConfigured: boolean;
+  sttConfigured: boolean;
+  ttsModel: string;
+  ttsVoice: string;
+  sttModel: string;
+};
+
+export async function fetchVoiceEngineStatus(): Promise<VoiceEngineStatus | null> {
+  try {
+    const res = await fetch("/api/voice/config", { cache: "no-store" });
+    if (!res.ok) return null;
+    return (await res.json()) as VoiceEngineStatus;
+  } catch {
+    return null;
+  }
+}
+
+/** Map a measured voice register (from the operator's clone DNA) to a natural
+ *  worker voice id from the Kokoro set. Same heuristic as the browser voice
+ *  matcher: high register prefers female, low prefers male. */
+export function workerVoiceForRegister(register: string | undefined): string {
+  if (register === "high") return "af_bella";
+  if (register === "low") return "am_onyx";
+  return "af_sky";
+}
+
+/* One failed round trip cools the neural path down for 60s so a sleeping
+ * worker does not add dead latency to every segment of a live call. */
+let neuralCooldownUntil = 0;
+let activeNeuralSource: AudioBufferSourceNode | null = null;
+
+function stopNeuralPlayback(): void {
+  if (activeNeuralSource) {
+    try {
+      activeNeuralSource.stop();
+    } catch {
+      /* already stopped */
+    }
+    activeNeuralSource = null;
+  }
+}
+
+async function speakOneNeural(
+  text: string,
+  voice: string | undefined,
+  speed: number,
+  volume: number,
+  isCancelled: () => boolean,
+): Promise<boolean> {
+  if (Date.now() < neuralCooldownUntil) return false;
+  try {
+    const res = await fetch("/api/voice/tts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text, voice, speed }),
+    });
+    if (!res.ok) throw new Error(`proxy ${res.status}`);
+    const buf = await res.arrayBuffer();
+    const g = getAudioGraph();
+    if (!g) throw new Error("no audio graph");
+    const audio = await g.ctx.decodeAudioData(buf);
+    if (isCancelled()) return false;
+    return await new Promise<boolean>((resolve) => {
+      const src = g.ctx.createBufferSource();
+      src.buffer = audio;
+      const gain = g.ctx.createGain();
+      gain.gain.value = Math.max(0.1, Math.min(1, volume));
+      src.connect(gain).connect(g.ctx.destination);
+      src.onended = () => {
+        if (activeNeuralSource === src) activeNeuralSource = null;
+        resolve(true);
+      };
+      activeNeuralSource = src;
+      src.start();
+    });
+  } catch {
+    neuralCooldownUntil = Date.now() + 60_000;
+    return false;
+  }
+}
+
 /** Speak parsed segments; each segment inherits rate/pitch/silence from its cue,
  *  then the operator's voice profile bias (cloned pitch/pace) is applied.
  *  Cues with an audible character play a real breath/sigh/sniff/chuckle sound
  *  inside the pause, and strongly emotional segments get slight pitch jitter
- *  so the voice sounds unsteady, the way real upset speech does. */
+ *  so the voice sounds unsteady, the way real upset speech does.
+ *  With opts.neural set (self-hosted worker connected), each segment is first
+ *  synthesized by the worker; the audible emotion layer stays identical. */
 export function speakSegments(
   segments: VoiceSegment[],
   opts: {
     voice?: SpeechSynthesisVoice | null;
     pitchBias?: number;
     rateBias?: number;
+    neural?: { voice?: string };
     onStart?: () => void;
     onDone?: () => void;
   } = {},
@@ -354,13 +447,22 @@ export function speakSegments(
       if (cancelled) break;
       // Unsteady voice under strong emotion: subtle per-segment pitch wobble.
       const strong = cue?.kind === "strong";
-      const jitter = strong ? (Math.random() * 0.09 - 0.045) : 0;
-      await speakOne(
-        seg.text,
-        (cue ? cue.rate : 1) * rateBias,
-        Math.max(0.4, (cue ? cue.pitch : 1) + jitter) * pitchBias,
-        strong ? 0.92 : 1,
-      );
+      const rate = (cue ? cue.rate : 1) * rateBias;
+      // Neural worker first (when connected): natural voice, same emotion layer.
+      let spoken = false;
+      if (opts.neural) {
+        spoken = await speakOneNeural(seg.text, opts.neural.voice, rate, strong ? 0.92 : 1, () => cancelled);
+        if (cancelled) break;
+      }
+      if (!spoken) {
+        const jitter = strong ? (Math.random() * 0.09 - 0.045) : 0;
+        await speakOne(
+          seg.text,
+          rate,
+          Math.max(0.4, (cue ? cue.pitch : 1) + jitter) * pitchBias,
+          strong ? 0.92 : 1,
+        );
+      }
       if (cancelled) break;
       if (cue) {
         if (cue.kind === "strong" && cue.postSilenceMs > 250) {
@@ -378,6 +480,7 @@ export function speakSegments(
     done,
     cancel() {
       cancelled = true;
+      stopNeuralPlayback();
       try {
         synth.cancel();
       } catch {

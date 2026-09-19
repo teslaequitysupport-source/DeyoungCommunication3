@@ -1,0 +1,13 @@
+# DEYOUNG voice worker, CPU engine (Kokoro). Tested on Python 3.12, plain CPU.
+fastapi>=0.110
+uvicorn>=0.29
+kokoro-onnx>=0.4.1
+soundfile>=0.12
+numpy>=1.26
+lameenc>=1.7
+
+# Optional, only if you want STT on the worker too (faster-whisper):
+# faster-whisper>=1.0
+
+# Optional, only for the GPU cloning engine (ENGINE=xtts):
+# coqui-tts (the "tts" package) plus a CUDA GPU.

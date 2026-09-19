@@ -455,7 +455,7 @@ export function ChannelsHonest() {
               )}
             >
               <span className="dy-status-dot" />
-              {c.state === "connected" ? "LIVE" : c.state === "attention" ? "SETUP REQUIRED" : "COMING SOON"}
+              {c.state === "connected" ? "LIVE" : "SETUP REQUIRED"}
             </span>
             <span className="text-[13.5px] leading-snug text-neutral-400">{c.detail}</span>
           </div>

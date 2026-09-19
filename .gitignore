@@ -59,3 +59,8 @@ scripts/*.mp3
 scripts/*.mp4
 scripts/audit*.json
 skills/
+
+# voice worker model binaries (regenerable, ~150MB)
+voice-worker/models/
+# 4K source PNGs: the pipeline normalizes to .jpg (what the site serves)
+public/img/*.png
